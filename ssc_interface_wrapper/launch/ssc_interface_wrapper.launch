@@ -1,0 +1,5 @@
+<launch>
+    <node name="ssc_interface_wrapper" pkg="ssc_interface_wrapper" type="ssc_interface_wrapper_node" output="screen"/>
+    <rosparam command="load" file="$(find ssc_interface_wrapper)/config/parameters.yaml"/>
+    <node pkg="topic_tools" type="relay" name="relay_vehicle_command" args="/controller/vehicle_commands /vehicle_cmd"/>
+</launch>
