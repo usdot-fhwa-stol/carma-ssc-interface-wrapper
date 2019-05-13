@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ssc_interface_wrapper</name>
+  <version>1.0.0</version>
+  <description>The autoware ssc interface wrapper package</description>
+  <maintainer email="carma@todo.todo">carma</maintainer>
+  <license>Apache 2.0</license>
+  <author email="carma@todo.todo">carma</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>cav_driver_utils</depend>
+  <depend>cav_msgs</depend>
+  <depend>cav_srvs</depend>
+  <depend>autoware_msgs</depend>
+</package>
