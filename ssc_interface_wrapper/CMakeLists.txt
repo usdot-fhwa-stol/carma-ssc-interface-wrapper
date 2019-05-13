@@ -92,5 +92,5 @@ install(DIRECTORY
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-test test/test_ssc_interface_wrapper.cpp)
+catkin_add_gmock(${PROJECT_NAME}-test test/test_ssc_interface_wrapper.cpp)
 target_link_libraries(${PROJECT_NAME}-test ssc_interface_wrapper_worker_library ${catkin_LIBRARIES})
