@@ -48,7 +48,7 @@ private:
     // robotic status message as a local variable
     cav_msgs::RobotEnabled robotic_status_msg_;
 
-    // callbacks to handle incoming vehicle status messages and enable robotic coontrol request
+    // callbacks to handle incoming vehicle status messages and enable robotic control request
     void vehicle_status_cb(const autoware_msgs::VehicleStatusConstPtr& msg);
     bool enable_robotic_control_cb(cav_srvs::SetEnableRoboticRequest &req, cav_srvs::SetEnableRoboticResponse &resp);
 
