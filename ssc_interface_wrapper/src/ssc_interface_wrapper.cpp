@@ -23,8 +23,7 @@ SSCInterfaceWrapper::~SSCInterfaceWrapper() {}
 void SSCInterfaceWrapper::initialize() {
 
     // Set driver type
-    status_.lon_controller = true;
-    status_.lat_controller = true;
+    status_.controller = true;
 
     // Initilize all subscribers
     vehicle_status_sub_ = nh_->subscribe("/vehicle_status", 5, &SSCInterfaceWrapper::vehicle_status_cb, this);
