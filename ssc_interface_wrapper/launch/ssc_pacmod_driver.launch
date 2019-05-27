@@ -15,7 +15,7 @@
   the License.
 -->
 <!--
-	This file is used to launch a CARMA compatible lidar driver for velodyne VLP-32C
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
 -->
 <launch>
 
