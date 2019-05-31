@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (C) 2018-2019 LEIDOS.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<!--
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
+-->
+<launch>
+
+  <arg name="pacmod_vehicle_type" default="LEXUS_RX_450H" />
+  <arg name="use_kvaser" default="true" />
+  <arg name="kvaser_hardware_id" default="10376" />
+  <arg name="kvaser_circuit_id" default="0" />
+
+  <!-- Launch Wrapper -->
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+
+  <!-- Launch Wrapped Nodes -->
+  <!-- Drive By Wire -->
+  <include file="$(find pacmod3)/launch/pacmod3.launch" ns="pacmod">
+    <arg name="pacmod_vehicle_type" value="LEXUS_RX_450H" />
+    <arg name="use_kvaser" value="true" />
+    <arg name="kvaser_hardware_id" value="10376" />
+    <arg name="kvaser_circuit_id" value="0" />
+  </include>
+
+  <!-- SSC -->
+  <include file="$(find ssc_pm_lexus)/launch/speed_steering_control.launch">
+    <arg name="namespace" value="ssc" />
+  </include>
+
+  <!-- SSC Interface -->
+  <include file="$(find as)/launch/ssc_interface.launch">
+    	<arg name="use_rear_wheel_speed" value="true"/>
+      <arg name="use_adaptive_gear_ratio" value="true"/>
+      <arg name="command_timeout" value="1000"/>
+      <arg name="loop_rate" value="30.0"/>
+      <arg name="wheel_base" value="2.79"/>
+      <arg name="tire_radius" value="0.39"/>
+      <arg name="acceleration_limit" value="3.0"/>
+      <arg name="deceleration_limit" value="6.0"/>
+      <arg name="max_curvature_rate" value="0.75"/>
+  </include>
+
+
+</launch>
