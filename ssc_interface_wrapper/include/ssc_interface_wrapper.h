@@ -17,9 +17,13 @@
  */
 
 #include <driver_wrapper/driver_wrapper.h>
-#include <autoware_msgs/VehicleStatus.h>
 #include <cav_srvs/SetEnableRobotic.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float64.h>
+#include <j2735_msgs/TransmissionState.h>
+#include <pacmod_msgs/SystemRptFloat.h>
+#include <pacmod_msgs/SystemRptInt.h>
+#include <pacmod_msgs/GlobalRpt.h>
 #include "ssc_interface_wrapper_worker.h"
 
 class SSCInterfaceWrapper : public cav::DriverWrapper
@@ -31,11 +35,23 @@ public:
 
 private:
     
-    // one subscriber and one publisher to SSC Interface node
-    ros::Subscriber vehicle_status_sub_;
+    // one subscribers for PACMOD status
+    ros::Subscriber pacmod_rpt_sub_;
+
+    // subscribers for reading CAN data
+    ros::Subscriber steer_sub_;
+    ros::Subscriber brake_sub_;
+    ros::Subscriber shift_sub_;
+
+    // publishers for sending CAN data to CARMA
+    ros::Publisher steering_wheel_angle_pub_;
+    ros::Publisher brake_position_pub_;
+    ros::Publisher transmission_pub_;
+
+    // one publisher for SSC Interface node
     ros::Publisher  vehicle_engage_pub_;
     
-    // one publisher and one service to CARMA
+    // one publisher and one service for controller status to CARMA platform
     ros::Publisher  robot_status_pub_;
     ros::ServiceServer enable_robotic_control_srv_;
 
@@ -48,22 +64,25 @@ private:
     // robotic status message as a local variable
     cav_msgs::RobotEnabled robotic_status_msg_;
 
-    // callbacks to handle incoming vehicle status messages and enable robotic control request
-    void vehicle_status_cb(const autoware_msgs::VehicleStatusConstPtr& msg);
+    // service callback to engage robotic control
     bool enable_robotic_control_cb(cav_srvs::SetEnableRoboticRequest &req, cav_srvs::SetEnableRoboticResponse &resp);
+
+    // callback functions to handle CAN messages from PACMOD driver
+    void pacmod_rpt_cb(const pacmod_msgs::GlobalRptConstPtr& msg);
+    void steer_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg);
+    void brake_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg);
+    void shift_cb(const pacmod_msgs::SystemRptIntConstPtr& msg);
 
     // process the latest vehicle status message and publish as robot status topic
     void publish_robot_status();
 
-    // check controller timeout and send disengage command if necessary
+    // check controller health status
     void update_controller_health_status();
 
-    //cav::DriverWrapper members
+    // cav::DriverWrapper members
     virtual void initialize();
     virtual void pre_spin();
     virtual void post_spin();
     virtual void shutdown();
-
-
 
 };

@@ -24,11 +24,18 @@ void SSCInterfaceWrapper::initialize() {
 
     // Set driver type
     status_.controller = true;
+    status_.can = true;
 
-    // Initilize all subscribers
-    vehicle_status_sub_ = nh_->subscribe("/vehicle_status", 5, &SSCInterfaceWrapper::vehicle_status_cb, this);
+    // Initialize all subscribers
+    pacmod_rpt_sub_ = nh_->subscribe("/parsed_tx/global_rpt", 5, &SSCInterfaceWrapper::pacmod_rpt_cb, this);
+    steer_sub_ = nh_->subscribe("/parsed_tx/steer_rpt", 5, &SSCInterfaceWrapper::steer_cb, this);
+    brake_sub_ = nh_->subscribe("/parsed_tx/brake_aux_rpt", 5, &SSCInterfaceWrapper::brake_cb, this);
+    shift_sub_ = nh_->subscribe("/parsed_tx/shift_aux_rpt", 5, &SSCInterfaceWrapper::shift_cb, this);
 
-    // Initilize all publishers
+    // Initialize all publishers
+    steering_wheel_angle_pub_ = nh_->advertise<std_msgs::Float64>("/can/steering_wheel_angle", 1);
+    brake_position_pub_ = nh_->advertise<std_msgs::Float64>("/can/brake_position", 1);
+    transmission_pub_ = nh_->advertise<j2735_msgs::TransmissionState>("/can/transmission_state", 1);
     robot_status_pub_   = nh_->advertise<cav_msgs::RobotEnabled>("/controller/robot_status", 1);
     vehicle_engage_pub_ = nh_->advertise<std_msgs::Bool>("/vehicle/engage", 5);
     
@@ -60,18 +67,39 @@ void SSCInterfaceWrapper::publish_robot_status()
     robot_status_pub_.publish(robotic_status_msg_);
 }
 
-void SSCInterfaceWrapper::vehicle_status_cb(const autoware_msgs::VehicleStatusConstPtr& msg)
-{
-    worker_.on_new_status_msg(msg, ros::Time::now());
-    // robot_enabled field is true once the lower level controller is running
-    robotic_status_msg_.robot_enabled = true;
-    publish_robot_status();
-}
-
 bool SSCInterfaceWrapper::enable_robotic_control_cb(cav_srvs::SetEnableRoboticRequest &req, cav_srvs::SetEnableRoboticResponse &resp)
 {
     std_msgs::Bool engage_cmd;
     engage_cmd.data = req.set == cav_srvs::SetEnableRoboticRequest::ENABLE;
     vehicle_engage_pub_.publish(engage_cmd);
     return true;
+}
+
+void SSCInterfaceWrapper::pacmod_rpt_cb(const pacmod_msgs::GlobalRptConstPtr& msg)
+{
+	worker_.on_new_status_msg(msg, ros::Time::now());
+	// robot_enabled field is true once the lower level controller is running
+	robotic_status_msg_.robot_enabled = true;
+    publish_robot_status();
+}
+
+void SSCInterfaceWrapper::steer_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg)
+{
+    std_msgs::Float64 steer_msg;
+    steer_msg.data = msg -> output;
+    steering_wheel_angle_pub_.publish(steer_msg);
+}
+
+void SSCInterfaceWrapper::brake_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg)
+{
+	std_msgs::Float64 brake_msg;
+	brake_msg.data = msg -> output;
+	brake_position_pub_.publish(brake_msg);
+}
+
+void SSCInterfaceWrapper::shift_cb(const pacmod_msgs::SystemRptIntConstPtr& msg)
+{
+    j2735_msgs::TransmissionState transmission_msg;
+    transmission_msg.transmission_state = worker_.convert_shift_state_to_J2735(msg);
+    transmission_pub_.publish(transmission_msg);
 }
