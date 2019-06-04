@@ -12,7 +12,10 @@ find_package(catkin REQUIRED COMPONENTS
   cav_msgs
   cav_srvs
   autoware_msgs
+  can_msgs  
   std_msgs
+  pacmod_msgs
+  j2735_msgs
   roscpp
 )
 

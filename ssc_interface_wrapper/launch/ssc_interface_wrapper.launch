@@ -20,4 +20,6 @@
     <node name="ssc_interface_wrapper" pkg="ssc_interface_wrapper" type="ssc_interface_wrapper_node"/>
     <rosparam command="load" file="$(find ssc_interface_wrapper)/config/parameters.yaml"/>
     <node pkg="topic_tools" type="relay" name="relay_vehicle_command" args="/controller/vehicle_commands /vehicle_cmd"/>
+    <node pkg="topic_tools" type="relay" name="relay_wheel_speed" args="/can/wheel_speed /parsed_tx/wheel_speed_rpt"/>
+
 </launch>
