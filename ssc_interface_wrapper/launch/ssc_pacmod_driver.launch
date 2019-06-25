@@ -25,8 +25,13 @@
   <arg name="kvaser_circuit_id" default="0" />
 
   <!-- Launch Wrapper -->
-  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
-
+  <group> <!-- Group to scope remappings -->
+    <remap from="parsed_tx/global_rpt" to="pacmod/parsed_tx/global_rpt"/>
+    <remap from="parsed_tx/steer_rpt" to="pacmod/parsed_tx/steer_rpt"/>
+    <remap from="parsed_tx/brake_aux_rpt" to="pacmod/parsed_tx/brake_aux_rpt"/>
+    <remap from="parsed_tx/shift_aux_rpt" to="pacmod/parsed_tx/shift_aux_rpt"/>
+    <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+  </group>
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
   <include file="$(find pacmod3)/launch/pacmod3.launch" ns="pacmod">
