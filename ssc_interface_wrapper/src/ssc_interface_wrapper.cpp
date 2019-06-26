@@ -29,8 +29,8 @@ void SSCInterfaceWrapper::initialize() {
     // Initialize all subscribers
     pacmod_rpt_sub_ = nh_->subscribe("parsed_tx/global_rpt", 5, &SSCInterfaceWrapper::pacmod_rpt_cb, this);
     steer_sub_ = nh_->subscribe("parsed_tx/steer_rpt", 5, &SSCInterfaceWrapper::steer_cb, this);
-    brake_sub_ = nh_->subscribe("parsed_tx/brake_aux_rpt", 5, &SSCInterfaceWrapper::brake_cb, this);
-    shift_sub_ = nh_->subscribe("parsed_tx/shift_aux_rpt", 5, &SSCInterfaceWrapper::shift_cb, this);
+    brake_sub_ = nh_->subscribe("parsed_tx/brake_rpt", 5, &SSCInterfaceWrapper::brake_cb, this);
+    shift_sub_ = nh_->subscribe("parsed_tx/shift_rpt", 5, &SSCInterfaceWrapper::shift_cb, this);
 
     // Initialize all publishers
     steering_wheel_angle_pub_ = nh_->advertise<std_msgs::Float64>("can/steering_wheel_angle", 1);
