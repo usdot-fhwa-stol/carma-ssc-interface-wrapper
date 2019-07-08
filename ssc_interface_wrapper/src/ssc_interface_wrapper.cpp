@@ -37,7 +37,7 @@ void SSCInterfaceWrapper::initialize() {
     brake_position_pub_ = nh_->advertise<std_msgs::Float64>("can/brake_position", 1);
     transmission_pub_ = nh_->advertise<j2735_msgs::TransmissionState>("can/transmission_state", 1);
     robot_status_pub_   = nh_->advertise<cav_msgs::RobotEnabled>("controller/robot_status", 1);
-    vehicle_engage_pub_ = nh_->advertise<std_msgs::Bool>("/vehicle/engage", 5);
+    vehicle_engage_pub_ = nh_->advertise<std_msgs::Bool>("vehicle/engage", 5);
     
     // initialize services
     enable_robotic_control_srv_ = nh_->advertiseService("controller/enable_robotic", &SSCInterfaceWrapper::enable_robotic_control_cb, this);
