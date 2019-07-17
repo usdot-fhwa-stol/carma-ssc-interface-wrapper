@@ -1,0 +1,2 @@
+# Timeout threshold for controller, in seconds
+controller_timeout: 1
