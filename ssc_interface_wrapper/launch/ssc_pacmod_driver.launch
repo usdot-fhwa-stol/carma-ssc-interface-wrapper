@@ -56,7 +56,7 @@
     <remap from="speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
     <remap from="wheel_speed" to="pacmod/parsed_tx/wheel_speed_rpt"/>
     <remap from="global_report" to="pacmod/parsed_tx/global_rpt"/>
-    <include file="$(find ssc_pm_lexus)/launch/carma_speed_steering_control.launch"/>
+    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch"/>
   </group>
 
   <!-- SSC Interface -->
