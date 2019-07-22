@@ -14,6 +14,8 @@
 
 FROM usdotfhwastol/carma-base:2.8.3 as setup
 
+RUN sudo apt-get update && sudo apt-get install -y ros-kinetic-jsk-recognition-msgs
+
 RUN mkdir ~/src
 COPY --chown=carma . /home/carma/src/
 RUN chmod +x ~/src/docker/checkout.sh && chown carma ~/src/docker/checkout.sh 

@@ -14,6 +14,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
+sudo cp -r /opt/autoware/src/autoware.ai/ros/src/msgs/autoware_msgs ~/src/autoware_msgs
 source /opt/ros/kinetic/setup.bash
 cd ~/
 catkin_make install
