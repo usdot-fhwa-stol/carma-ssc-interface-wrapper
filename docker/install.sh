@@ -15,7 +15,7 @@
 #  the License.
 
 sudo chmod -R +x /opt/carma/app/bin
-sudo cp -r /opt/autoware/src/autoware.ai/ros/src/msgs/autoware_msgs ~/src/autoware_msgs
+mv ~/autoware.ai/ros/src/msgs/autoware_msgs ~/src/autoware_msgs
 source /opt/ros/kinetic/setup.bash
 cd ~/
 catkin_make install

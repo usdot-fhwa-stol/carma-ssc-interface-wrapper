@@ -20,4 +20,4 @@ set -ex
 
 git clone https://github.com/usdot-fhwa-stol/CARMAMsgs.git ~/src/CARMAMsgs
 git clone https://github.com/usdot-fhwa-stol/CARMADriverUtils.git ~/src/CARMADriverUtils
-sudo git clone https://github.com/usdot-fhwa-stol/autoware.ai /opt/autoware/src/autoware.ai/
+git clone https://github.com/usdot-fhwa-stol/autoware.ai ~/autoware.ai
