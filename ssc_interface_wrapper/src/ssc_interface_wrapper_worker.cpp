@@ -22,24 +22,33 @@ uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_ti
     {
         return cav_msgs::DriverStatus::OFF;
     }
-    else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || can_bus_timeout_ || pacmod_fault_) {
+    else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || controller_fault_) {
         return cav_msgs::DriverStatus::FAULT;
     }
     return cav_msgs::DriverStatus::OPERATIONAL;
 }
 
-void SSCInterfaceWrapperWorker::on_new_status_msg(const pacmod_msgs::GlobalRptConstPtr& msg, const ros::Time& current_time)
+void SSCInterfaceWrapperWorker::on_new_status_msg(const automotive_navigation_msgs::ModuleStateConstPtr& msg, const ros::Time& current_time)
 {
     last_vehicle_status_time_ = current_time;
     update_control_status(msg);
 }
 
-void SSCInterfaceWrapperWorker::update_control_status(const pacmod_msgs::GlobalRptConstPtr& msg)
+void SSCInterfaceWrapperWorker::update_control_status(const automotive_navigation_msgs::ModuleStateConstPtr& msg)
 {
-	pacmod_fault_ = msg -> fault_active || msg -> config_fault_active;
-	can_bus_timeout_ = msg -> user_can_timeout || msg -> brake_can_timeout   || msg -> steering_can_timeout
-			                                   || msg -> vehicle_can_timeout || msg -> subsystem_can_timeout;
-	robotic_control_engaged_ = msg -> enabled;
+	
+	if(msg->state.compare("fatal") == 0)
+	{
+		controller_fault_ = true;
+	}
+	else if (msg->state.compare("active") == 0 || msg->state.compare("engaged") == 0)
+	{
+		robotic_control_engaged_ = true;
+	}
+	// TODO will move the following logic into controller specific CAN driver
+	//can_bus_timeout_ = msg -> user_can_timeout || msg -> brake_can_timeout   || msg -> steering_can_timeout
+	//		                                   || msg -> vehicle_can_timeout || msg -> subsystem_can_timeout;
+	can_bus_timeout_ = true;
 }
 
 int SSCInterfaceWrapperWorker::convert_shift_state_to_J2735(const pacmod_msgs::SystemRptIntConstPtr shift_state)
