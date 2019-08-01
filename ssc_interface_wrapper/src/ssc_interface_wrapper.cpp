@@ -27,7 +27,7 @@ void SSCInterfaceWrapper::initialize() {
     status_.can = true;
 
     // Initialize all subscribers
-    ssc_state_sub_ = nh_->subscribe("module_state", 5, &SSCInterfaceWrapper::ssc_state_cb, this);
+    ssc_state_sub_ = nh_->subscribe("module_states", 5, &SSCInterfaceWrapper::ssc_state_cb, this);
     steer_sub_ = nh_->subscribe("parsed_tx/steer_rpt", 5, &SSCInterfaceWrapper::steer_cb, this);
     brake_sub_ = nh_->subscribe("parsed_tx/brake_rpt", 5, &SSCInterfaceWrapper::brake_cb, this);
     shift_sub_ = nh_->subscribe("parsed_tx/shift_rpt", 5, &SSCInterfaceWrapper::shift_cb, this);
