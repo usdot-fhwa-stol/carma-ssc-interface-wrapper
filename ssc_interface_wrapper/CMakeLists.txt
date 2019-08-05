@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   pacmod_msgs
   j2735_msgs
   roscpp
+  automotive_navigation_msgs
 )
 
 ###################################

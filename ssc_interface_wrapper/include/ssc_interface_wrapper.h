@@ -23,7 +23,7 @@
 #include <j2735_msgs/TransmissionState.h>
 #include <pacmod_msgs/SystemRptFloat.h>
 #include <pacmod_msgs/SystemRptInt.h>
-#include <pacmod_msgs/GlobalRpt.h>
+#include <automotive_navigation_msgs/ModuleState.h>
 #include "ssc_interface_wrapper_worker.h"
 
 class SSCInterfaceWrapper : public cav::DriverWrapper
@@ -35,8 +35,8 @@ public:
 
 private:
     
-    // one subscribers for PACMOD status
-    ros::Subscriber pacmod_rpt_sub_;
+    // one subscribers for ssc status
+    ros::Subscriber ssc_state_sub_;
 
     // subscribers for reading CAN data
     ros::Subscriber steer_sub_;
@@ -68,7 +68,7 @@ private:
     bool enable_robotic_control_cb(cav_srvs::SetEnableRoboticRequest &req, cav_srvs::SetEnableRoboticResponse &resp);
 
     // callback functions to handle CAN messages from PACMOD driver
-    void pacmod_rpt_cb(const pacmod_msgs::GlobalRptConstPtr& msg);
+    void ssc_state_cb(const automotive_navigation_msgs::ModuleStateConstPtr& msg);
     void steer_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg);
     void brake_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg);
     void shift_cb(const pacmod_msgs::SystemRptIntConstPtr& msg);
