@@ -67,6 +67,8 @@
     <remap from="as/throttle_feedback" to="throttle_feedback"/>
     <remap from="as/turn_signal_command" to="turn_signal_command"/>
     <remap from="as/velocity_accel" to="velocity_accel"/>
+    <remap from="as/steering_feedback" to="steering_feedback"/>
+    <remap from="as/velocity_accel_cov" to="velocity_accel_cov"/>
     <include file="$(find as)/launch/ssc_interface.launch">
         <arg name="use_adaptive_gear_ratio" value="true"/>
         <arg name="command_timeout" value="1000"/>
