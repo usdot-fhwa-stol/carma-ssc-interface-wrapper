@@ -1,2 +1,36 @@
 # Timeout threshold for controller, in seconds
 controller_timeout: 1
+
+# True if using rear wheel speed data
+use_rear_wheel_speed: true
+
+# True if using an adaptive gear ratio
+use_adaptive_gear_ratio: true
+
+# Timeout for command reciet
+# Units: ms
+command_timeout: 1000
+
+# Looping rate
+# Units: Hz
+loop_rate: 30.0
+
+# Acceleration limit
+# Units: m/s^2
+acceleration_limit: 3.0
+
+# Deceleration limit
+# Units: m/s^2
+deceleration_limit: 6.0
+
+# Max curvature rate
+# Units: (m^-1) / s
+max_curvature_rate: 0.75
+
+
+# TODO we are here. What to do with these parameters
+# Wheel base
+# Units: m
+wheel_base: 2.79
+
+tire_radius: 0.39
