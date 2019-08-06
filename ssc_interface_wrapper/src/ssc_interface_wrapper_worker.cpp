@@ -30,13 +30,15 @@ uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_ti
 
 void SSCInterfaceWrapperWorker::on_new_status_msg(const automotive_navigation_msgs::ModuleStateConstPtr& msg, const ros::Time& current_time)
 {
-    last_vehicle_status_time_ = current_time;
-    update_control_status(msg);
+    if(msg->name.compare("/veh_controller") == 0)
+	{
+        last_vehicle_status_time_ = current_time;
+		update_control_status(msg);
+	}
 }
 
 void SSCInterfaceWrapperWorker::update_control_status(const automotive_navigation_msgs::ModuleStateConstPtr& msg)
 {
-	
 	if(msg->state.compare("fatal") == 0)
 	{
 		controller_fault_ = true;
@@ -45,6 +47,7 @@ void SSCInterfaceWrapperWorker::update_control_status(const automotive_navigatio
 	{
 		robotic_control_engaged_ = true;
 	}
+
 	// TODO will move the following logic into controller specific CAN driver
 	//can_bus_timeout_ = msg -> user_can_timeout || msg -> brake_can_timeout   || msg -> steering_can_timeout
 	//		                                   || msg -> vehicle_can_timeout || msg -> subsystem_can_timeout;
