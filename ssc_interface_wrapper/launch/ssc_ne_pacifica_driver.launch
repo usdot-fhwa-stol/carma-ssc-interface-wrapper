@@ -68,7 +68,6 @@
     <remap from="as/turn_signal_command" to="turn_signal_command"/>
     <remap from="as/velocity_accel" to="velocity_accel"/>
     <include file="$(find as)/launch/ssc_interface.launch">
-        <arg name="use_rear_wheel_speed" value="true"/>
         <arg name="use_adaptive_gear_ratio" value="true"/>
         <arg name="command_timeout" value="1000"/>
         <arg name="loop_rate" value="30.0"/>
