@@ -30,7 +30,10 @@ uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_ti
 
 void SSCInterfaceWrapperWorker::on_new_status_msg(const automotive_navigation_msgs::ModuleStateConstPtr& msg, const ros::Time& current_time)
 {
-    if(msg->name.compare("/veh_controller") == 0)
+	const std::string controller_tag("veh_controller");
+	
+    if(msg->name.length() >= controller_tag.length() 
+		&& (0 == msg->name.compare (msg->name.length() - controller_tag.length(), controller_tag.length(), controller_tag)))
 	{
         last_vehicle_status_time_ = current_time;
 		update_control_status(msg);
