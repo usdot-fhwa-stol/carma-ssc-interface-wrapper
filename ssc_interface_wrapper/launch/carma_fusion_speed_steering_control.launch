@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="speed_model_json" default="$(find ssc_ds_fusion)/json/speed_model.json" />
+  <arg name="steering_model_json" default="$(find ssc_ds_fusion)/json/steering_model.json" />
+  <arg name="veh_controller_json" default="$(find ssc_ds_fusion)/json/veh_controller.json" />
+  <arg name="veh_interface_json" default="$(find ssc_ds_fusion)/json/veh_interface.json" />
+
+  <group>
+    <node pkg="ssc_ds_fusion" type="speed_model" name="speed_model" args="-f $(arg speed_model_json)" />
+    <node pkg="ssc_ds_fusion" type="steering_model" name="steering_model" args="-f $(arg steering_model_json)" />
+    <remap from="brake_cmd" to="vehicle/brake_cmd" />
+    <remap from="brake_info_report" to="vehicle/brake_info_report" />
+    <remap from="brake_report" to="vehicle/brake_report" />
+    <remap from="disable" to="vehicle/disable" />
+    <remap from="enable" to="vehicle/enable" />
+    <remap from="steering_cmd" to="vehicle/steering_cmd" />
+    <remap from="steering_report" to="vehicle/steering_report" />
+    <remap from="surround_report" to="vehicle/surround_report" />
+    <remap from="throttle_cmd" to="vehicle/throttle_cmd" />
+    <remap from="throttle_report" to="vehicle/throttle_report" />
+    <remap from="turn_signal_cmd" to="vehicle/turn_signal_cmd" />
+    <remap from="gear_cmd" to="vehicle/gear_cmd" />
+    <remap from="gear_report" to="vehicle/gear_report" />
+    <remap from="wheel_speed_report" to="vehicle/wheel_speed_report" />
+    <remap from="misc_1_report" to="vehicle/misc_1_report" />
+    <node pkg="ssc_ds_fusion" type="veh_controller" name="veh_controller" args="-f $(arg veh_controller_json)" />
+    <node pkg="ssc_ds_fusion" type="veh_interface" name="veh_interface" args="-f $(arg veh_interface_json)" />
+  </group>
+</launch>
