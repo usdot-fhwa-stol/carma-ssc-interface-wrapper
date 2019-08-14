@@ -35,10 +35,10 @@
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
   <include file="$(find pacmod3)/launch/pacmod3.launch" ns="pacmod">
-    <arg name="pacmod_vehicle_type" value="LEXUS_RX_450H" />
-    <arg name="use_kvaser" value="true" />
-    <arg name="kvaser_hardware_id" value="10376" />
-    <arg name="kvaser_circuit_id" value="0" />
+    <arg name="pacmod_vehicle_type" value="$(arg pacmod_vehicle_type)" />
+    <arg name="use_kvaser" value="$(arg use_kvaser)" />
+    <arg name="kvaser_hardware_id" value="$(arg kvaser_hardware_id)" />
+    <arg name="kvaser_circuit_id" value="$(arg kvaser_circuit_id)" />
   </include>
 
   <!-- SSC -->
