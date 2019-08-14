@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="speed_model_json" default="$(find ssc_pm_lexus)/json/speed_model.json" />
-  <arg name="steering_model_json" default="$(find ssc_pm_lexus)/json/steering_model.json" />
-  <arg name="veh_controller_json" default="$(find ssc_pm_lexus)/json/veh_controller.json" />
-  <arg name="veh_interface_json" default="$(find ssc_pm_lexus)/json/veh_interface.json" />
+  <arg name="param_dir" value="/opt/carma/vehicle/ssc_pm_lexus"/>
+  <arg name="speed_model_json" default="$(arg param_dir)/json/speed_model.json" />
+  <arg name="steering_model_json" default="$(arg param_dir)/json/steering_model.json" />
+  <arg name="veh_controller_json" default="$(arg param_dir)/json/veh_controller.json" />
+  <arg name="veh_interface_json" default="$(arg param_dir)/json/veh_interface.json" />
 
   <group>
     <node pkg="ssc_pm_lexus" type="speed_model" name="speed_model" args="-f $(arg speed_model_json)" />
