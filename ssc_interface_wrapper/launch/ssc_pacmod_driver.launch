@@ -23,6 +23,7 @@
   <arg name="use_kvaser" default="true" />
   <arg name="kvaser_hardware_id" default="10376" />
   <arg name="kvaser_circuit_id" default="0" />
+  <arg name="ssc_param_dir" default="$(find ssc_pm_lexus)"/>
 
   <!-- Launch Wrapper -->
   <group> <!-- Group to scope remappings -->
@@ -56,9 +57,12 @@
     <remap from="speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
     <remap from="wheel_speed" to="pacmod/parsed_tx/wheel_speed_rpt"/>
     <remap from="global_report" to="pacmod/parsed_tx/global_rpt"/>
-    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch"/>
+    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+      <arg name="param_dir" value="$(arg ssc_param_dir)"/>
+      <arg name="ssc_package_name" value="ssc_pm_lexus"/>
+    </include>
   </group>
 
   <!-- SSC Interface -->
-  <include file="$(find ssc_interface_wrapper)/remapped_ssc_interface.launch"/>
+  <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
 </launch>

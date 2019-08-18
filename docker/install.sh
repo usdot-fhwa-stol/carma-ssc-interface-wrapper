@@ -14,8 +14,9 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-sudo chmod -R +x /opt/carma/app/bin
-mv ~/autoware.ai/ros/src/msgs/autoware_msgs ~/src/autoware_msgs
-source /opt/ros/kinetic/setup.bash
+source /opt/autoware.ai/ros/install/setup.bash
+export ROS_LANG_DISABLE=genjava # Disable genjava as it is not needed in this image and makes build inconsistent 
 cd ~/
 catkin_make install
+chmod -R ugo+x ~/install
+unset ROS_LANG_DISABLE
