@@ -1,16 +1,21 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="speed_model_json" default="$(find ssc_pm_lexus)/json/speed_model.json" />
-  <arg name="steering_model_json" default="$(find ssc_pm_lexus)/json/steering_model.json" />
-  <arg name="veh_controller_json" default="$(find ssc_pm_lexus)/json/veh_controller.json" />
-  <arg name="veh_interface_json" default="$(find ssc_pm_lexus)/json/veh_interface.json" />
+  <arg name="ssc_package_name" default="ssc_pm_lexus"/>
+  <arg name="param_dir" default="$(find ssc_pm_lexus)"/>
+  <arg name="license_folder" default="$(arg param_dir)/as_licenses"/>
+  <arg name="speed_model_json" default="$(arg param_dir)/json/speed_model.json" />
+  <arg name="steering_model_json" default="$(arg param_dir)/json/steering_model.json" />
+  <arg name="veh_controller_json" default="$(arg param_dir)/json/veh_controller.json" />
+  <arg name="veh_interface_json" default="$(arg param_dir)/json/veh_interface.json" />
+
+  <env name="RLM_LICENSE" value="$(arg license_folder)"/>
 
   <group>
-    <node pkg="ssc_pm_lexus" type="speed_model" name="speed_model" args="-f $(arg speed_model_json)" />
-    <node pkg="ssc_pm_lexus" type="steering_model" name="steering_model" args="-f $(arg steering_model_json)" />
+    <node pkg="$(arg ssc_package_name)" type="speed_model" name="speed_model" args="-f $(arg speed_model_json)" />
+    <node pkg="$(arg ssc_package_name)" type="steering_model" name="steering_model" args="-f $(arg steering_model_json)" />
 
-    <node pkg="ssc_pm_lexus" type="veh_controller" name="veh_controller" args="-f $(arg veh_controller_json)" />
-    <node pkg="ssc_pm_lexus" type="veh_interface" name="veh_interface" args="-f $(arg veh_interface_json)" />
+    <node pkg="$(arg ssc_package_name)" type="veh_controller" name="veh_controller" args="-f $(arg veh_controller_json)" />
+    <node pkg="$(arg ssc_package_name)" type="veh_interface" name="veh_interface" args="-f $(arg veh_interface_json)" />
   </group>
 </launch>

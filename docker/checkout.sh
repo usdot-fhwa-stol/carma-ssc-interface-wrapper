@@ -20,4 +20,5 @@ set -ex
 
 git clone https://github.com/usdot-fhwa-stol/CARMAMsgs.git ~/src/CARMAMsgs
 git clone https://github.com/usdot-fhwa-stol/CARMADriverUtils.git ~/src/CARMADriverUtils
-git clone https://github.com/usdot-fhwa-stol/autoware.ai ~/autoware.ai
+# Required to build the dbw_pacifica_msgs message set.
+git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git ~/src/pacifica-dbw-ros

@@ -22,6 +22,7 @@
   <arg name="can_hardware_id" default="57755" />
   <arg name="can_circuit_id" default="0" />
   <arg name="can_bit_rate" default="500000" />
+  <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
 
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
@@ -36,8 +37,11 @@
   </include>
 
   <!-- SSC -->
-  <include file="$(find ssc_interface_wrapper)/launch/carma_pacifica_speed_steering_control.launch"/>
+  <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+    <arg name="param_dir" value="$(arg ssc_param_dir)"/>
+    <arg name="ssc_package_name" value="ssc_ne_pacifica"/>
+  </include>
 
   <!-- SSC Interface -->
-  <include file="$(find ssc_interface_wrapper)/remapped_ssc_interface.launch"/>
+  <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
 </launch>

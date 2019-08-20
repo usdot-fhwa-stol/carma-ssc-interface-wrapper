@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (C) 2018-2019 LEIDOS.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<!--
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
+-->
+<launch>
+
+  <arg name="can_hardware_id" default="57755" />
+  <arg name="can_circuit_id" default="0" />
+  <arg name="can_bit_rate" default="500000" />
+  <arg name="ssc_param_dir" default="$(find ssc_ds_fusion)"/>
+
+  <!-- Launch Wrapper -->
+  <!-- Group to scope remappings -->
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+  
+  <!-- Launch Wrapped Nodes -->
+  <!-- Drive By Wire -->
+  <arg name="dbw_namespace" default="ds_fusion" />
+  <include file="$(find dbw_mkz_can)/launch/dbw.launch">
+    <arg name="vehicle_ns" value="$(arg dbw_namespace)"/>
+    <arg name="can_ns" value="can_bus_dbw"/>
+  </include>
+
+  <!-- SSC -->
+  <group>
+    <remap from="brake_cmd" to="$(arg dbw_namespace)/brake_cmd" />
+    <remap from="brake_info_report" to="$(arg dbw_namespace)/brake_info_report" />
+    <remap from="brake_report" to="$(arg dbw_namespace)/brake_report" />
+    <remap from="disable" to="$(arg dbw_namespace)/disable" />
+    <remap from="enable" to="$(arg dbw_namespace)/enable" />
+    <remap from="steering_cmd" to="$(arg dbw_namespace)/steering_cmd" />
+    <remap from="steering_report" to="$(arg dbw_namespace)/steering_report" />
+    <remap from="surround_report" to="$(arg dbw_namespace)/surround_report" />
+    <remap from="throttle_cmd" to="$(arg dbw_namespace)/throttle_cmd" />
+    <remap from="throttle_report" to="$(arg dbw_namespace)/throttle_report" />
+    <remap from="turn_signal_cmd" to="$(arg dbw_namespace)/turn_signal_cmd" />
+    <remap from="gear_cmd" to="$(arg dbw_namespace)/gear_cmd" />
+    <remap from="gear_report" to="$(arg dbw_namespace)/gear_report" />
+    <remap from="wheel_speed_report" to="$(arg dbw_namespace)/wheel_speed_report" />
+    <remap from="misc_1_report" to="$(arg dbw_namespace)/misc_1_report" />
+    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+      <arg name="param_dir" value="$(arg ssc_param_dir)"/>
+      <arg name="ssc_package_name" value="ssc_ds_fusion"/>
+    </include>
+  </group>
+
+  <!-- SSC Interface -->
+  <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
+</launch>
