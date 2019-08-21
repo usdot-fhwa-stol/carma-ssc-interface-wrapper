@@ -21,6 +21,7 @@
   <remap from="as/arbitrated_speed_commands" to="arbitrated_speed_commands"/>
   <remap from="as/arbitrated_steering_commands" to="arbitrated_steering_commands"/>
   <remap from="as/brake_feedback" to="brake_feedback"/>
+  <remap from="as/steering_feedback" to="steering_feedback"/>
   <remap from="as/curvature_feedback" to="curvature_feedback"/>
   <remap from="as/gear_feedback" to="gear_feedback"/>
   <remap from="as/gear_select" to="gear_select"/>
@@ -28,6 +29,7 @@
   <remap from="as/throttle_feedback" to="throttle_feedback"/>
   <remap from="as/turn_signal_command" to="turn_signal_command"/>
   <remap from="as/velocity_accel" to="velocity_accel"/>
+  <remap from="as/velocity_accel_cov" to="velocity_accel_cov"/>
   <!-- Vehicle Config Parameter Remapping -->
   <remap from="~wheel_base" to="/vehicle_wheel_base"/>
   <remap from="~tire_radius" to="/vehicle_tire_radius"/>
