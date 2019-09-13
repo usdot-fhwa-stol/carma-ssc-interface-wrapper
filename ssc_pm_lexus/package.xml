@@ -19,4 +19,5 @@
   <depend>automotive_platform_msgs</depend>
   <depend>automotive_navigation_msgs</depend>
   <depend>pacmod_msgs</depend>
+  <depend>pacmod3</depend>
 </package>

@@ -12,7 +12,15 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastol/autoware.ai:3.0.0 as setup
+FROM usdotfhwastol/autoware.ai:3.1.0 as deps
+
+# Install remaining package deps
+RUN mkdir ~/src
+COPY --chown=carma . /home/carma/src/
+RUN rosdep install --from-paths /home/carma/src/ --ignore-src -r -y
+RUN rm -R /home/carma/src/
+
+FROM deps as setup
 
 RUN sudo apt-get update && sudo apt-get install -y ros-kinetic-jsk-recognition-msgs
 
@@ -21,7 +29,7 @@ COPY --chown=carma . /home/carma/src/
 RUN ~/src/docker/checkout.sh
 RUN ~/src/docker/install.sh
 
-FROM usdotfhwastol/autoware.ai:3.0.0
+FROM deps
 
 ARG BUILD_DATE="NULL"
 ARG VERSION="NULL"
