@@ -23,6 +23,7 @@
   <arg name="can_bit_rate" default="500000" />
   <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
   <arg name="use_socketcan" default="true" />
+  <arg name="socketcan_device" default="can0" />
 
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
