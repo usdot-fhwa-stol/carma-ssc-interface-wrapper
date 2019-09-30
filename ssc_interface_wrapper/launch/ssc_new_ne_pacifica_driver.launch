@@ -31,16 +31,14 @@
   
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
-  <node ns="vehicle" pkg="dbw_pacifica_can" type="dbw_node" name="dbw" output="screen">
+  <node ns="new_eagle" pkg="dbw_pacifica_can" type="dbw_node" name="dbw" output="screen">
     <param name="dbw_dbc_file" textfile="$(find dbw_pacifica_can)/New_Eagle_DBW_3.3.388.dbc" />
-    <remap from="can_tx" to="/can0/can_rx" />
-    <remap from="can_rx" to="/can0/can_tx" />
   </node>
 
   <node pkg="socketcan_bridge" type="socketcan_bridge_node" name="socketcan_bridge" if="$(arg use_socketcan)">
     <param name="can_device" value="$(arg socketcan_device)" />
-    <remap from="received_messages" to="can_tx" />
-    <remap from="sent_messages" to="can_rx" />
+    <remap from="received_messages" to="new_eagle/can_tx" />
+    <remap from="sent_messages" to="new_eagle/can_rx" />
   </node>
 
   <!-- SSC -->
