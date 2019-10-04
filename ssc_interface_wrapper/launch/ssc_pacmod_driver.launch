@@ -20,7 +20,7 @@
 <launch>
 
   <arg name="pacmod_vehicle_type" default="LEXUS_RX_450H" />
-  <arg name="use_kvaser" default="true" />
+  <arg name="use_kvaser" default="false" />
   <arg name="kvaser_hardware_id" default="10376" />
   <arg name="kvaser_circuit_id" default="0" />
 
