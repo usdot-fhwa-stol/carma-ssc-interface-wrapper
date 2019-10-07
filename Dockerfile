@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastol/autoware.ai:3.1.0 as deps
+FROM usdotfhwastol/autoware.ai:3.1.0-Test as deps
 
 # Install remaining package deps
 RUN mkdir ~/src
@@ -46,5 +46,6 @@ LABEL org.label-schema.vcs-ref=${VCS_REF}
 LABEL org.label-schema.build-date=${BUILD_DATE}
 
 COPY --from=setup /home/carma/install /opt/carma/install
+RUN sudo git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git /opt/pacifica-dbw-ros --branch master --depth 1 &&  sudo cp /opt/pacifica-dbw-ros/dbw_pacifica_can/New_Eagle_DBW_3.3.388.dbc /opt/carma/install/share/dbw_pacifica_can/New_Eagle_DBW_3.3.388.dbc
 
 CMD [ "wait-for-it.sh", "localhost:11311", "--", "roslaunch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch"]
