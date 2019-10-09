@@ -22,8 +22,6 @@ RUN rm -R /home/carma/src/
 
 FROM deps as setup
 
-RUN sudo apt-get update && sudo apt-get install -y ros-kinetic-jsk-recognition-msgs
-
 RUN mkdir ~/src
 COPY --chown=carma . /home/carma/src/
 RUN ~/src/docker/checkout.sh
