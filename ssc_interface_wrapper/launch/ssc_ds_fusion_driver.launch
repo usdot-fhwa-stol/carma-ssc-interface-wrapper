@@ -30,22 +30,11 @@
   
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
-<!--  <arg name="dbw_namespace" default="ds_fusion" />
-  <include file="$(find dbw_mkz_can)/launch/dbw.launch">
-    <arg name="vehicle_ns" value="$(arg dbw_namespace)"/>
-    <arg name="can_ns" value="can_bus_dbw"/>
-  </include>
--->
-
-
-
-
-
   <arg name="live" default="true" />
   <arg name="load_urdf" default="true" />
   <arg name="ulc" default="true" />
-  <arg name="vehicle_ns" default="vehicle" />
-  <arg name="can_ns" default="$(arg vehicle_ns)/can_bus_dbw" />
+  <arg name="vehicle_ns" default="ds_fusion" />
+  <arg name="can_ns" default="can_bus_dbw" />
 
   <!-- CAN Bus Hardware -->
   <node if="$(arg live)" pkg="dataspeed_can_usb" type="can_node" name="can_node" output="screen">
@@ -53,7 +42,7 @@
     <param name="bitrate_1" value="0" />
     <remap from="can_bus_2" to="can_bus_2"/>
     <param name="bitrate_2" value="0" />
-    <remap from="can_bus_3" to="$(arg can_ns)"/>
+    <remap from="can_bus_3" to="$(arg vehicle_ns)/$(arg can_ns)"/>
     <param name="bitrate_3" value="500000" />
     <param name="channel_3_mask_0"  value="0x800007E0" />
     <param name="channel_3_match_0" value="0x00000060" /> <!-- SID 0x060 to 0x07F -->
@@ -90,10 +79,9 @@
     <include if="$(arg load_urdf)" file="$(find dbw_mkz_description)/launch/mkz.launch" />
   </group>
 
-
   <!-- SSC -->
   <group>
-    <remap from="brake_cmd" to="$(arg dbw_namespace)/brake_cmd" />
+    <remap from="brake_cmd" to="$(arg vehicle_ns)/brake_cmd" />
     <remap from="brake_info_report" to="$(arg vehicle_ns)/brake_info_report" />
     <remap from="brake_report" to="$(arg vehicle_ns)/brake_report" />
     <remap from="disable" to="$(arg vehicle_ns)/disable" />
