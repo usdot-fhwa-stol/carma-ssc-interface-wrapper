@@ -45,7 +45,7 @@
   <arg name="load_urdf" default="true" />
   <arg name="ulc" default="true" />
   <arg name="vehicle_ns" default="vehicle" />
-  <arg name="can_ns" default="/can_bus_dbw" />
+  <arg name="can_ns" default="$(arg vehicle_ns)/can_bus_dbw" />
 
   <!-- CAN Bus Hardware -->
   <node if="$(arg live)" pkg="dataspeed_can_usb" type="can_node" name="can_node" output="screen">
@@ -71,7 +71,7 @@
   <arg name="ackermann_wheelbase" default="2.8498"/>
   <arg name="ackermann_track"     default="1.5824"/>
   <arg name="steering_ratio"      default="14.8"/>
-  <!-- <group ns="$(arg vehicle_ns)" > -->
+  <group ns="$(arg vehicle_ns)" >
     <node pkg="dbw_mkz_can" type="dbw_node" name="dbw_node" output="screen">
       <remap from="can_rx" to="$(arg can_ns)/can_rx"/>
       <remap from="can_tx" to="$(arg can_ns)/can_tx"/>
@@ -88,20 +88,27 @@
       <remap from="can_tx" to="$(arg can_ns)/can_tx"/>
     </node>
     <include if="$(arg load_urdf)" file="$(find dbw_mkz_description)/launch/mkz.launch" />
-  <!-- </group> -->
-
-
-
-
-
-
-
-
-
+  </group>
 
 
   <!-- SSC -->
   <group>
+    <remap from="brake_cmd" to="$(arg dbw_namespace)/brake_cmd" />
+    <remap from="brake_info_report" to="$(arg vehicle_ns)/brake_info_report" />
+    <remap from="brake_report" to="$(arg vehicle_ns)/brake_report" />
+    <remap from="disable" to="$(arg vehicle_ns)/disable" />
+    <remap from="enable" to="$(arg vehicle_ns)/enable" />
+    <remap from="steering_cmd" to="$(arg vehicle_ns)/steering_cmd" />
+    <remap from="steering_report" to="$(arg vehicle_ns)/steering_report" />
+    <remap from="surround_report" to="$(arg vehicle_ns)/surround_report" />
+    <remap from="throttle_cmd" to="$(arg vehicle_ns)/throttle_cmd" />
+    <remap from="throttle_report" to="$(arg vehicle_ns)/throttle_report" />
+    <remap from="turn_signal_cmd" to="$(arg vehicle_ns)/turn_signal_cmd" />
+    <remap from="gear_cmd" to="$(arg vehicle_ns)/gear_cmd" />
+    <remap from="gear_report" to="$(arg vehicle_ns)/gear_report" />
+    <remap from="wheel_speed_report" to="$(arg vehicle_ns)/wheel_speed_report" />
+    <remap from="misc_1_report" to="$(arg vehicle_ns)/misc_1_report" />
+
     <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
       <arg name="param_dir" value="$(arg ssc_param_dir)"/>
       <arg name="ssc_package_name" value="ssc_ds_fusion"/>
