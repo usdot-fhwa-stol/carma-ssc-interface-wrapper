@@ -17,12 +17,9 @@ FROM usdotfhwastol/autoware.ai:3.1.0 as deps
 # Install remaining package deps
 RUN mkdir ~/src
 COPY --chown=carma . /home/carma/src/
-RUN rosdep install --from-paths /home/carma/src/ --ignore-src -r -y
 RUN rm -R /home/carma/src/
 
 FROM deps as setup
-
-RUN sudo apt-get update && sudo apt-get install -y ros-kinetic-jsk-recognition-msgs
 
 RUN mkdir ~/src
 COPY --chown=carma . /home/carma/src/
