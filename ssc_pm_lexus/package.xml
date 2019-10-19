@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ssc_pm_lexus</name>
+  <version>1.0.0</version>
+  <description>Speed and Steering Control for Lexus with a PACMod.</description>
+
+  <maintainer email="dstanek@autonomoustuff.com">Daniel Stanek</maintainer>
+  <license>Closed Source</license>
+  <author email="dstanek@autonomoustuff.com">Daniel Stanek</author>
+
+  <depend>roslint</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>automotive_platform_msgs</depend>
+  <depend>automotive_navigation_msgs</depend>
+  <depend>pacmod_msgs</depend>
+  <depend>pacmod3</depend>
+</package>

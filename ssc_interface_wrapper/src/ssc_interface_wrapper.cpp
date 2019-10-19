@@ -27,7 +27,7 @@ void SSCInterfaceWrapper::initialize() {
     status_.can = true;
 
     // Initialize all subscribers
-    pacmod_rpt_sub_ = nh_->subscribe("parsed_tx/global_rpt", 5, &SSCInterfaceWrapper::pacmod_rpt_cb, this);
+    ssc_state_sub_ = nh_->subscribe("module_states", 5, &SSCInterfaceWrapper::ssc_state_cb, this);
     steer_sub_ = nh_->subscribe("parsed_tx/steer_rpt", 5, &SSCInterfaceWrapper::steer_cb, this);
     brake_sub_ = nh_->subscribe("parsed_tx/brake_rpt", 5, &SSCInterfaceWrapper::brake_cb, this);
     shift_sub_ = nh_->subscribe("parsed_tx/shift_rpt", 5, &SSCInterfaceWrapper::shift_cb, this);
@@ -75,7 +75,7 @@ bool SSCInterfaceWrapper::enable_robotic_control_cb(cav_srvs::SetEnableRoboticRe
     return true;
 }
 
-void SSCInterfaceWrapper::pacmod_rpt_cb(const pacmod_msgs::GlobalRptConstPtr& msg)
+void SSCInterfaceWrapper::ssc_state_cb(const automotive_navigation_msgs::ModuleStateConstPtr& msg)
 {
 	worker_.on_new_status_msg(msg, ros::Time::now());
 	// robot_enabled field is true once the lower level controller is running

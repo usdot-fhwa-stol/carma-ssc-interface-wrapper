@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (C) 2018-2019 LEIDOS.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<!--
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
+-->
+<launch>
+
+  <arg name="can_hardware_id" default="57755" />
+  <arg name="can_circuit_id" default="0" />
+  <arg name="can_bit_rate" default="500000" />
+  <arg name="ssc_param_dir" default="$(find ssc_ds_fusion)"/>
+
+  <!-- Launch Wrapper -->
+  <!-- Group to scope remappings -->
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+  
+  <!-- Launch Wrapped Nodes -->
+  <!-- Drive By Wire -->
+  <arg name="live" default="true" />
+  <arg name="load_urdf" default="true" />
+  <arg name="ulc" default="true" />
+  <arg name="vehicle_ns" default="ds_fusion" />
+  <arg name="can_ns" default="can_bus_dbw" />
+
+  <!-- CAN Bus Hardware -->
+  <node if="$(arg live)" pkg="dataspeed_can_usb" type="can_node" name="can_node" output="screen">
+    <remap from="can_bus_1" to="can_bus_1"/>
+    <param name="bitrate_1" value="0" />
+    <remap from="can_bus_2" to="can_bus_2"/>
+    <param name="bitrate_2" value="0" />
+    <remap from="can_bus_3" to="$(arg vehicle_ns)/$(arg can_ns)"/>
+    <param name="bitrate_3" value="500000" />
+    <param name="channel_3_mask_0"  value="0x800007E0" />
+    <param name="channel_3_match_0" value="0x00000060" /> <!-- SID 0x060 to 0x07F -->
+    <!--param name="channel_3_mask_1"  value="0x80000000" /-->
+    <!--param name="channel_3_match_1" value="0x00000000" /--> <!-- SID 0x000 to 0x7FF -->
+    <remap from="can_bus_4" to="can_bus_4"/>
+    <param name="bitrate_4" value="0" />
+  </node>
+
+  <!-- Vehicle Interface -->
+  <arg name="frame_id" default="base_footprint"/>
+  <arg name="warn_cmds" default="true"/>
+  <arg name="buttons" default="true"/>
+  <arg name="pedal_luts"    default="false"/>
+  <arg name="ackermann_wheelbase" default="2.8498"/>
+  <arg name="ackermann_track"     default="1.5824"/>
+  <arg name="steering_ratio"      default="14.8"/>
+  <group ns="$(arg vehicle_ns)" >
+    <node pkg="dbw_mkz_can" type="dbw_node" name="dbw_node" output="screen">
+      <remap from="can_rx" to="$(arg can_ns)/can_rx"/>
+      <remap from="can_tx" to="$(arg can_ns)/can_tx"/>
+      <param name="frame_id" value="$(arg frame_id)" />
+      <param name="warn_cmds" value="$(arg warn_cmds)" />
+      <param name="pedal_luts" value="$(arg pedal_luts)" />
+      <param name="buttons" value="$(arg buttons)" />
+      <param name="ackermann_wheelbase" value="$(arg ackermann_wheelbase)" />
+      <param name="ackermann_track" value="$(arg ackermann_track)" />
+      <param name="steering_ratio" value="$(arg steering_ratio)" />
+    </node>
+    <node if="$(arg ulc)" pkg="dataspeed_ulc_can" type="ulc_node" name="ulc_node" output="screen">
+      <remap from="can_rx" to="$(arg can_ns)/can_rx"/>
+      <remap from="can_tx" to="$(arg can_ns)/can_tx"/>
+    </node>
+    <include if="$(arg load_urdf)" file="$(find dbw_mkz_description)/launch/mkz.launch" />
+  </group>
+
+  <!-- SSC -->
+  <group>
+    <remap from="brake_cmd" to="$(arg vehicle_ns)/brake_cmd" />
+    <remap from="brake_info_report" to="$(arg vehicle_ns)/brake_info_report" />
+    <remap from="brake_report" to="$(arg vehicle_ns)/brake_report" />
+    <remap from="disable" to="$(arg vehicle_ns)/disable" />
+    <remap from="enable" to="$(arg vehicle_ns)/enable" />
+    <remap from="steering_cmd" to="$(arg vehicle_ns)/steering_cmd" />
+    <remap from="steering_report" to="$(arg vehicle_ns)/steering_report" />
+    <remap from="surround_report" to="$(arg vehicle_ns)/surround_report" />
+    <remap from="throttle_cmd" to="$(arg vehicle_ns)/throttle_cmd" />
+    <remap from="throttle_report" to="$(arg vehicle_ns)/throttle_report" />
+    <remap from="turn_signal_cmd" to="$(arg vehicle_ns)/turn_signal_cmd" />
+    <remap from="gear_cmd" to="$(arg vehicle_ns)/gear_cmd" />
+    <remap from="gear_report" to="$(arg vehicle_ns)/gear_report" />
+    <remap from="wheel_speed_report" to="$(arg vehicle_ns)/wheel_speed_report" />
+    <remap from="misc_1_report" to="$(arg vehicle_ns)/misc_1_report" />
+
+    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+      <arg name="param_dir" value="$(arg ssc_param_dir)"/>
+      <arg name="ssc_package_name" value="ssc_ds_fusion"/>
+    </include>
+  </group>
+
+  <!-- SSC Interface -->
+  <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
+</launch>

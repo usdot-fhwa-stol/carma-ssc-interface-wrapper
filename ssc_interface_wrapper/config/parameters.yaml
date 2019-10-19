@@ -1,2 +1,19 @@
+# Note: Vehicle Config Parameters are remapped to those provided by the carma platform
+# Specifically [wheel_base, tire_radius, acceleration_limit, deceleration_limit, max_curvature_rate]
+
 # Timeout threshold for controller, in seconds
 controller_timeout: 1
+
+# True if using rear wheel speed data
+use_rear_wheel_speed: true
+
+# True if using an adaptive gear ratio
+use_adaptive_gear_ratio: true
+
+# Timeout for command reciet
+# Units: ms
+command_timeout: 1000
+
+# Looping rate
+# Units: Hz
+loop_rate: 30.0
