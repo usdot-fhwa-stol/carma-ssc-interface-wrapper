@@ -61,6 +61,9 @@ private:
     // ROS parameter for determining controller timeout
     double controller_timeout_;
 
+    // bool flag indicates the wrapper is in the reengage mode
+    bool reengage_state_;
+
     // robotic status message as a local variable
     cav_msgs::RobotEnabled robotic_status_msg_;
 
@@ -78,6 +81,9 @@ private:
 
     // check controller health status
     void update_controller_health_status();
+
+    // reengage robotic control if the reengage_state_ flag is set
+    void reengage_robotic_control();
 
     // cav::DriverWrapper members
     virtual void initialize();
