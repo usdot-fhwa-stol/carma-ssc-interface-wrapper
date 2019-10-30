@@ -18,11 +18,11 @@
 
 uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_time, double timeout)
 {
-    if(last_vehicle_status_time_.isZero())
+    if(last_vehicle_status_time_.isZero() || latest_ssc_status_.compare("not_ready") == 0)
     {
         return cav_msgs::DriverStatus::OFF;
     }
-    else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || !latest_ssc_status_.compare("fatal")) {
+    else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || latest_ssc_status_.compare("fatal") == 0) {
         return cav_msgs::DriverStatus::FAULT;
     }
     return cav_msgs::DriverStatus::OPERATIONAL;
@@ -31,10 +31,11 @@ uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_ti
 void SSCInterfaceWrapperWorker::on_new_status_msg(const automotive_navigation_msgs::ModuleStateConstPtr& msg, const ros::Time& current_time)
 {
 	static std::string controller_tag{"veh_controller"};
-    if(!msg->name.compare(controller_tag))
+        if(msg->name.length() >= controller_tag.length() 
+		&& (0 == msg->name.compare (msg->name.length() - controller_tag.length(), controller_tag.length(), controller_tag)))
 	{
-        last_vehicle_status_time_ = current_time;
-		latest_ssc_status_ = msg->state;
+            last_vehicle_status_time_ = current_time;
+            latest_ssc_status_ = msg->state;
 	}
 }
 
