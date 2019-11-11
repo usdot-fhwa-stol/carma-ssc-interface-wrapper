@@ -1,0 +1,49 @@
+<!--
+  Copyright (C) 2018-2019 LEIDOS.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<launch>
+  <arg name="vehicle_calibration_dir" default="/opt/carma/vehicle/calibration"/>
+  <arg name="publish_steer_not_speed" default="false" doc="USE WITH CAUTION: If true then steering will be published instead of speed."/>
+  <arg name="launch_novatel" default="false" doc="If true this launch file will try to launch the novatel_gps_driver as well" />
+
+  <group if="$(arg launch_novatel)">
+    <include file="$(find novatel_gps_driver)/launch/novatel_gps_driver_eth.launch"/>
+  </group>
+
+  <group>
+
+    <!-- Remap speed or steering to fake topic to prevent level2 control -->
+    <remap unless="$(arg publish_steer_not_speed)" from="arbitrated_steering_commands" to="fake_arbitrated_steering_commands"/> 
+    <remap if="$(arg publish_steer_not_speed)" from="arbitrated_speed_commands" to="fake_arbitrated_speed_commands"/> 
+    <include file="$(find ssc_interface_wrapper)/launch/ssc_pacmod_driver.launch">
+      <arg name="pacmod_vehicle_type" default="LEXUS_RX_450H" />
+      <arg name="use_kvaser" default="false" />
+      <arg name="use_socketcan" default="true" />
+      <arg name="socketcan_device" default="can0" />
+      <arg name="ssc_param_dir" value="$(arg vehicle_calibration_dir)/ssc_pm_lexus"/>
+    </include>
+  </group>
+
+  <group>
+    <remap from="engage" to="vehicle/engage"/>
+    <node pkg="ssc_tester" name="ssc_tester" type="ssc_tester_node.py" output="screen"> 
+      <rosparam command="load" file="$(find ssc_tester)/config/params.yaml"/>
+      <param name="publish_steer_not_speed" value="$(arg publish_steer_not_speed)"/>
+    </node>
+  </group>
+
+  <node pkg="rosbag" type="record" name="rosbag_node" args="record -o /opt/carma/logs/ --lz4 -a -x '/rosout(.*)'" />
+
+</launch>
