@@ -18,6 +18,7 @@
 
 #include <cav_msgs/DriverStatus.h>
 #include <cav_msgs/RobotEnabled.h>
+#include <cav_srvs/SetEnableRobotic.h>
 #include <pacmod_msgs/SystemRptInt.h>
 #include <automotive_navigation_msgs/ModuleState.h>
 #include <j2735_msgs/TransmissionState.h>
@@ -27,21 +28,18 @@ class SSCInterfaceWrapperWorker
 
 public:
 
-    SSCInterfaceWrapperWorker() : robotic_control_engaged_(false), can_bus_timeout_(false), controller_fault_(false) {}
+    SSCInterfaceWrapperWorker() : latest_ssc_status_("not_ready") {}
     ~SSCInterfaceWrapperWorker() {}
 
     bool is_engaged();
     uint8_t get_driver_status(const ros::Time& current_time, double timeout);
     void on_new_status_msg(const automotive_navigation_msgs::ModuleStateConstPtr& msg, const ros::Time& current_time);
     int convert_shift_state_to_J2735(const pacmod_msgs::SystemRptIntConstPtr shift_state);
+    std::string get_current_ssc_state();
 
 private:
     
-    bool robotic_control_engaged_;
-    bool can_bus_timeout_;
-    bool controller_fault_;
+    std::string latest_ssc_status_;
     ros::Time last_vehicle_status_time_;
-    
-    void update_control_status(const automotive_navigation_msgs::ModuleStateConstPtr& msg);
 
 };

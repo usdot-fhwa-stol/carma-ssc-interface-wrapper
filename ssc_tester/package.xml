@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ssc_tester</name>
+  <version>2.1.0</version>
+  <description>Package containing helpful nodes for testing of SSC bahaviors</description>
+
+  <maintainer email="carma@todo.todo">carma</maintainer>
+  <license>Apache 2.0</license>
+  <author email="carma@todo.todo">carma</author>
+
+  <depend>roslint</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>automotive_platform_msgs</depend>
+  <depend>automotive_navigation_msgs</depend>
+  <depend>pacmod_msgs</depend>
+  <depend>ssc_ds_fusion</depend>
+  <depend>ssc_interface_wrapper</depend>
+  <depend>ssc_ne_pacifica</depend>
+  <depend>ssc_pm_lexus</depend>
+  <depend>as</depend>
+</package>

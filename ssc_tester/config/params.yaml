@@ -1,0 +1,17 @@
+# Defines the ros parameters that are required by the ssc_tester node
+
+# Double: Rate at which to send commands to the ssc_interface
+# Units: Hz
+cmd_rate: 20.0
+
+# Boolean: If true then commands will loop once the speeds list is exceeded
+loop_values: false
+
+# Double List: The values for speed or steering commands to send to the ssc. The duration of each command is specified by the values_period list
+# Speed Units: m/s
+# Steer Units: deg
+values: [ 5.0, 10.0 ]
+
+# Double List: The amount of time to send each speed or steering command before sending a different command
+# Units: Seconds
+value_period: [ 4.0, 6.0 ]

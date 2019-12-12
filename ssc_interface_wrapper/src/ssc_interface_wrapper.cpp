@@ -45,11 +45,18 @@ void SSCInterfaceWrapper::initialize() {
     // Load parameters
     private_nh_->param<double>("controller_timeout", controller_timeout_, 1);
 
+    // initialize member variables
+    reengage_state_ = false;
+
 }
 
 void SSCInterfaceWrapper::pre_spin()
 {
     update_controller_health_status();
+    if(reengage_state_)
+    {
+        reengage_robotic_control();
+    }
 }
 
 void SSCInterfaceWrapper::post_spin() {}
@@ -61,6 +68,16 @@ void SSCInterfaceWrapper::update_controller_health_status()
     status_.status = worker_.get_driver_status(ros::Time::now(), controller_timeout_);
 }
 
+void SSCInterfaceWrapper::reengage_robotic_control()
+{
+    if(!worker_.get_current_ssc_state().compare("ready")) {
+        std_msgs::Bool engage_cmd;
+        engage_cmd.data = true;
+        vehicle_engage_pub_.publish(engage_cmd);
+        reengage_state_ = false;
+    }
+}
+
 void SSCInterfaceWrapper::publish_robot_status()
 {
     robotic_status_msg_.robot_active = worker_.is_engaged();
@@ -70,8 +87,24 @@ void SSCInterfaceWrapper::publish_robot_status()
 bool SSCInterfaceWrapper::enable_robotic_control_cb(cav_srvs::SetEnableRoboticRequest &req, cav_srvs::SetEnableRoboticResponse &resp)
 {
     std_msgs::Bool engage_cmd;
-    engage_cmd.data = req.set == cav_srvs::SetEnableRoboticRequest::ENABLE;
-    vehicle_engage_pub_.publish(engage_cmd);
+    std::string current_state = worker_.get_current_ssc_state();
+    if(!current_state.compare("ready")) {
+        if(req.set == cav_srvs::SetEnableRoboticRequest::ENABLE) {
+            engage_cmd.data = true;
+            vehicle_engage_pub_.publish(engage_cmd);
+        }
+    } else if(!current_state.compare("active")) {
+        if(req.set == cav_srvs::SetEnableRoboticRequest::DISABLE) {
+            engage_cmd.data = false;
+            vehicle_engage_pub_.publish(engage_cmd);
+        }
+    } else if(!current_state.compare("failure")) {
+        engage_cmd.data = false;
+        vehicle_engage_pub_.publish(engage_cmd);
+        if(req.set == cav_srvs::SetEnableRoboticRequest::ENABLE) {
+            reengage_state_ = true;
+        }
+    }
     return true;
 }
 

@@ -64,6 +64,7 @@
     <node pkg="dbw_mkz_can" type="dbw_node" name="dbw_node" output="screen">
       <remap from="can_rx" to="$(arg can_ns)/can_rx"/>
       <remap from="can_tx" to="$(arg can_ns)/can_tx"/>
+      <remap from="twist" to="dbw_node_twist"/>
       <param name="frame_id" value="$(arg frame_id)" />
       <param name="warn_cmds" value="$(arg warn_cmds)" />
       <param name="pedal_luts" value="$(arg pedal_luts)" />
