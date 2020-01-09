@@ -30,6 +30,6 @@ git clone https://github.com/usdot-fhwa-stol/CARMAUtils.git ${dir}/src/CARMAUtil
 git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
 
 #checkout working commit of third party repo
-cd pacifica-dbw-ros
+cd /home/carma/src/pacifica-dbw-ros
 git checkout 75260152de8ad66321b3e85a74f84d47645f4605
-cd ..
+cd ../../..
