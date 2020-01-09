@@ -31,5 +31,5 @@ git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git ${dir}/src/paci
 
 #checkout working commit of third party repo
 cd pacifica-dbw-ros
-git checkout 6a3266dd72da2a378c27aedb2be65ae847c46b30
+git checkout 75260152de8ad66321b3e85a74f84d47645f4605
 cd ..
