@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ssc_ne_pacifica</name>
-  <version>2.1.0</version>
-  <description>Speed and Steering Control for a Pacifica with a New Eagle by-wire controller.</description>
+  <name>ssc_pm_cascadia</name>
+  <version>1.0.0</version>
+  <description>Speed and Steering Control for Freightliner Cascadia with a PACMod3</description>
 
-  <maintainer email="dstanek@autonomoustuff.com">Daniel Stanek</maintainer>
+  <maintainer email="software@autonomoustuff.com">Software Group</maintainer>
   <license>Closed Source</license>
   <author email="dstanek@autonomoustuff.com">Daniel Stanek</author>
+  <author email="sganesh@autonomoustuff.com">Sneha Ganesh</author>
 
   <depend>roslint</depend>
 
@@ -16,9 +17,11 @@
 
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
   <depend>automotive_platform_msgs</depend>
   <depend>automotive_navigation_msgs</depend>
-  <depend>dbw_pacifica_msgs</depend>
+  <depend>pacmod_msgs</depend>
+  <depend>message_filters</depend>
   <exec_depend>libas-common</exec_depend>
 </package>
 

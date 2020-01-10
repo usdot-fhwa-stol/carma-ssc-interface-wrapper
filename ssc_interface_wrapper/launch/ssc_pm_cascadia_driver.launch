@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (C) 2018-2019 LEIDOS.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<!--
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface. 
+  This launch file is for systems which require the additional gear_change node to operate such as the frieghtliner cascadia operated at STOL. 
+-->
+<launch>
+
+  <arg name="pacmod_vehicle_type" default="LEXUS_RX_450H" />
+  <arg name="use_kvaser" default="false" />
+  <arg name="kvaser_hardware_id" default="45358" />
+  <arg name="kvaser_circuit_id" default="0" />
+  <arg name="use_socketcan" default="true" />
+  <arg name="socketcan_device" default="can0" />
+  <arg name="ssc_param_dir" default="$(find ssc_pm_cascadia)"/>
+
+  <!-- Launch Wrapper -->
+  <group> <!-- Group to scope remappings -->
+    <remap from="parsed_tx/global_rpt" to="pacmod/parsed_tx/global_rpt"/>
+    <remap from="parsed_tx/steer_rpt" to="pacmod/parsed_tx/steer_rpt"/>
+    <remap from="parsed_tx/brake_rpt" to="pacmod/parsed_tx/brake_rpt"/>
+    <remap from="parsed_tx/shift_rpt" to="pacmod/parsed_tx/shift_rpt"/>
+    <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+  </group>
+  <!-- Launch Wrapped Nodes -->
+  <!-- Drive By Wire -->
+  <include file="$(find pacmod3)/launch/pacmod3.launch" ns="pacmod">
+    <arg name="pacmod_vehicle_type" value="$(arg pacmod_vehicle_type)" />
+    <arg name="use_kvaser" value="$(arg use_kvaser)" />
+    <arg name="use_socketcan" default="$(arg use_socketcan)" />
+    <arg name="socketcan_device" default="$(arg socketcan_device)" />
+    <arg name="kvaser_hardware_id" value="$(arg kvaser_hardware_id)" />
+    <arg name="kvaser_circuit_id" value="$(arg kvaser_circuit_id)" />
+  </include>
+
+  <!-- SSC -->
+  <group>
+    <remap from="brake_cmd" to="pacmod/as_rx/brake_cmd"/>
+    <remap from="brake_report" to="pacmod/parsed_tx/brake_rpt"/>
+    <remap from="enable_cmd" to="pacmod/as_rx/enable"/>
+    <remap from="steering_cmd" to="pacmod/as_rx/steer_cmd"/>
+    <remap from="steering_report" to="pacmod/parsed_tx/steer_rpt"/>
+    <remap from="throttle_cmd" to="pacmod/as_rx/accel_cmd"/>
+    <remap from="throttle_report" to="pacmod/parsed_tx/accel_rpt"/>
+    <remap from="transmission_cmd" to="pacmod/as_rx/shift_cmd"/>
+    <remap from="transmission_report" to="pacmod/parsed_tx/shift_rpt"/>
+    <remap from="turn_signal_cmd" to="pacmod/as_rx/turn_cmd"/>
+    <remap from="speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
+    <remap from="wheel_speed" to="pacmod/parsed_tx/wheel_speed_rpt"/>
+    <remap from="global_report" to="pacmod/parsed_tx/global_rpt"/>
+    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+      <arg name="param_dir" value="$(arg ssc_param_dir)"/>
+      <arg name="ssc_package_name" value="ssc_pm_cascadia"/>
+    </include>
+  </group>
+
+  <!-- SSC Interface Using custom remapping for gear change node -->
+  <group>
+    <remap from="as/arbitrated_speed_commands" to="ssc_interface/arbitrated_speed_commands"/> <!-- Gear change required remapping -->
+    <remap from="as/arbitrated_steering_commands" to="ssc_interface/arbitrated_steering_commands"/> <!-- Gear change required remapping -->
+
+    <remap from="as/brake_feedback" to="brake_feedback"/>
+    <remap from="as/steering_feedback" to="steering_feedback"/>
+    <remap from="as/curvature_feedback" to="curvature_feedback"/>
+    <remap from="as/gear_feedback" to="gear_feedback"/>
+    <remap from="as/gear_select" to="gear_select"/>
+    <remap from="as/module_states" to="module_states"/>
+    <remap from="as/throttle_feedback" to="throttle_feedback"/>
+    <remap from="as/turn_signal_command" to="turn_signal_command"/>
+    <remap from="as/velocity_accel_cov" to="velocity_accel_cov"/>
+    <!-- Vehicle Config Parameter Remapping -->
+    <remap from="~wheel_base" to="/vehicle_wheel_base"/>
+    <remap from="~tire_radius" to="/vehicle_tire_radius"/>
+    <remap from="~acceleration_limit" to="/vehicle_acceleration_limit"/>
+    <remap from="~deceleration_limit" to="/vehicle_deceleration_limit"/>
+    <remap from="~max_curvature_rate" to="/vehicle_max_curvature_rate"/>
+    <include file="$(find as)/launch/ssc_interface.launch">
+        <arg name="use_adaptive_gear_ratio" value="false"/>
+        <arg name="command_timeout" value="1000"/>
+        <arg name="loop_rate" value="30.0"/>
+    </include>
+  </group>
+
+  <!-- SCC Gear Change Node -->
+  <node pkg="ssc_gear_change" type="gear_change" name="gear_change">
+		<param name="delay_time" value="3" />
+		<remap from="as/arbitrated_speed_commands" to="arbitrated_speed_commands"/>
+		<remap from="as/gear_select" to="gear_select"/>
+		<remap from="as/gear_feedback" to="gear_feedback"/>
+  </node>
+</launch>
