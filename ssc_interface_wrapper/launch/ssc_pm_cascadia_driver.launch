@@ -48,6 +48,7 @@
   </include>
 
   <!-- SSC -->
+
   <group>
     <remap from="brake_cmd" to="pacmod/as_rx/brake_cmd"/>
     <remap from="brake_report" to="pacmod/parsed_tx/brake_rpt"/>
@@ -59,7 +60,7 @@
     <remap from="transmission_cmd" to="pacmod/as_rx/shift_cmd"/>
     <remap from="transmission_report" to="pacmod/parsed_tx/shift_rpt"/>
     <remap from="turn_signal_cmd" to="pacmod/as_rx/turn_cmd"/>
-    <remap from="speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
+    <remap from="vehicle_speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
     <remap from="wheel_speed" to="pacmod/parsed_tx/wheel_speed_rpt"/>
     <remap from="global_report" to="pacmod/parsed_tx/global_rpt"/>
     <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
@@ -70,9 +71,8 @@
 
   <!-- SSC Interface Using custom remapping for gear change node -->
   <group>
-    <remap from="as/arbitrated_speed_commands" to="ssc_interface/arbitrated_speed_commands"/> <!-- Gear change required remapping -->
-    <remap from="as/arbitrated_steering_commands" to="ssc_interface/arbitrated_steering_commands"/> <!-- Gear change required remapping -->
-
+    <remap from="as/arbitrated_speed_commands" to="arbitrated_speed_commands"/>
+    <remap from="as/arbitrated_steering_commands" to="arbitrated_steering_commands"/>
     <remap from="as/brake_feedback" to="brake_feedback"/>
     <remap from="as/steering_feedback" to="steering_feedback"/>
     <remap from="as/curvature_feedback" to="curvature_feedback"/>
@@ -94,12 +94,4 @@
         <arg name="loop_rate" value="30.0"/>
     </include>
   </group>
-
-  <!-- SCC Gear Change Node -->
-  <node pkg="ssc_gear_change" type="gear_change" name="gear_change">
-		<param name="delay_time" value="3" />
-		<remap from="as/arbitrated_speed_commands" to="arbitrated_speed_commands"/>
-		<remap from="as/gear_select" to="gear_select"/>
-		<remap from="as/gear_feedback" to="gear_feedback"/>
-  </node>
 </launch>
