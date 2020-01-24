@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright (C) 2018-2020 LEIDOS.
+  Copyright (C) 2018-2019 LEIDOS.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -15,17 +15,18 @@
   the License.
 -->
 <!--
-	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface. 
+  This launch file is for systems which require the additional gear_change node to operate such as the frieghtliner cascadia operated at STOL. 
 -->
 <launch>
 
   <arg name="pacmod_vehicle_type" default="LEXUS_RX_450H" />
   <arg name="use_kvaser" default="false" />
-  <arg name="kvaser_hardware_id" default="10376" />
+  <arg name="kvaser_hardware_id" default="45358" />
   <arg name="kvaser_circuit_id" default="0" />
   <arg name="use_socketcan" default="true" />
   <arg name="socketcan_device" default="can0" />
-  <arg name="ssc_param_dir" default="$(find ssc_pm_lexus)"/>
+  <arg name="ssc_param_dir" default="$(find ssc_pm_cascadia)"/>
 
   <!-- Launch Wrapper -->
   <group> <!-- Group to scope remappings -->
@@ -47,6 +48,7 @@
   </include>
 
   <!-- SSC -->
+
   <group>
     <remap from="brake_cmd" to="pacmod/as_rx/brake_cmd"/>
     <remap from="brake_report" to="pacmod/parsed_tx/brake_rpt"/>
@@ -58,15 +60,38 @@
     <remap from="transmission_cmd" to="pacmod/as_rx/shift_cmd"/>
     <remap from="transmission_report" to="pacmod/parsed_tx/shift_rpt"/>
     <remap from="turn_signal_cmd" to="pacmod/as_rx/turn_cmd"/>
-    <remap from="speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
+    <remap from="vehicle_speed" to="pacmod/parsed_tx/vehicle_speed_rpt"/>
     <remap from="wheel_speed" to="pacmod/parsed_tx/wheel_speed_rpt"/>
     <remap from="global_report" to="pacmod/parsed_tx/global_rpt"/>
     <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
       <arg name="param_dir" value="$(arg ssc_param_dir)"/>
-      <arg name="ssc_package_name" value="ssc_pm_lexus"/>
+      <arg name="ssc_package_name" value="ssc_pm_cascadia"/>
     </include>
   </group>
 
-  <!-- SSC Interface -->
-  <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
+  <!-- SSC Interface Using custom remapping for gear change node -->
+  <group>
+    <remap from="as/arbitrated_speed_commands" to="arbitrated_speed_commands"/>
+    <remap from="as/arbitrated_steering_commands" to="arbitrated_steering_commands"/>
+    <remap from="as/brake_feedback" to="brake_feedback"/>
+    <remap from="as/steering_feedback" to="steering_feedback"/>
+    <remap from="as/curvature_feedback" to="curvature_feedback"/>
+    <remap from="as/gear_feedback" to="gear_feedback"/>
+    <remap from="as/gear_select" to="gear_select"/>
+    <remap from="as/module_states" to="module_states"/>
+    <remap from="as/throttle_feedback" to="throttle_feedback"/>
+    <remap from="as/turn_signal_command" to="turn_signal_command"/>
+    <remap from="as/velocity_accel_cov" to="velocity_accel_cov"/>
+    <!-- Vehicle Config Parameter Remapping -->
+    <remap from="~wheel_base" to="/vehicle_wheel_base"/>
+    <remap from="~tire_radius" to="/vehicle_tire_radius"/>
+    <remap from="~acceleration_limit" to="/vehicle_acceleration_limit"/>
+    <remap from="~deceleration_limit" to="/vehicle_deceleration_limit"/>
+    <remap from="~max_curvature_rate" to="/vehicle_max_curvature_rate"/>
+    <include file="$(find as)/launch/ssc_interface.launch">
+        <arg name="use_adaptive_gear_ratio" value="false"/>
+        <arg name="command_timeout" value="1000"/>
+        <arg name="loop_rate" value="30.0"/>
+    </include>
+  </group>
 </launch>

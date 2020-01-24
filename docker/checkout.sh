@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2018-2019 LEIDOS.
+#  Copyright (C) 2018-2020 LEIDOS.
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
@@ -24,7 +24,7 @@ if [[ -n ${1} ]]; then
       dir=${1}
 fi
 
-git clone https://github.com/usdot-fhwa-stol/CARMAMsgs.git ${dir}/src/CARMAMsgs --branch CARMAMsgs_1.1.0 --depth 1
+git clone https://github.com/usdot-fhwa-stol/CARMAMsgs.git ${dir}/src/CARMAMsgs --branch CARMAMsgs_1.2.0 --depth 1
 git clone https://github.com/usdot-fhwa-stol/CARMAUtils.git ${dir}/src/CARMAUtils --branch CARMAUtils_1.3.0 --depth 1
 # Required to build the dbw_pacifica_msgs message set.
-git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
+git clone https://github.com/jtbaird/pacifica-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
