@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>ssc_gear_change</name>
-  <version>2.2.0</version>
+  <version>2.3.0</version>
   <description>Node for handling gear changes on some packmod interfaces</description>
   <maintainer email="carma@dot.gov">Carma Support</maintainer>
   <license>Apache 2</license>
