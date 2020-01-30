@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>ssc_ds_fusion</name>
-  <version>2.2.0</version>
+  <version>2.3.0</version>
   <description>Speed and Steering Control for a Fusion with a DataSpeed by-wire controller.</description>
 
   <maintainer email="dstanek@autonomoustuff.com">Daniel Stanek</maintainer>
