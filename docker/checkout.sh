@@ -27,4 +27,4 @@ fi
 git clone https://github.com/usdot-fhwa-stol/CARMAMsgs.git ${dir}/src/CARMAMsgs --branch develop --depth 1
 git clone https://github.com/usdot-fhwa-stol/CARMAUtils.git ${dir}/src/CARMAUtils --branch develop --depth 1
 # Required to build the dbw_pacifica_msgs message set.
-git clone https://github.com/jtbaird/pacifica-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
+git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
