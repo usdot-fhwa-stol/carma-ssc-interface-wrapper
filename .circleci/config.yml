@@ -49,7 +49,7 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.sh ${PWD}
+            ./src/CARMASscInterfaceWrapper/docker/checkout.sh -r ${PWD}
       - run:
           name: Build Driver
           command: |
