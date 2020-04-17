@@ -43,4 +43,4 @@ else
 fi
 
 # Required to build the dbw_pacifica_msgs message set.
-git clone https://github.com/NewEagleRaptor/pacifica-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
+git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/pacifica-dbw-ros --branch master --depth 1
