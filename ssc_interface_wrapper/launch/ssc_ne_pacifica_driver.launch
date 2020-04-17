@@ -30,8 +30,8 @@
 
   <!-- Drive By Wire -->
 <group if="$(arg use_socketcan)">
-  <node pkg="raptor_dbw_can" type="dbw_node" name="dbw" output="screen">
-    <param name="dbw_dbc_file" textfile="$(find raptor_dbw_can)/New_Eagle_DBW_3.3.388.dbc" />
+  <node pkg="dbw_pacifica_can" type="dbw_node" name="dbw" output="screen">
+    <param name="dbw_dbc_file" textfile="$(find dbw_pacifica_can)/New_Eagle_DBW_3.3.388.dbc" />
   </node>
   <node pkg="socketcan_bridge" type="socketcan_bridge_node" name="socketcan_bridge" if="$(arg use_socketcan)">
     <param name="can_device" value="$(arg socketcan_device)" />
@@ -40,7 +40,7 @@
   </node>
 </group>
 <group unless="$(arg use_socketcan)">
-  <include file="$(find raptor_dbw_can)/launch/dbw.launch">
+  <include file="$(find dbw_pacifica_can)/launch/dbw.launch">
     <arg name="can_hardware_id" default="57755" />
     <arg name="can_circuit_id" default="0" />
     <arg name="can_bit_rate" default="500000" />
