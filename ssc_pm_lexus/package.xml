@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>ssc_pm_lexus</name>
   <version>2.3.0</version>
   <description>Speed and Steering Control for Lexus with a PACMod.</description>
