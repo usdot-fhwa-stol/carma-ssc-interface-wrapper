@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>ssc_tester</name>
   <version>2.3.0</version>
   <description>Package containing helpful nodes for testing of SSC bahaviors</description>
