@@ -19,12 +19,6 @@
 -->
 <launch>
 
-  <arg name="pacmod_vehicle_type" default="LEXUS_RX_450H" />
-  <arg name="use_kvaser" default="false" />
-  <arg name="kvaser_hardware_id" default="10376" />
-  <arg name="kvaser_circuit_id" default="0" />
-  <arg name="use_socketcan" default="true" />
-  <arg name="socketcan_device" default="can0" />
   <arg name="ssc_param_dir" default="$(find ssc_pm_lexus)"/>
 
   <!-- Launch Wrapper -->
@@ -37,14 +31,7 @@
   </group>
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
-  <include file="$(find pacmod3)/launch/pacmod3.launch" ns="pacmod">
-    <arg name="pacmod_vehicle_type" value="$(arg pacmod_vehicle_type)" />
-    <arg name="use_kvaser" value="$(arg use_kvaser)" />
-    <arg name="use_socketcan" default="$(arg use_socketcan)" />
-    <arg name="socketcan_device" default="$(arg socketcan_device)" />
-    <arg name="kvaser_hardware_id" value="$(arg kvaser_hardware_id)" />
-    <arg name="kvaser_circuit_id" value="$(arg kvaser_circuit_id)" />
-  </include>
+  <include file="$(arg ssc_param_dir)/pacmod3_connection.launch" ns="pacmod"/>
 
   <!-- SSC -->
   <group>
