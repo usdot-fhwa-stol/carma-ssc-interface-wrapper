@@ -44,10 +44,10 @@ else
 fi
 
 # Required to build the dbw_pacifica_msgs message set.
-git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master --depth 4
+git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master
 pwd
 base_dir=$(pwd)
 cd ${dir}/src/raptor-dbw-ros
 git status
-git checkout 9eadaf13c261b15dbd1a816560a03c00926a6683
+git checkout b8ce257dd1bb9f41c31c070a684d482aba53ae96
 cd ${base_dir}
