@@ -49,5 +49,5 @@ pwd
 base_dir=$(pwd)
 cd ${dir}/src/raptor-dbw-ros
 git status
-git checkout 259dce7c51507c2dc7c601eda3706df60fef8c90
+git checkout 54c56d7350249bdcef3ddb0134f04e0874c8a6f2
 cd ${base_dir}
