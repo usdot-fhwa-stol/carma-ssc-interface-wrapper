@@ -16,7 +16,7 @@
  * the License.
  */
 
-#include <driver_wrapper/driver_wrapper.h>
+#include <cav_driver_utils/driver_wrapper.h>
 #include <cav_srvs/SetEnableRobotic.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float64.h>

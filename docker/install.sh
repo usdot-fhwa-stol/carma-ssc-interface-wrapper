@@ -16,6 +16,6 @@
 
 source /opt/autoware.ai/ros/install/setup.bash
 cd ~/
-catkin_make install
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 chmod -R ugo+x ~/install
 unset ROS_LANG_DISABLE
