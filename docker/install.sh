@@ -21,6 +21,7 @@ cd ~/dbw
 source ~/dataspeed/devel_isolated/setup.bash
 catkin_make_isolated    # build dbw_mkz packages
 cd ..
+source ~/dbw/devel_isolated/setup.bash
 catkin_make install -DCMAKE_BUILD_TYPE=Release
 chmod -R ugo+x ~/install
 unset ROS_LANG_DISABLE
