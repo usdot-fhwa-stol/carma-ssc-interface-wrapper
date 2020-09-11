@@ -15,7 +15,12 @@
 #  the License.
 
 source /opt/autoware.ai/ros/install/setup.bash
-cd ~/
-catkin_make_isolated install -DCMAKE_BUILD_TYPE=Release
+cd ~/dataspeed
+catkin_make_isolated
+cd ~/dbw
+source ~/dataspeed/devel_isolated/setup.bash
+catkin_make_isolated    # build dbw_mkz packages
+cd ..
+catkin_make install -DCMAKE_BUILD_TYPE=Release
 chmod -R ugo+x ~/install
 unset ROS_LANG_DISABLE
