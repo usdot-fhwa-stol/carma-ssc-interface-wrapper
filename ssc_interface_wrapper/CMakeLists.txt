@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   cav_srvs
   autoware_msgs
   can_msgs  
-  std_msgs
   pacmod_msgs
   j2735_msgs
   roscpp
@@ -30,6 +29,17 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
+        INCLUDE_DIRS include
+        CATKIN_DEPENDS
+        cav_driver_utils
+        cav_msgs
+        cav_srvs
+        autoware_msgs
+        can_msgs  
+        pacmod_msgs
+        j2735_msgs
+        roscpp
+        automotive_navigation_msgs
 )
 
 ###########
