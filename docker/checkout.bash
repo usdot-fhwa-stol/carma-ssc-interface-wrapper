@@ -46,12 +46,11 @@ fi
 # Required to build the dbw_pacifica_msgs message set.
 git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master --depth 1
 
-git clone https://bitbucket.org/DataspeedInc/dataspeed_can.git ~/dataspeed/src/dataspeed_can --branch master
-cd ~/dataspeed/src/dataspeed_can
-rm -rf dataspeed_can_msgs dataspeed_can_tools dataspeed_can_usb
-cd /
+#git clone https://bitbucket.org/DataspeedInc/dataspeed_can.git ~/dataspeed/src/dataspeed_can --branch 1.0.13
+#cd ~/dataspeed/src/dataspeed_can
+#rm -rf dataspeed_can_msgs dataspeed_can_tools dataspeed_can_usb
+#cd /
 
-git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ~/dbw/src/dbw-mkz-ros --branch master
-cd ~/dbw/src/dbw-mkz-ros
-git checkout 1.2.4
-cd /
+git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
+#cd ${dir}
+#rosdep install --from-paths src --ignore-src -r -y

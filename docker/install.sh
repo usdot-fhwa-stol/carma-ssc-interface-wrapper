@@ -15,17 +15,18 @@
 #  the License.
 
 source /opt/autoware.ai/ros/install/setup.bash
-cd ~/dataspeed
-colcon build
-ls build
-echo ""
-ls install
-echo ""
-cd ~/dbw
-source ~/dataspeed/install/setup.bash
-colcon build
+#cd ~/dataspeed
+#colcon build
+#ls build
+#echo ""
+#ls install
+#echo ""
+#cd ~/dbw
+#source ~/dataspeed/install/setup.bash
+#colcon build
 cd ~/
-source ~/dbw/install/setup.bash
+#source ~/dbw/install/setup.bash
+rosdep install --from-paths src --ignore-src -r -y
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 chmod -R ugo+x ~/install
 unset ROS_LANG_DISABLE
