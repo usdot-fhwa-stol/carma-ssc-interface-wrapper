@@ -53,5 +53,5 @@ cd /
 
 git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ~/dbw/src/dbw-mkz-ros --branch master
 cd ~/dbw/src/dbw-mkz-ros
-git checkout 1.2.8
+git checkout 1.2.4
 cd /
