@@ -45,3 +45,11 @@ fi
 
 # Required to build the dbw_pacifica_msgs message set.
 git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master --depth 1
+
+# Required for ford fusion drive by wire
+git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
+
+sudo apt-get install -y apt-utils
+source /opt/autoware.ai/ros/install/setup.bash
+cd ${dir}/
+rosdep install --from-paths src --ignore-src -r -y
