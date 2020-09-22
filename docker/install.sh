@@ -14,10 +14,8 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
 cd ~/
-rosdep install --from-paths src --ignore-src -r -y
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 chmod -R ugo+x ~/install
 unset ROS_LANG_DISABLE
