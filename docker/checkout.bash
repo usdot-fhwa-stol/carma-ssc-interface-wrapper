@@ -51,5 +51,5 @@ git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-
 
 sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
-cd ~/
+cd ${dir}/
 rosdep install --from-paths src --ignore-src -r -y
