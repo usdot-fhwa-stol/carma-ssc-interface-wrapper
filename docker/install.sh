@@ -14,6 +14,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
+sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
 #cd ~/dataspeed
 #colcon build
