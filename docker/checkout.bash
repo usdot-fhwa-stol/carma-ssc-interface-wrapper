@@ -49,3 +49,7 @@ git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor
 # Required for ford fusion drive by wire
 git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
+sudo apt-get install -y apt-utils
+source /opt/autoware.ai/ros/install/setup.bash
+cd ~/
+rosdep install --from-paths src --ignore-src -r -y
