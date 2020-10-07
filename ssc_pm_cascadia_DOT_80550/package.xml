@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>ssc_pm_cascadia_DOT-10002</name>
+  <name>ssc_pm_cascadia_DOT_80550</name>
   <version>2.3.0</version>
-  <description>Speed and Steering Control for the blue Freightliner Cascadia with a PACMod3</description>
+  <description>Speed and Steering Control for Freightliner Cascadia with a PACMod3</description>
 
   <maintainer email="software@autonomoustuff.com">Software Group</maintainer>
   <license>Closed Source</license>
