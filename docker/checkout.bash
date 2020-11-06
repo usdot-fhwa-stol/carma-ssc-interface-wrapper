@@ -50,7 +50,7 @@ git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor
 git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
 # Required to build pacmod_msgs
-git clone https://github.com/astuff/astuff_sensor_msgs.git ${dir}/src/astuff_sensor_msgs --branch ros2-3.0.0
+git clone https://github.com/astuff/astuff_sensor_msgs.git ${dir}/src/astuff_sensor_msgs --branch 3.0.1
 
 sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
