@@ -48,11 +48,13 @@ jobs:
       - run: 
           name: Pull Deps
           command: |
+            set -x
             source ${INIT_ENV}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Build Driver
           command: |
+            set -x
             source ${INIT_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
