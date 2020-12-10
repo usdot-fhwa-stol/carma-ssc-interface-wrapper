@@ -48,7 +48,6 @@ jobs:
       - run: 
           name: Pull Deps
           command: |
-            set -x
             source ${INIT_ENV}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:

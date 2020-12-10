@@ -44,7 +44,8 @@ else
 fi
 
 # Required to build the dbw_pacifica_msgs message set.
-git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master --depth 1
+git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master 
+git reset --hard f50f91cd88ad27b2ce05bab1f8ff780931c41475
 
 # Required for ford fusion drive by wire
 git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
