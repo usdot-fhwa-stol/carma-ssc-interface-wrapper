@@ -15,12 +15,7 @@
 	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
 -->
 <launch>
-  <arg name="can_hardware_id" default="57755" />
-  <arg name="can_circuit_id" default="0" />
-  <arg name="can_bit_rate" default="500000" />
   <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
-  <arg name="use_socketcan" default="true" />
-  <arg name="socketcan_device" default="can0" />
 
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
@@ -29,23 +24,7 @@
   <!-- Launch Wrapped Nodes -->	
 
   <!-- Drive By Wire -->
-<group if="$(arg use_socketcan)">
-  <node pkg="dbw_pacifica_can" type="dbw_node" name="dbw" output="screen">
-    <param name="dbw_dbc_file" textfile="$(find dbw_pacifica_can)/New_Eagle_DBW_3.3.388.dbc" />
-  </node>
-  <node pkg="socketcan_bridge" type="socketcan_bridge_node" name="socketcan_bridge" if="$(arg use_socketcan)">
-    <param name="can_device" value="$(arg socketcan_device)" />
-    <remap from="received_messages" to="can_rx" />
-    <remap from="sent_messages" to="can_tx" />
-  </node>
-</group>
-<group unless="$(arg use_socketcan)">
-  <include file="$(find dbw_pacifica_can)/launch/dbw.launch">
-    <arg name="can_hardware_id" default="57755" />
-    <arg name="can_circuit_id" default="0" />
-    <arg name="can_bit_rate" default="500000" />
-  </include>
-</group>
+  <include file="$(arg ssc_param_dir)/ne_dbw_connection.launch"/>
 
   <!-- SSC -->
   <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">

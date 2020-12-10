@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>ssc_pm_cascadia_dot_10002</name>
+  <version>2.3.0</version>
+  <description>Speed and Steering Control for the blue Freightliner Cascadia with a PACMod3</description>
+
+  <maintainer email="software@autonomoustuff.com">Software Group</maintainer>
+  <license>Closed Source</license>
+  <author email="dstanek@autonomoustuff.com">Daniel Stanek</author>
+  <author email="sganesh@autonomoustuff.com">Sneha Ganesh</author>
+
+  <depend>roslint</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>automotive_platform_msgs</depend>
+  <depend>automotive_navigation_msgs</depend>
+  <depend>pacmod_msgs</depend>
+  <depend>message_filters</depend>
+  <exec_depend>libas-common</exec_depend>
+</package>
+
