@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastol/autoware.ai:3.6.0 as deps
+FROM usdotfhwastol/autoware.ai:carma-system-3.4.0 as deps
 
 # Install remaining package deps
 RUN mkdir ~/src
