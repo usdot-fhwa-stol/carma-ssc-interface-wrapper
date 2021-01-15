@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the develop branch
   push:
-    branches: [ $default-branch ]
+    branches: [ feature/github_ci ]
   pull_request:
-    branches: [ $default-branch ]
+    branches: [ feature/github_ci ] # $default-branch
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
