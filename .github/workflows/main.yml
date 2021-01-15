@@ -29,8 +29,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       #- uses: actions/checkout@v2
-      - shell: bash
       - name: Pull Source
+        shell: bash
         run: |
           echo ${INIT_ENV}
           ls /opt/carma/
