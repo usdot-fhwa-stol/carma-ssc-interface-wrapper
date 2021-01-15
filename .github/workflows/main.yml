@@ -30,6 +30,8 @@ jobs:
       #- uses: actions/checkout@v2
       - name: Pull Source
         run: |
+          echo ${INIT_ENV}
+          ls /opt/carma/
           source ${INIT_ENV}
           cd ${CARMA_HOME}
           mkdir src
