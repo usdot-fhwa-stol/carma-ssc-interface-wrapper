@@ -45,7 +45,7 @@ jobs:
         run: |
           source ${INIT_ENV}
           cd ${CARMA_HOME}/src
-          CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+          carma-ssc-interface-wrapper/docker/checkout.bash -r ${PWD}
           
       - name: Build driver
         shell: bash
