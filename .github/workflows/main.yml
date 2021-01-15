@@ -41,12 +41,14 @@ jobs:
           git clone https://github.com/usdot-fhwa-stol/carma-ssc-interface-wrapper.git --branch feature/github_ci
 
       - name: Pull deps
+        shell: bash
         run: |
           source ${INIT_ENV}
           cd ${CARMA_HOME}/src
           CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
           
       - name: Build driver
+        shell: bash
         run: |
             source ${INIT_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
