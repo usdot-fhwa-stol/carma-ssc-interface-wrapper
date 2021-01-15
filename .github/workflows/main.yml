@@ -22,18 +22,25 @@ jobs:
     container: usdotfhwastoldev/autoware.ai:develop
     env:
       INIT_ENV: /home/carma/.base-image/init-env.sh
+      CARMA_HOME: /opt/carma/
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      #- uses: actions/checkout@v2
+      - name: Pull Source
+        run: |
+          source ${INIT_ENV}
+          cd ${CARMA_HOME}
+          mkdir src
+          cd src
+          git clone https://github.com/usdot-fhwa-stol/carma-ssc-interface-wrapper.git --branch feature/github_ci
 
       - name: Pull deps
         run: |
           source ${INIT_ENV}
-          cd $GITHUB_WORKSPACE
-          cd ../
-          $GITHUB_WORKSPACE/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+          cd ${CARMA_HOME}/src
+          CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
           
       - name: Build driver
         run: |
