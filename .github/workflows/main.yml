@@ -21,9 +21,7 @@ jobs:
     runs-on: ubuntu-16.04
     container: 
       image: usdotfhwastoldev/autoware.ai:develop
-      credentials: # TODO not sure if the user and password need to be secure since there isn't a password
-        username: carma
-        password: ''
+      options: --user 1000
     defaults:
       run:
         shell: bash
