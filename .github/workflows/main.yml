@@ -19,7 +19,15 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-16.04
-    container: usdotfhwastoldev/autoware.ai:develop
+    container: 
+      image: usdotfhwastoldev/autoware.ai:develop
+      credentials:
+        username: carma # TODO hide?
+        password: carma # TODO hide?
+    defaults:
+      run:
+        shell: bash
+        working-directory: /opt/carma/
     env:
       INIT_ENV: /home/carma/.base-image/init-env.sh
       CARMA_HOME: /opt/carma/
@@ -30,10 +38,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       #- uses: actions/checkout@v2
       - name: Pull Source
-        shell: bash
         run: |
           echo ${INIT_ENV}
-          ls /opt/carma/
           source ${INIT_ENV}
           cd ${CARMA_HOME}
           mkdir src
@@ -41,14 +47,12 @@ jobs:
           git clone https://github.com/usdot-fhwa-stol/carma-ssc-interface-wrapper.git --branch feature/github_ci
 
       - name: Pull deps
-        shell: bash
         run: |
           source ${INIT_ENV}
           cd ${CARMA_HOME}/src
           carma-ssc-interface-wrapper/docker/checkout.bash -r ${PWD}
           
       - name: Build driver
-        shell: bash
         run: |
             source ${INIT_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
