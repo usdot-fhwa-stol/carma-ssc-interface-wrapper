@@ -59,4 +59,5 @@ rm -rf ${dir}/src/astuff_sensor_msgs/ibeo_msgs
 sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
 cd ${dir}/
+rosdep update
 rosdep install --from-paths src --ignore-src -r -y
