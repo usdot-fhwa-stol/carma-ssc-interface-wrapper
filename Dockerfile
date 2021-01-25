@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastoldev/autoware.ai:release/vanden-plas as deps
+FROM usdotfhwastolcandidate/autoware.ai:vanden-plas as deps
 
 # Install remaining package deps
 RUN mkdir ~/src
