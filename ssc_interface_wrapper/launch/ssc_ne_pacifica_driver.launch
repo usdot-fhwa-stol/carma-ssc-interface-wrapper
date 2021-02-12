@@ -27,11 +27,30 @@
   <include file="$(arg ssc_param_dir)/ne_dbw_connection.launch"/>
 
   <!-- SSC -->
+  <group>
+
+  <remap from="brake_cmd" to="$(arg vehicle_ns)/brake_cmd" />
+    <remap from="brake_info_report" to="$(arg vehicle_ns)/brake_info_report" />
+    <remap from="brake_report" to="$(arg vehicle_ns)/brake_report" />
+    <remap from="disable" to="$(arg vehicle_ns)/disable" />
+    <remap from="enable" to="$(arg vehicle_ns)/enable" />
+    <remap from="steering_cmd" to="$(arg vehicle_ns)/steering_cmd" />
+    <remap from="steering_report" to="$(arg vehicle_ns)/steering_report" />
+    <remap from="surround_report" to="$(arg vehicle_ns)/surround_report" />
+    <remap from="throttle_cmd" to="$(arg vehicle_ns)/throttle_cmd" />
+    <remap from="throttle_report" to="$(arg vehicle_ns)/throttle_report" />
+    <remap from="turn_signal_cmd" to="$(arg vehicle_ns)/turn_signal_cmd" />
+    <remap from="gear_cmd" to="$(arg vehicle_ns)/gear_cmd" />
+    <remap from="gear_report" to="$(arg vehicle_ns)/gear_report" />
+    <remap from="wheel_speed_report" to="$(arg vehicle_ns)/wheel_speed_report" />
+    <remap from="misc_1_report" to="$(arg vehicle_ns)/misc_1_report" />
+
+    
   <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
     <arg name="param_dir" value="$(arg ssc_param_dir)"/>
     <arg name="ssc_package_name" value="ssc_ne_pacifica"/>
   </include>
-
+</group>
   <!-- SSC Interface -->
   <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
 </launch>
