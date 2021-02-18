@@ -27,11 +27,14 @@
   <include file="$(arg ssc_param_dir)/ne_dbw_connection.launch"/>
 
   <!-- SSC -->
+  <group>
+
+  
   <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
     <arg name="param_dir" value="$(arg ssc_param_dir)"/>
     <arg name="ssc_package_name" value="ssc_ne_pacifica"/>
   </include>
-
+</group>
   <!-- SSC Interface -->
   <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
 </launch>
