@@ -15,14 +15,17 @@
  */
 
 #include "ssc_interface_wrapper_worker.h"
+#include <ros/ros.h>
 
 uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_time, double timeout)
 {
+
     if(last_vehicle_status_time_.isZero() || latest_ssc_status_.compare("not_ready") == 0)
     {
         return cav_msgs::DriverStatus::OFF;
     }
-    else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || latest_ssc_status_.compare("fatal") == 0) {
+    else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || latest_ssc_status_.compare("fatal") == 0 
+	|| latest_ssc_status_.compare("failure") == 0) {
         return cav_msgs::DriverStatus::FAULT;
     }
     return cav_msgs::DriverStatus::OPERATIONAL;
@@ -63,5 +66,6 @@ int SSCInterfaceWrapperWorker::convert_shift_state_to_J2735(const pacmod_msgs::S
 
 bool SSCInterfaceWrapperWorker::is_engaged()
 {
+
     return !latest_ssc_status_.compare("active");
 }
