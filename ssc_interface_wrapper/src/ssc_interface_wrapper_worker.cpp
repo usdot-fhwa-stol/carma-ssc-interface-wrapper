@@ -25,7 +25,7 @@ uint8_t SSCInterfaceWrapperWorker::get_driver_status(const ros::Time& current_ti
         return cav_msgs::DriverStatus::OFF;
     }
     else if(current_time - last_vehicle_status_time_ > ros::Duration(timeout) || latest_ssc_status_.compare("fatal") == 0 
-	|| latest_ssc_status_.compare("failure") == 0) {
+	|| (latest_ssc_status_.compare("failure") == 0 && latest_ssc_status_info_.compare("Operator Override") != 0)) {
         return cav_msgs::DriverStatus::FAULT;
     }
     return cav_msgs::DriverStatus::OPERATIONAL;
@@ -39,6 +39,7 @@ void SSCInterfaceWrapperWorker::on_new_status_msg(const automotive_navigation_ms
 	{
             last_vehicle_status_time_ = current_time;
             latest_ssc_status_ = msg->state;
+			latest_ssc_status_info_ = msg->info;
 	}
 }
 
