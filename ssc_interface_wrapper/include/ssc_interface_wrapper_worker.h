@@ -38,7 +38,7 @@ public:
     std::string get_current_ssc_state();
 
 private:
-    
+    std::string latest_ssc_status_info_;
     std::string latest_ssc_status_;
     ros::Time last_vehicle_status_time_;
 
