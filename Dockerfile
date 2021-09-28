@@ -13,7 +13,7 @@
 #  the License.
 
 
-FROM usdotfhwastol/autoware.ai:carma-system-3.8.0 as deps
+FROM usdotfhwastoldev/autoware.ai:develop as deps
 
 
 # Install remaining package deps
