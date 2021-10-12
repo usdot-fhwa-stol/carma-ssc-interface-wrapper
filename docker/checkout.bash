@@ -52,6 +52,10 @@ cd ${dir}
 # Required for ford fusion drive by wire
 git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
+git clone https://github.com/astuff/pacmod3.git --branch ros1_master
+
+git clone https://github.com/astuff/kvaser_interface.git --branch ros1_master
+
 sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
 cd ${dir}/
