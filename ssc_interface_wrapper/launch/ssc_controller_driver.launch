@@ -20,7 +20,7 @@
 
 <launch>
 
-  <arg name="ssc_param_dir" default="$(find ssc_pm_lexus)"/>
+  <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
 
   <!-- Launch Wrapper -->
   <group> <!-- Group to scope remappings -->
@@ -51,7 +51,6 @@
     <remap from="global_report" to="controller/parsed_tx/global_rpt"/>
     <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
       <arg name="param_dir" value="$(arg ssc_param_dir)"/>
-      <arg name="ssc_package_name" value="ssc_pm_lexus"/>
     </include>
   </group>
 
