@@ -49,7 +49,7 @@
     <remap from="speed" to="controller/parsed_tx/vehicle_speed_rpt"/>
     <remap from="wheel_speed" to="controller/parsed_tx/wheel_speed_rpt"/>
     <remap from="global_report" to="controller/parsed_tx/global_rpt"/>
-    <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+    <include file="$(find ssc_interface_wrapper)/launch/carma_pacifica_speed_steering_control.launch">
       <arg name="param_dir" value="$(arg ssc_param_dir)"/>
     </include>
   </group>
