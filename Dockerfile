@@ -13,7 +13,7 @@
 #  the License.
 
 
-FROM usdotfhwastoldev/autoware.ai:develop as deps
+FROM usdotfhwastolcandidate/autoware.ai:battista as deps
 
 
 # Install remaining package deps
