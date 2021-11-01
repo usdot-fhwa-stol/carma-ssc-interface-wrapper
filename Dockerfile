@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastolcandidate/autoware.ai:elise as deps
+FROM usdotfhwastoldev/autoware.ai:develop as deps
 
 # Install remaining package deps
 RUN mkdir ~/src
