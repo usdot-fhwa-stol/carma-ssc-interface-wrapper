@@ -36,13 +36,11 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$BRANCH" = "develop" ]]; then
-
-      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch develop
-      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch develop
+      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
+      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch $BRANCH
 else
       git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch develop
       git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch develop
-
 fi
 
 # Required to build the dbw_pacifica_msgs message set.
@@ -54,9 +52,15 @@ cd ${dir}
 # Required for ford fusion drive by wire
 git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
-# Required to build pacmod_msgs
-git clone https://github.com/astuff/astuff_sensor_msgs.git ${dir}/src/astuff_sensor_msgs --branch 3.0.1
-rm -rf ${dir}/src/astuff_sensor_msgs/ibeo_msgs
+git clone https://github.com/astuff/pacmod3.git ${dir}/src/pacmod3 --branch ros1_master
+cd ${dir}/src/pacmod3
+git reset --hard 4e5e9cd5e821f4f19e31e10ba42f20449860b940
+cd ${dir}
+
+git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros1_master
+cd ${dir}/src/kvaser_interface
+git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
+cd ${dir}
 
 sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
