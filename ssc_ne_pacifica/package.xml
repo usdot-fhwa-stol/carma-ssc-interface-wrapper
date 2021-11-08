@@ -20,5 +20,6 @@
   <depend>automotive_navigation_msgs</depend>
   <depend>dbw_pacifica_msgs</depend>
   <exec_depend>libas-common</exec_depend>
+  <build_depend>carma_cmake_common</build_depend>
 </package>
 
