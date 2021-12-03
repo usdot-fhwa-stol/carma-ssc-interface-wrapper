@@ -13,7 +13,7 @@
 #  the License.
 
 
-FROM usdotfhwastolcandidate/autoware.ai:battista as deps
+FROM usdotfhwastol/autoware.ai:carma-system-3.9.0 as deps
 
 
 # Install remaining package deps
