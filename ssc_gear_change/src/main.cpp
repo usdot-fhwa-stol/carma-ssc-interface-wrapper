@@ -15,17 +15,17 @@
  */
 
 #include <rclcpp/rclcpp.hpp>
-#include "ssc_interface_wrapper/ssc_interface_wrapper_node.hpp"
+#include "ssc_gear_change/ssc_gear_change.hpp"
 
 int main(int argc, char **argv) 
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<ssc_interface_wrapper::Node>(rclcpp::NodeOptions());
+//   auto node = std::make_shared<ssc_gear_change::Node>(rclcpp::NodeOptions());
   
-  rclcpp::executors::MultiThreadedExecutor executor;
-  executor.add_node(node->get_node_base_interface());
-  executor.spin();
+//   rclcpp::executors::MultiThreadedExecutor executor;
+//   executor.add_node(node->get_node_base_interface());
+//   executor.spin();
 
   rclcpp::shutdown();
 
