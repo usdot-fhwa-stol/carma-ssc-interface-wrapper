@@ -26,10 +26,10 @@ namespace ssc_interface_wrapper
    */
   struct Config
   {
-    double controller_timeout = 1.0;
+    int controller_timeout = 1;
     bool use_real_wheel_speed = true;
     bool use_adaptive_gear_ratio = true;
-    double command_timeout = 1000;
+    int command_timeout = 1000;
     double loop_rate = 30.0;
 
     // Stream operator for this config

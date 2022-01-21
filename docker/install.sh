@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2018-2021 LEIDOS.
+#  Copyright (C) 2021 LEIDOS.
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
@@ -14,8 +14,11 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-source /opt/autoware.ai/ros/install/setup.bash
-cd ~/
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+source /opt/ros/foxy/setup.bash
+sudo apt-get install -y apt-utils
+sudo apt-get install ros-foxy-pacmod-msgs
+cd ~
+# rosdep install --from-paths src --ignore-src -r -y
+
+colcon build --packages-up-to ssc_interface_wrapper ssc_gear_change --cmake-args -DCMAKE_BUILD_TYPE=Release
 chmod -R ugo+x ~/install
-unset ROS_LANG_DISABLE

@@ -42,4 +42,4 @@ LABEL org.label-schema.build-date=${BUILD_DATE}
 
 RUN cp -r /home/carma/install /opt/carma/install
 RUN rm -rf ~/src/dbw-mkz-ros ~/src/raptor-dbw-ros ~/src/CARMAMsgs ~/src/CARMAUtils
-CMD [ "wait-for-it.sh", "localhost:11311", "--", "roslaunch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch"]
+CMD [ "wait-for-it.sh", "localhost:11311", "--", "ros2","launch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch.py"]

@@ -24,10 +24,10 @@ namespace ssc_interface_wrapper{
         config_ = Config();
 
         // Declare parameters
-        config_.controller_timeout = declare_parameter<double>("controller_timeout", config_.controller_timeout);
+        config_.controller_timeout = declare_parameter<int>("controller_timeout", config_.controller_timeout);
         config_.use_real_wheel_speed = declare_parameter<bool>("use_rear_wheel_speed", config_.use_real_wheel_speed);
         config_.use_adaptive_gear_ratio = declare_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio);
-        config_.command_timeout = declare_parameter<double>("command_timeout", config_.command_timeout);
+        config_.command_timeout = declare_parameter<int>("command_timeout", config_.command_timeout);
         config_.loop_rate = declare_parameter<double>("loop_rate", config_.loop_rate);
 
     }
@@ -57,10 +57,10 @@ namespace ssc_interface_wrapper{
         worker_ = Worker();
 
         //Load parameters
-        get_parameter<double>("controlller_timeout", config_.command_timeout);
+        get_parameter<int>("controlller_timeout", config_.controller_timeout);
         get_parameter<bool>("use_rear_wheel_speed", config_.use_real_wheel_speed);
         get_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio);
-        get_parameter<double>("command_timeout", config_.command_timeout);
+        get_parameter<int>("command_timeout", config_.command_timeout);
         get_parameter<double>("loop_rate", config_.loop_rate);
 
         //setup subscribers
