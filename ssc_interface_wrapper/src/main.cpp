@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <SUB><year> LEIDOS.
+ * Copyright (C) 2019-2021 LEIDOS.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,10 @@
  * the License.
  */
 
-#include <rclcpp/rclcpp.hpp>
-#include "ssc_interface_wrapper/ssc_interface_wrapper_node.hpp"
+#include "ssc_interface_wrapper.h"
 
-int main(int argc, char **argv) 
+int main(int argc, char**argv)
 {
-  rclcpp::init(argc, argv);
-
-  auto node = std::make_shared<ssc_interface_wrapper::Node>(rclcpp::NodeOptions());
-  
-  rclcpp::executors::MultiThreadedExecutor executor;
-  executor.add_node(node->get_node_base_interface());
-  executor.spin();
-
-  rclcpp::shutdown();
-
-  return 0;
+   SSCInterfaceWrapper wrapper(argc,argv);
+   return  wrapper.run();
 }

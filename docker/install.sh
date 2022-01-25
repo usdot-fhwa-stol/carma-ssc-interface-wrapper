@@ -14,11 +14,27 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-source /opt/ros/foxy/setup.bash
-sudo apt-get install -y apt-utils
-sudo apt-get install ros-foxy-pacmod-msgs
-cd ~
-# rosdep install --from-paths src --ignore-src -r -y
 
-colcon build --packages-up-to ssc_interface_wrapper ssc_gear_change --cmake-args -DCMAKE_BUILD_TYPE=Release
-chmod -R ugo+x ~/install
+# ROS1 build and install
+cd ~/workspace_ros1
+echo "ROS1 build"
+source /opt/autoware.ai/ros/install/setup.bash
+source /home/carma/catkin/setup.bash
+sudo apt-get install -y apt-utils
+source /opt/autoware.ai/ros/install/setup.bash
+
+rosdep install --from-paths src --ignore-src -r -y
+sudo apt-get install ros-noetic-pacmod-msgs
+
+sudo apt install python3-catkin-pkg
+colcon build --packages-ignore ssc_interface_wrapper_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/ros/install
+chmod -R ugo+x /opt/carma/ros/install
+unset ROS_LANG_DISABLE
+
+# Get the exit code from the ROS1 build so we can skip the ROS2 build if the ROS1 build failed
+status=$?
+
+if [[ $status -ne 0 ]]; then
+    echo "ssc interface wrapper ros1 build failed."
+    exit $status
+fi

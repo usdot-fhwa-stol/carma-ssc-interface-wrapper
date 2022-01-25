@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (C) 2019-2021 LEIDOS.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+
+
+<launch>
+
+  <arg name="ssc_package_name" default="ssc_pm_lexus"/>
+  <arg name="param_dir" default="$(find ssc_pm_lexus)"/>
+  <arg name="license_folder" default="$(arg param_dir)/as_licenses"/>
+  <arg name="speed_model_json" default="$(arg param_dir)/json/speed_model.json" />
+  <arg name="steering_model_json" default="$(arg param_dir)/json/steering_model.json" />
+  <arg name="veh_controller_json" default="$(arg param_dir)/json/veh_controller.json" />
+  <arg name="veh_interface_json" default="$(arg param_dir)/json/veh_interface.json" />
+
+  <env name="RLM_LICENSE" value="$(arg license_folder)"/>
+
+  <group>
+    <node pkg="$(arg ssc_package_name)" type="speed_model" name="speed_model" args="-f $(arg speed_model_json)" />
+    <node pkg="$(arg ssc_package_name)" type="steering_model" name="steering_model" args="-f $(arg steering_model_json)" />
+
+    <node pkg="$(arg ssc_package_name)" type="veh_controller" name="veh_controller" args="-f $(arg veh_controller_json)" />
+    <node pkg="$(arg ssc_package_name)" type="veh_interface" name="veh_interface" args="-f $(arg veh_interface_json)" />
+  </group>
+</launch>

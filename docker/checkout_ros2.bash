@@ -19,12 +19,12 @@
 
 set -exo pipefail
 
-dir=~/workspace_ros1
+dir=~/workspace_ros2
 while [[ $# -gt 0 ]]; do
       arg="$1"
       case $arg in
             -d|--develop)
-                  BRANCH=develop
+                  BRANCH=foxy/develop
                   shift
             ;;
             -r|--root)
@@ -35,31 +35,39 @@ while [[ $# -gt 0 ]]; do
       esac
 done
 
+# Checkout ROS2 dependencies
 cd ${dir}
 if [[ "$BRANCH" = "develop" ]]; then
       sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch $BRANCH
       sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch $BRANCH
 else
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch develop
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch develop
+      sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch foxy/develop
+      sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch foxy/develop
 fi
 
-# Required to build the dbw_pacifica_msgs message set.
-sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ./src/raptor-dbw-ros --branch master 
-cd ./src/raptor-dbw-ros
-sudo git reset --hard f50f91cd88ad27b2ce05bab1f8ff780931c41475
+sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy 
+cd ${dir}/src/raptor-dbw-ros2
+sudo git reset --hard 4ad958dd07bb9c7128dc75bc7397bc8f5be30a3c
 cd ${dir}
 
+# TO DO: Add ros2 version for Ford fusion drive by wire
 # Required for ford fusion drive by wire
-sudo git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ./src/dbw-mkz-ros --branch 1.2.4
+# sudo git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
-sudo git clone https://github.com/astuff/pacmod3.git ./src/pacmod3 --branch ros1_master
-cd ./src/pacmod3
-sudo git reset --hard 4e5e9cd5e821f4f19e31e10ba42f20449860b940
+#Pacmod3
+sudo git clone https://github.com/astuff/pacmod3.git ./src/pacmod3_ros2 --branch ros2_master
+cd ./src/pacmod3_ros2
+sudo git reset --hard 159ef36f26726cf8d7f58e67add8c8319a67ae85
 cd ${dir}
 
-sudo git clone https://github.com/astuff/kvaser_interface.git ./src/kvaser_interface --branch ros1_master
+# kvaser
+sudo git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros2_master
 cd ./src/kvaser_interface
-sudo git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
+sudo git reset --hard 89a6293ac0229c2c82a1fb33f72311e46f81c85b
 cd ${dir}
 
+# Install automotive_autonomy_msgs
+sudo git clone https://github.com/astuff/automotive_autonomy_msgs.git ${dir}/src/automotive_autonomy_msgs --branch master
+cd ./src/automotive_autonomy_msgs 
+sudo git reset --hard 191dce1827023bef6d69b31e8c2514cf82bf10c5
+cd ${dir}

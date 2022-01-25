@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (C) 2018-2021 LEIDOS.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<!--
+	Launches the ssc_interface with the remappings nessasary to operate with carma
+-->
+<launch>
+  <remap from="as/arbitrated_speed_commands" to="arbitrated_speed_commands"/>
+  <remap from="as/arbitrated_steering_commands" to="arbitrated_steering_commands"/>
+  <remap from="as/brake_feedback" to="brake_feedback"/>
+  <remap from="as/steering_feedback" to="steering_feedback"/>
+  <remap from="as/curvature_feedback" to="curvature_feedback"/>
+  <remap from="as/gear_feedback" to="gear_feedback"/>
+  <remap from="as/gear_select" to="gear_select"/>
+  <remap from="as/module_states" to="module_states"/>
+  <remap from="as/throttle_feedback" to="throttle_feedback"/>
+  <remap from="as/turn_signal_command" to="turn_signal_command"/>
+  <remap from="as/velocity_accel" to="velocity_accel"/>
+  <remap from="as/velocity_accel_cov" to="velocity_accel_cov"/>
+  <!-- Vehicle Config Parameter Remapping -->
+  <remap from="~wheel_base" to="/vehicle_wheel_base"/>
+  <remap from="~tire_radius" to="/vehicle_tire_radius"/>
+  <remap from="~acceleration_limit" to="/vehicle_acceleration_limit"/>
+  <remap from="~deceleration_limit" to="/vehicle_deceleration_limit"/>
+  <remap from="~max_curvature_rate" to="/vehicle_max_curvature_rate"/>
+  <include file="$(find as)/launch/ssc_interface.launch">
+      <arg name="use_adaptive_gear_ratio" value="true"/>
+      <arg name="command_timeout" value="1000"/>
+      <arg name="loop_rate" value="30.0"/>
+  </include>
+</launch>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (C) 2018-2021 LEIDOS.
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+<!--
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface
+-->
+<launch>
+  <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
+
+  <!-- Launch Wrapper -->
+  <!-- Group to scope remappings -->
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+  
+  <!-- Launch Wrapped Nodes -->	
+
+  <!-- Drive By Wire -->
+  <include file="$(arg ssc_param_dir)/ne_dbw_connection.launch"/>
+
+  <!-- SSC -->
+  <group>
+
+  
+  <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
+    <arg name="param_dir" value="$(arg ssc_param_dir)"/>
+    <arg name="ssc_package_name" value="ssc_ne_pacifica"/>
+  </include>
+</group>
+  <!-- SSC Interface -->
+  <include file="$(find ssc_interface_wrapper)/launch/remapped_ssc_interface.launch"/>
+</launch>

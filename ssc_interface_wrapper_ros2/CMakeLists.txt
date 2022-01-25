@@ -13,7 +13,7 @@
 # the License.
 
 cmake_minimum_required(VERSION 3.5)
-project(ssc_gear_change)
+project(ssc_interface_wrapper_ros2)
 
 # Declare carma package and check ROS version
 find_package(carma_cmake_common REQUIRED)
@@ -25,8 +25,8 @@ find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
 # Name build targets
-set(node_exec ssc_gear_change_node_exec)
-set(node_lib ssc_gear_change_node)
+set(node_exec ssc_interface_wrapper_node_exec)
+set(node_lib ssc_interface_wrapper_node)
 
 # Includes
 include_directories(
@@ -35,8 +35,8 @@ include_directories(
 
 # Build
 ament_auto_add_library(${node_lib} SHARED
-        src/ssc_gear_change.cpp
-
+        src/ssc_interface_wrapper_node.cpp
+        src/ssc_interface_wrapper_worker.cpp
 )
 
 ament_auto_add_executable(${node_exec} 
@@ -44,7 +44,7 @@ ament_auto_add_executable(${node_exec}
 )
 
 # Register component
-rclcpp_components_register_nodes(${node_lib} "ssc_gear_change::Node")
+rclcpp_components_register_nodes(${node_lib} "ssc_interface_wrapper::Node")
 
 # All locally created targets will need to be manually linked
 # ament auto will handle linking of external dependencies
@@ -52,8 +52,21 @@ target_link_libraries(${node_exec}
         ${node_lib}
 )
 
+# Testing
+if(BUILD_TESTING)  
+
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies() # This populates the ${${PROJECT_NAME}_FOUND_TEST_DEPENDS} variable
+
+  ament_add_gtest(test_ssc_interface_wrapper test/node_test.cpp)
+
+  ament_target_dependencies(test_ssc_interface_wrapper ${${PROJECT_NAME}_FOUND_TEST_DEPENDS})
+
+  target_link_libraries(test_ssc_interface_wrapper ${node_lib})
+
+endif()
 
 # Install
 ament_auto_package(
-        INSTALL_TO_SHARE config
+        INSTALL_TO_SHARE config launch
 )

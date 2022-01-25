@@ -13,10 +13,11 @@
  the License.
 -->
 
+
 <package format="3">
-  <name>ssc_gear_change</name>
+  <name>ssc_interface_wrapper_ros2</name>
   <version>1.0.0</version>
-  <description>Node for handling gear changes on some packmod interfaces</description>
+  <description>ssc_interface_wrapper</description>
 
   <maintainer email="carma@dot.gov">carma</maintainer>
 
@@ -30,10 +31,12 @@
   <depend>carma_ros2_utils</depend>
   <depend>rclcpp_components</depend>
   <depend>std_srvs</depend>
-  <depend>automotive_platform_msgs</depend>
-  <depend>automotive_navigation_msgs</depend>
   <depend>pacmod_msgs</depend>
+  <depend>j2735_v2x_msgs</depend>
+  <depend>cav_srvs</depend>
+  <depend>carma_driver_msgs</depend>
   <depend>autoware_auto_msgs</depend>
+  <depend>automotive_navigation_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>

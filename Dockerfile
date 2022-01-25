@@ -15,16 +15,24 @@
 FROM usdotfhwastoldev/autoware.ai:foxy-develop as deps
 
 # Install remaining package deps
-RUN mkdir ~/src
-COPY --chown=carma . /home/carma/src/
-RUN rm -R /home/carma/src/
+RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
+COPY --chown=carma . /home/carma/workspace_ros1/src/ 
+RUN sudo rm -rf ~/workspace_ros1 ~/workspace_ros2
 
 FROM deps
 
-RUN mkdir ~/src
-COPY --chown=carma . /home/carma/src/
-RUN ~/src/docker/checkout.bash
-RUN ~/src/docker/install.sh
+# ROS1 build
+RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
+COPY --chown=carma . /home/carma/workspace_ros1/src/
+RUN ~/workspace_ros1/src/docker/checkout.bash
+RUN ~/workspace_ros1/src/docker/install.sh
+
+# ROS2 build
+COPY --chown=carma . /home/carma/workspace_ros2/src/
+RUN chmod u+x ~/workspace_ros2/src/docker/checkout_ros2.bash ~/workspace_ros2/src/docker/install_ros2.sh
+RUN ~/workspace_ros2/src/docker/checkout_ros2.bash
+RUN ~/workspace_ros2/src/docker/install_ros2.sh
+
 
 ARG BUILD_DATE="NULL"
 ARG VERSION="NULL"
@@ -41,5 +49,6 @@ LABEL org.label-schema.vcs-ref=${VCS_REF}
 LABEL org.label-schema.build-date=${BUILD_DATE}
 
 RUN cp -r /home/carma/install /opt/carma/install
-RUN rm -rf ~/src/dbw-mkz-ros ~/src/raptor-dbw-ros ~/src/CARMAMsgs ~/src/CARMAUtils
-CMD [ "wait-for-it.sh", "localhost:11311", "--", "ros2","launch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch.py"]
+RUN cp -r /home/carma/install /opt/carma/ros/install_ros2 
+# RUN rm -rf ~/src/dbw-mkz-ros ~/src/raptor-dbw-ros ~/src/CARMAMsgs ~/src/CARMAUtils
+# CMD [ "wait-for-it.sh", "localhost:11311", "--", "ros2","launch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch.py"]
