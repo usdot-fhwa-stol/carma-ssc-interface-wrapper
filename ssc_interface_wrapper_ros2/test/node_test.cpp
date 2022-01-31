@@ -20,6 +20,7 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include <rclcpp/rclcpp.hpp>
 
 #include "ssc_interface_wrapper/ssc_interface_wrapper_worker.hpp"
 
@@ -62,6 +63,31 @@ TEST(TEST_ssc_interface_wrapper, testControlledStatusChangeTwo)
     auto clock = node->get_clock();
     worker.on_new_status_msg(msg, clock->now());
     EXPECT_EQ(false, worker.is_engaged());
+}
+
+TEST(Test_ssc_interface_wrapper, testAsync)
+{
+    auto node1 = std::make_shared<rclcpp::Node>("test_node_1");
+    auto node2 = std::make_shared<rclcpp::Node>("test_node_2");
+
+    rclcpp::executors::SingleThreadedExecutor executor1;
+    executor1.add_node(node1);
+    rclcpp::executors::SingleThreadedExecutor executor2;
+    executor2.add_node(node2);
+
+    auto spin_executor2 = [&executor2](){
+        std::cout<<"Print from spin"<<std::endl;
+        executor2.spin();
+    };
+
+    // Multiple single threaded executors in async?
+    std::async execution_thread(spin_executor2);
+    executor1.spin();
+    execution_thread.join();
+
+    rclcpp::Duration test;
+    test.seconds();
+    
 }
 
 

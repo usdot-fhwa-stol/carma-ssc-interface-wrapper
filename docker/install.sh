@@ -18,8 +18,8 @@
 # ROS1 build and install
 cd ~/workspace_ros1
 echo "ROS1 build"
-source /opt/autoware.ai/ros/install/setup.bash
 source /home/carma/catkin/setup.bash
+source /opt/autoware.ai/ros/install/setup.bash
 sudo apt-get install -y apt-utils
 source /opt/autoware.ai/ros/install/setup.bash
 
