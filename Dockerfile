@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastolcandidate/autoware.ai:fiesta as deps
+FROM usdotfhwastol/autoware.ai:carma-system-3.11.0 as deps
 
 
 # Install remaining package deps
