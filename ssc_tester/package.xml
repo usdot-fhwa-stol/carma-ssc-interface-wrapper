@@ -22,4 +22,5 @@
   <depend>ssc_ne_pacifica</depend>
   <depend>ssc_pm_lexus</depend>
   <depend>as</depend>
+  <build_depend>carma_cmake_common</build_depend>
 </package>

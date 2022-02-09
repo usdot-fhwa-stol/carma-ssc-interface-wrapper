@@ -15,8 +15,10 @@
 
 cmake_minimum_required(VERSION 2.8.3)
 project(ssc_tester)
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+
+find_package(carma_cmake_common REQUIRED)
+carma_check_ros_version(1)
+carma_package()
 
 set (DEPS 
   rospy
