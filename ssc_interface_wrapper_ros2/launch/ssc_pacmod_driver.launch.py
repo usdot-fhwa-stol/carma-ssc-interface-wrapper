@@ -54,7 +54,7 @@ def generate_launch_description():
 
     #Launch drive by wire
     ssc_lexus_node = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(['/', ssc_param_dir, '/pacmod3_connection.launch.py']),
+        PythonLaunchDescriptionSource(['/', param_dir, '/pacmod3_connection.launch.py']),
     )
 
     #Launch SSC
@@ -92,6 +92,7 @@ def generate_launch_description():
         declare_param_dir,
         declare_ssc_package_name,
         declare_ssc_param_dir,
+        declare_vehicle_ssc_param_dir,
         ssc_interface_wrapper_group,
         ssc_lexus_node,
         carma_speed_steering_control_group,
