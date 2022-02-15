@@ -37,61 +37,22 @@ def generate_launch_description():
 
     license_folder = LaunchConfiguration('license_folder')
     declare_license_folder = DeclareLaunchArgument(name = 'license_folder', default_value= os.path.join(
-        get_package_share_directory('ssc_pm_lexus'), 'as_licenses'))
-    
-    speed_model_json = LaunchConfiguration('speed_model_json')
-    declare_speed_model_json = DeclareLaunchArgument(name = 'speed_model_json', default_value= os.path.join(
-        get_package_share_directory('ssc_pm_lexus'), 'json/speed_model.json'))
-
-    steering_model_json = LaunchConfiguration('steering_model_json')
-    declare_steering_model_json = DeclareLaunchArgument(name = 'steering_model_json', default_value= os.path.join(
-        get_package_share_directory('ssc_pm_lexus'), 'json/steering_model.json'))
-    
-    veh_controller_json = LaunchConfiguration('veh_controller_json')
-    declare_veh_controller_json = DeclareLaunchArgument(name = 'veh_controller_json', default_value= os.path.join(
-        get_package_share_directory('ssc_pm_lexus'), 'json/veh_controller.json'))
-
-    veh_interface_json = LaunchConfiguration('veh_interface_json')
-    declare_veh_interface_json = DeclareLaunchArgument(name = 'veh_interface_json', default_value= os.path.join(
-        get_package_share_directory('ssc_pm_lexus'), 'json/veh_interface.json'))
+        param_dir , 'as_licenses'))
 
 
     #Set environment variable
     env_var = SetEnvironmentVariable('RLM_LICENSE', license_folder)
 
-
-    #TO DO: replace with generated module
-    # carma_speed_steering_control_group = GroupAction(
-    #     actions = [
+    ssc_package_dir = get_package_share_directory(ssc_package_name)
+    carma_speed_steering_control_node = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(['/', ssc_package_dir, '/launch','/speed_steering_control.launch.xml']),
             
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(['/', <package_name>, '/launch','<launch>']),
-    #             launch_arguments={'speed_model_json':speed_model_json}.items(),
-    #         ),
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(['/', <package_name>, '/launch','<launch>']),
-    #             launch_arguments={'steering_model_json':steering_model_json}.items(),
-    #         ),
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(['/', <package_name>, '/launch','<launch>']),
-    #             launch_arguments={'steering_model_json':steering_model_json}.items(),
-    #         ),
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(['/', <package_name>, '/launch','<launch>']),
-    #             launch_arguments={'steering_model_json':steering_model_json}.items(),
-    #         ),
-    #     ]
-    # )
-
+    )
 
     return LaunchDescription([
-        env_var,
         declare_ssc_package_name,
         declare_param_dir,
         declare_license_folder,
-        declare_speed_model_json,
-        declare_steering_model_json,
-        declare_veh_controller_json,
-        declare_veh_interface_json,
-        # carma_speed_steering_control_group
+        env_var,
+        carma_speed_steering_control_node
     ])

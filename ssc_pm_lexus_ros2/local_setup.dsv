@@ -1,4 +1,0 @@
-source;share/ssc_pm_lexus/environment/ament_prefix_path.sh
-source;share/ssc_pm_lexus/environment/library_path.sh
-source;share/ssc_pm_lexus/environment/path.sh
-source;share/ssc_pm_lexus/environment/pythonpath.sh

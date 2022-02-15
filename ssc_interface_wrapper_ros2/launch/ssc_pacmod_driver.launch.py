@@ -1,4 +1,4 @@
-# Copyright (C) 2021 LEIDOS.
+# Copyright (C) 2022 LEIDOS.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
@@ -35,10 +35,6 @@ def generate_launch_description():
     ssc_package_name = LaunchConfiguration('ssc_pm_lexus')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
 
-    ssc_param_dir = LaunchConfiguration('ssc_param_dir')
-    declare_ssc_param_dir = DeclareLaunchArgument(name = 'ssc_param_dir', default_value='ssc_pm_lexus')
-
-
     # Launch wrapper
     ssc_interface_wrapper_pkg = get_package_share_directory('ssc_interface_wrapper')
     ssc_interface_wrapper_group = GroupAction(
@@ -57,13 +53,12 @@ def generate_launch_description():
     )
 
     #Launch drive by wire
-    #TO DO: update launch file in vehicle calibration folder
     ssc_lexus_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(['/', ssc_param_dir, '/pacmod3_connection.launch.py']),
     )
 
     #Launch SSC
-    carma_speed_steering_group = GroupAction(
+    carma_speed_steering_control_group = GroupAction(
         actions = [
             # Launch SSC
             set_remap.SetRemap('brake_cmd','pacmod/as_rx/brake_cmd'),
@@ -83,7 +78,7 @@ def generate_launch_description():
                         
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg, '/launch','/carma_speed_steering_control.launch.py']),
-                launch_arguments={'param_dir':param_dir, 'ssc_package_name': ssc_package_name}.items()
+                launch_arguments={'ssc_package_name': ssc_package_name}.items()
             ),
         ]
     )
@@ -99,6 +94,6 @@ def generate_launch_description():
         declare_ssc_param_dir,
         ssc_interface_wrapper_group,
         ssc_lexus_node,
-        carma_speed_steering_group,
+        carma_speed_steering_control_group,
         autoware_ssc_interface_node
     ])

@@ -55,16 +55,15 @@ def generate_launch_description():
             set_remap.SetRemap('as/velocity_accel_cov', 'velocity_accel_cov'),
 
             #TO DO: Update global parameter remapping
-            # set_remap.SetRemap('~wheel_base','/vehicle_wheel_base'),
-            # set_remap.SetRemap('~tire_radius','/vehicle_tire_radius'),
-            # set_remap.SetRemap('~acceleration_limit','/vehicle_acceleration_limit'),
-            # set_remap.SetRemap('deceleration_limit','/vehicle_deceleration_limit'),
-            # set_remap.SetRemap('~max_curvature_rate','/vehicle_max_curvature_rate'),
-            # set_remap.SetRemap('~max_curvature_rate','/vehicle_max_curvature_rate')
+            set_remap.SetRemap('wheel_base','/vehicle_wheel_base'),
+            set_remap.SetRemap('tire_radius','/vehicle_tire_radius'),
+            set_remap.SetRemap('acceleration_limit','/vehicle_acceleration_limit'),
+            set_remap.SetRemap('deceleration_limit','/vehicle_deceleration_limit'),
+            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
+            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate')
 
-            #TO DO: update to include launch file from ssc_interface autoware.ai
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(['/', '/launch','/ssc_interface.launch.py']),
+                PythonLaunchDescriptionSource([get_package_share_directory('as_ros2'), '/launch','/ssc_interface.launch.py']),
                 launch_arguments={'use_adaptive_gear_ratio':use_adaptive_gear_ratio, 'command_timeout': command_timeout, 'loop_rate': loop_rate}.items()
             )
 

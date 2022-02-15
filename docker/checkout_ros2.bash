@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2021 LEIDOS.
+#  Copyright (C) 2022 LEIDOS.
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
@@ -41,8 +41,8 @@ if [[ "$BRANCH" = "develop" ]]; then
       sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch $BRANCH
       sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch $BRANCH
 else
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch foxy/develop
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch foxy/develop
+      sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch develop
+      sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch develop
 fi
 
 sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy 
