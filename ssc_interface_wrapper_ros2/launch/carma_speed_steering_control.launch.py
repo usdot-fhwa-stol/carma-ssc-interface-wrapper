@@ -32,9 +32,6 @@ def generate_launch_description():
     ssc_package_name = LaunchConfiguration('ssc_package_name')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value='ssc_pm_lexus')
 
-    param_dir = LaunchConfiguration('param_dir')
-    declare_param_dir = DeclareLaunchArgument(name='param_dir', default_value= get_package_share_directory('ssc_pm_lexus'))
-
     license_folder = LaunchConfiguration('license_folder')
     declare_license_folder = DeclareLaunchArgument(name = 'license_folder', default_value= os.path.join(
         param_dir , 'as_licenses'))

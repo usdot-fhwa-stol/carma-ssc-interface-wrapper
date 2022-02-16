@@ -29,8 +29,8 @@ from launch_ros.actions import set_remap
 
 
 def generate_launch_description():
-    param_dir = LaunchConfiguration('param_dir')
-    declare_param_dir = DeclareLaunchArgument(name='param_dir', default_value='ssc_param_dir')
+    vehicle_calibration_dir = LaunchConfiguration('vehicle_calibration_dir')
+    declare_vehicle_calibration_dir = DeclareLaunchArgument(name='vehicle_calibration_dir', default_value='ssc_vehicle_calibration_dir')
 
     ssc_package_name = LaunchConfiguration('ssc_pm_lexus')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
@@ -53,8 +53,9 @@ def generate_launch_description():
     )
 
     #Launch drive by wire
+    ssc_param_dir = os.path.join(vehicle_calibration_dir, ssc_package_name)
     ssc_lexus_node = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(['/', param_dir, '/pacmod3_connection.launch.py']),
+        PythonLaunchDescriptionSource(['/', ssc_param_dir, '/pacmod3_connection.launch.py']),
     )
 
     #Launch SSC
@@ -78,7 +79,9 @@ def generate_launch_description():
                         
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg, '/launch','/carma_speed_steering_control.launch.py']),
-                launch_arguments={'ssc_package_name': ssc_package_name}.items()
+                launch_arguments={
+                    'ssc_package_name': ssc_package_name,
+                    }.items()
             ),
         ]
     )
@@ -89,10 +92,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        declare_param_dir,
-        declare_ssc_package_name,
-        declare_ssc_param_dir,
-        declare_vehicle_ssc_param_dir,
+        declare_vehicle_calibration_dir,
+        declare_ssc_package_name,,
         ssc_interface_wrapper_group,
         ssc_lexus_node,
         carma_speed_steering_control_group,
