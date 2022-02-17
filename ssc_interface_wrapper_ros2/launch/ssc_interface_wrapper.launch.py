@@ -35,7 +35,7 @@ def generate_launch_description():
     
     # Get parameter file path
     param_file_path = os.path.join(
-        get_package_share_directory('ssc_interface_wrapper'), 'config/parameters.yaml')
+        get_package_share_directory('ssc_interface_wrapper_ros2'), 'config/parameters.yaml')
 
     # Launch node(s) in a carma container to allow logging to be configured
     container = ComposableNodeContainer(
@@ -47,7 +47,7 @@ def generate_launch_description():
             
             # Launch the core node(s)
             ComposableNode(
-                    package='ssc_interface_wrapper',
+                    package='ssc_interface_wrapper_ros2',
                     plugin='ssc_interface_wrapper::Node',
                     name='ssc_interface_wrapper_node',
                     extra_arguments=[

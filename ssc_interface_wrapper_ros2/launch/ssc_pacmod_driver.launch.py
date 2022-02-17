@@ -36,7 +36,7 @@ def generate_launch_description():
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
 
     # Launch wrapper
-    ssc_interface_wrapper_pkg = get_package_share_directory('ssc_interface_wrapper')
+    ssc_interface_wrapper_pkg = get_package_share_directory('ssc_interface_wrapper_ros2')
     ssc_interface_wrapper_group = GroupAction(
         actions = [
             # Launch Wrapper
@@ -48,14 +48,12 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg, '/launch','/ssc_interface_wrapper.launch.py']),
             )
-
         ]
     )
 
     #Launch drive by wire
-    ssc_param_dir = os.path.join(vehicle_calibration_dir, ssc_package_name)
     ssc_lexus_node = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(['/', ssc_param_dir, '/pacmod3_connection.launch.py']),
+        PythonLaunchDescriptionSource(['/', vehicle_calibration_dir, '/ssc_pm_lexus/pacmod3_connection.launch.py']),
     )
 
     #Launch SSC
@@ -81,6 +79,7 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg, '/launch','/carma_speed_steering_control.launch.py']),
                 launch_arguments={
                     'ssc_package_name': ssc_package_name,
+                    'vehicle_calibration_dir' : vehicle_calibration_dir
                     }.items()
             ),
         ]
@@ -88,12 +87,12 @@ def generate_launch_description():
 
     #SSC Interface
     autoware_ssc_interface_node = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('/', ssc_interface_wrapper_pkg,'/launch', '/remapped_ssc_interface.launch.py')
+        PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg,'/launch', '/remapped_ssc_interface.launch.py'])
     )
 
     return LaunchDescription([
         declare_vehicle_calibration_dir,
-        declare_ssc_package_name,,
+        declare_ssc_package_name,
         ssc_interface_wrapper_group,
         ssc_lexus_node,
         carma_speed_steering_control_group,

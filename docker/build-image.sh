@@ -23,9 +23,6 @@ echo ""
 echo "##### $IMAGE Docker Image Build Script #####"
 echo ""
 
-access_id="NULL"
-secret_key="NULL"
-
 while [[ $# -gt 0 ]]; do
     arg="$1"
     case $arg in

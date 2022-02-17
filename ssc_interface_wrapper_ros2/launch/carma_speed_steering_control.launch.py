@@ -22,6 +22,7 @@ from carma_ros2_utils.launch.get_current_namespace import GetCurrentNamespace
 
 import os
 
+from launch.substitutions import TextSubstitution
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import GroupAction
@@ -29,14 +30,12 @@ from launch_ros.actions import set_remap
 from launch.actions import SetEnvironmentVariable
 
 def generate_launch_description():
+    vehicle_calibration_dir = LaunchConfiguration('vehicle_calibration_dir')
+    
     ssc_package_name = LaunchConfiguration('ssc_package_name')
-    declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value='ssc_pm_lexus')
-
-    license_folder = LaunchConfiguration('license_folder')
-    declare_license_folder = DeclareLaunchArgument(name = 'license_folder', default_value= os.path.join(
-        param_dir , 'as_licenses'))
-
-
+    
+    license_folder = TextSubstitution([vehicle_calibration_dir ,ssc_package_name,'as_licenses'])
+    
     #Set environment variable
     env_var = SetEnvironmentVariable('RLM_LICENSE', license_folder)
 
@@ -47,9 +46,6 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        declare_ssc_package_name,
-        declare_param_dir,
-        declare_license_folder,
         env_var,
         carma_speed_steering_control_node
     ])
