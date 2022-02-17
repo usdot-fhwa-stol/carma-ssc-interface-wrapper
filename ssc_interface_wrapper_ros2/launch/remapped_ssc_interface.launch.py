@@ -60,10 +60,10 @@ def generate_launch_description():
             set_remap.SetRemap('acceleration_limit','/vehicle_acceleration_limit'),
             set_remap.SetRemap('deceleration_limit','/vehicle_deceleration_limit'),
             set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
-            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate')
+            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
 
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([get_package_share_directory('as_ros2'), '/launch','/ssc_interface.launch.py']),
+                PythonLaunchDescriptionSource([get_package_share_directory('ssc_interface'), '/launch','/ssc_interface.launch.py']),
                 launch_arguments={'use_adaptive_gear_ratio':use_adaptive_gear_ratio, 'command_timeout': command_timeout, 'loop_rate': loop_rate}.items()
             )
 

@@ -32,7 +32,7 @@ def generate_launch_description():
     vehicle_calibration_dir = LaunchConfiguration('vehicle_calibration_dir')
     declare_vehicle_calibration_dir = DeclareLaunchArgument(name='vehicle_calibration_dir', default_value='ssc_vehicle_calibration_dir')
 
-    ssc_package_name = LaunchConfiguration('ssc_pm_lexus')
+    ssc_package_name = LaunchConfiguration('ssc_package_name')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
 
     # Launch wrapper
@@ -94,7 +94,7 @@ def generate_launch_description():
         declare_vehicle_calibration_dir,
         declare_ssc_package_name,
         ssc_interface_wrapper_group,
-        ssc_lexus_node,
+        # ssc_lexus_node,
         carma_speed_steering_control_group,
         autoware_ssc_interface_node
     ])

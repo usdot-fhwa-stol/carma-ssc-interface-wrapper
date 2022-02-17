@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+from typing import Text
 from ament_index_python import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import ComposableNodeContainer
@@ -23,6 +24,7 @@ from carma_ros2_utils.launch.get_current_namespace import GetCurrentNamespace
 import os
 
 from launch.substitutions import TextSubstitution
+from launch.substitutions import PathJoinSubstitution
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import GroupAction
@@ -30,22 +32,27 @@ from launch_ros.actions import set_remap
 from launch.actions import SetEnvironmentVariable
 
 def generate_launch_description():
-    vehicle_calibration_dir = LaunchConfiguration('vehicle_calibration_dir')
+    vehicle_calibration_dir = LaunchConfiguration("vehicle_calibration_dir")
+    declare_vehicle_calibration_dir = DeclareLaunchArgument(name="vehicle_calibration_dir", default_value='ssc_vehicle_calibration_dir')
     
     ssc_package_name = LaunchConfiguration('ssc_package_name')
+    declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
     
-    license_folder = TextSubstitution([vehicle_calibration_dir ,ssc_package_name,'as_licenses'])
-    
-    #Set environment variable
-    env_var = SetEnvironmentVariable('RLM_LICENSE', license_folder)
+    license_folder = PathJoinSubstitution([TextSubstitution(text="vehicle_calibration_dir"), "/", TextSubstitution(text="ssc_package_name"),"/as_licenses"])
 
-    ssc_package_dir = get_package_share_directory(ssc_package_name)
-    carma_speed_steering_control_node = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(['/', ssc_package_dir, '/launch','/speed_steering_control.launch.xml']),
-            
+    ssc_package_dir = get_package_share_directory("ssc_pm_lexus")
+
+
+    carma_speed_steering_group = GroupAction(
+        actions = [
+            SetEnvironmentVariable('RLM_LICENSE', license_folder),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(['/', ssc_package_dir, '/launch','/speed_steering_control.launch.xml'])),
+        ]
     )
 
     return LaunchDescription([
-        env_var,
-        carma_speed_steering_control_node
+        declare_vehicle_calibration_dir,
+        declare_ssc_package_name,
+        # carma_speed_steering_group
     ])
