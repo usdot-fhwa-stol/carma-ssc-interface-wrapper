@@ -27,8 +27,8 @@ rosdep install --from-paths src --ignore-src -r -y
 sudo apt-get install ros-noetic-pacmod-msgs
 
 sudo apt install python3-catkin-pkg
-colcon build --packages-ignore ssc_interface_wrapper_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/ros/install
-chmod -R ugo+x /opt/carma/ros/install
+colcon build --packages-ignore ssc_interface_wrapper_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
+chmod -R ugo+x /opt/carma/install
 unset ROS_LANG_DISABLE
 
 # Get the exit code from the ROS1 build so we can skip the ROS2 build if the ROS1 build failed
