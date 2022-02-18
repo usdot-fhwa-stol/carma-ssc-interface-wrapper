@@ -24,8 +24,8 @@ RUN sudo rm -rf ~/workspace_ros1 ~/workspace_ros2
 # ROS1 build
 RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
 COPY --chown=carma . /home/carma/workspace_ros1/src/
-# RUN ~/workspace_ros1/src/docker/checkout.bash
-# RUN ~/workspace_ros1/src/docker/install.sh
+RUN ~/workspace_ros1/src/docker/checkout.bash
+RUN ~/workspace_ros1/src/docker/install.sh
 
 # ROS2 build
 COPY --chown=carma . /home/carma/workspace_ros2/src/
