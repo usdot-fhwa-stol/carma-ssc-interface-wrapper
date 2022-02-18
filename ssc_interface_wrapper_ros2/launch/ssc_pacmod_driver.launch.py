@@ -53,7 +53,7 @@ def generate_launch_description():
 
     #Launch drive by wire
     ssc_lexus_node = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(['/', vehicle_calibration_dir, '/ssc_pm_lexus/pacmod3_connection.launch.py']),
+        PythonLaunchDescriptionSource([vehicle_calibration_dir, '/ssc_pm_lexus/pacmod3_connection.launch.py']),
     )
 
     #Launch SSC
@@ -76,7 +76,7 @@ def generate_launch_description():
 
                         
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg, '/launch','/carma_speed_steering_control.launch.py']),
+                PythonLaunchDescriptionSource([ssc_interface_wrapper_pkg, '/launch','/carma_speed_steering_control.launch.py']),
                 launch_arguments={
                     'ssc_package_name': ssc_package_name,
                     'vehicle_calibration_dir' : vehicle_calibration_dir
@@ -94,7 +94,7 @@ def generate_launch_description():
         declare_vehicle_calibration_dir,
         declare_ssc_package_name,
         ssc_interface_wrapper_group,
-        # ssc_lexus_node,
+        ssc_lexus_node,
         carma_speed_steering_control_group,
         autoware_ssc_interface_node
     ])

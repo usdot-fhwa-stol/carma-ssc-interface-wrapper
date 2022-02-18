@@ -54,7 +54,6 @@ def generate_launch_description():
             set_remap.SetRemap('as/velocity_accel','velocity_accel'),
             set_remap.SetRemap('as/velocity_accel_cov', 'velocity_accel_cov'),
 
-            #TO DO: Update global parameter remapping
             set_remap.SetRemap('wheel_base','/vehicle_wheel_base'),
             set_remap.SetRemap('tire_radius','/vehicle_tire_radius'),
             set_remap.SetRemap('acceleration_limit','/vehicle_acceleration_limit'),
