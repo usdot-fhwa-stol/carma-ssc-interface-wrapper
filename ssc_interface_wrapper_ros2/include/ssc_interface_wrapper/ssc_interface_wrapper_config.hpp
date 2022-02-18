@@ -33,7 +33,6 @@ namespace ssc_interface_wrapper
     double loop_rate = 30.0;
 
     // Stream operator for this config
-    // TODO for USER: Update prints for the added parameters
     friend std::ostream &operator<<(std::ostream &output, const Config &c)
     {
       output << "ssc_interface_wrapper::Config { " << std::endl
