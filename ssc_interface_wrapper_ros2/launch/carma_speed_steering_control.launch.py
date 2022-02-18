@@ -23,7 +23,7 @@ import os
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution
 from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch.actions import SetEnvironmentVariable
 
@@ -39,9 +39,9 @@ def generate_launch_description():
         declare_ssc_package_name,
         GroupAction(
             actions = [
-                SetEnvironmentVariable('RLM_LICENSE', PathJoinSubstitution([vehicle_calibration_dir, '/' , ssc_package_name ,'/as_licenses'])),
+                SetEnvironmentVariable('RLM_LICENSE', PathJoinSubstitution([vehicle_calibration_dir, '/' , ssc_package_name ,'/as_licenses/'])),
                 IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource([
+                    AnyLaunchDescriptionSource([
                         PathJoinSubstitution([
                             FindPackageShare(ssc_package_name),
                             'launch', 

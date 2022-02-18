@@ -30,7 +30,7 @@ from launch_ros.actions import set_remap
 
 def generate_launch_description():
     vehicle_calibration_dir = LaunchConfiguration('vehicle_calibration_dir')
-    declare_vehicle_calibration_dir = DeclareLaunchArgument(name='vehicle_calibration_dir', default_value='ssc_vehicle_calibration_dir')
+    declare_vehicle_calibration_dir = DeclareLaunchArgument(name='vehicle_calibration_dir', default_value='/opt/carma/vehicle/calibration')
 
     ssc_package_name = LaunchConfiguration('ssc_package_name')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
@@ -87,7 +87,7 @@ def generate_launch_description():
 
     #SSC Interface
     autoware_ssc_interface_node = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(['/', ssc_interface_wrapper_pkg,'/launch', '/remapped_ssc_interface.launch.py'])
+        PythonLaunchDescriptionSource([ssc_interface_wrapper_pkg,'/launch', '/remapped_ssc_interface.launch.py'])
     )
 
     return LaunchDescription([
