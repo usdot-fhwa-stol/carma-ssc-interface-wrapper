@@ -64,13 +64,13 @@ echo "Final image name: $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING"
 if [ -z $access_id ];
     then 
         echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
-        exit
+        exit 1
 fi
 
 if [ -z $secret_key ];
     then 
         echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
-        exit
+        exit 1
 fi
 
 cd ..

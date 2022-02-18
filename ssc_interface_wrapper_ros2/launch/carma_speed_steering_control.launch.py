@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+from typing import Text
 from launch import LaunchDescription
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
@@ -22,14 +23,18 @@ import os
 
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution
+
+from launch.substitutions import TextSubstitution
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch.actions import SetEnvironmentVariable
 
+
 def generate_launch_description():
-    vehicle_calibration_dir = LaunchConfiguration("vehicle_calibration_dir")
-    declare_vehicle_calibration_dir = DeclareLaunchArgument(name="vehicle_calibration_dir", default_value='ssc_vehicle_calibration_dir')
+
+    vehicle_calibration_dir = LaunchConfiguration('vehicle_calibration_dir')
+    declare_vehicle_calibration_dir = DeclareLaunchArgument(name='vehicle_calibration_dir', default_value= '/opt/carma/vehicle/calibration')
     
     ssc_package_name = LaunchConfiguration('ssc_package_name')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
@@ -37,9 +42,11 @@ def generate_launch_description():
     return LaunchDescription([
         declare_vehicle_calibration_dir,
         declare_ssc_package_name,
+
         GroupAction(
             actions = [
-                SetEnvironmentVariable('RLM_LICENSE', PathJoinSubstitution([vehicle_calibration_dir, '/' , ssc_package_name ,'/as_licenses/'])),
+                SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
+
                 IncludeLaunchDescription(
                     AnyLaunchDescriptionSource([
                         PathJoinSubstitution([
