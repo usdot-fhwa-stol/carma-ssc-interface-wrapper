@@ -16,22 +16,28 @@ FROM usdotfhwastoldev/autoware.ai:develop AS base_image
 
 FROM base_image as source-code
 
-# ROS1 build
-RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
-COPY --chown=carma . /home/carma/workspace_ros1/src/
-RUN ~/workspace_ros1/src/docker/checkout.bash
-RUN ~/workspace_ros1/src/docker/install.sh
-
-# ROS2 build
-COPY --chown=carma . /home/carma/workspace_ros2/src/
-RUN chmod u+x ~/workspace_ros2/src/docker/checkout_ros2.bash ~/workspace_ros2/src/docker/install_ros2.sh ~/workspace_ros2/src/docker/install_ssc_pm.sh
-RUN ~/workspace_ros2/src/docker/checkout_ros2.bash
-RUN ~/workspace_ros2/src/docker/install_ros2.sh
-
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG ACCESS_ID="NULL"
 ARG SECRET_KEY="NULL"
-RUN ~/workspace_ros2/src/docker/install_ssc_pm.sh ${ACCESS_ID} ${SECRET_KEY}
+
+# ROS1 checkout deps
+RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
+COPY --chown=carma . /home/carma/workspace_ros1/src/
+RUN chmod -R u+x ~/workspace_ros1/src/docker/
+RUN ~/workspace_ros1/src/docker/checkout.bash -ros1
+
+# ROS2 checkout deps
+COPY --chown=carma . /home/carma/workspace_ros2/src/
+COPY --chown=carma . /home/carma/workspace_ros2/src/
+RUN chmod -R u+x ~/workspace_ros2/src/docker/
+RUN ~/workspace_ros2/src/docker/checkout.bash -ros2
+
+# Install ssc_pm_lexus
+RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+# Build ros1 pkgs
+RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+#Build ros2 pkgs
+RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
 
 FROM base_image
 
