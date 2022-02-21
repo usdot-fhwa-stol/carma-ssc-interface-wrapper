@@ -1,7 +1,7 @@
 #pragma once
 
 /*
- * Copyright (C) <SUB><year> LEIDOS.
+ * Copyright (C) 2022 LEIDOS.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,14 +22,19 @@ namespace ssc_interface_wrapper
 {
 
   /**
-   * \brief Stuct containing the algorithm configuration values for <SUB><package_name>
+   * \brief Stuct containing the algorithm configuration values for ssc_interface_wrapper
    */
   struct Config
   {
+    // Timeout threshold for controller, in seconds
     int controller_timeout = 1;
+    //True if using rear wheel speed data
     bool use_real_wheel_speed = true;
+    // True if using an adaptive gear ratio
     bool use_adaptive_gear_ratio = true;
+    // Timeout for command receipt in milliseconds
     int command_timeout = 1000;
+    // Looping rate
     double loop_rate = 30.0;
 
     // Stream operator for this config

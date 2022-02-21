@@ -21,13 +21,12 @@ echo "ROS1 build"
 source /home/carma/catkin/setup.bash
 source /opt/autoware.ai/ros/install/setup.bash
 sudo apt-get install -y apt-utils
-source /opt/autoware.ai/ros/install/setup.bash
 
 rosdep install --from-paths src --ignore-src -r -y
 sudo apt-get install ros-noetic-pacmod-msgs
 
-sudo apt install python3-catkin-pkg
-colcon build --packages-ignore ssc_interface_wrapper_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
+sudo apt-get install python3-catkin-pkg
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
 chmod -R ugo+x /opt/carma/install
 unset ROS_LANG_DISABLE
 

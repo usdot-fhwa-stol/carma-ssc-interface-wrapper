@@ -16,6 +16,11 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ssc_interface_wrapper)
 
+# Declare carma package and check ROS version
+find_package(carma_cmake_common REQUIRED)
+carma_check_ros_version(1)
+carma_package()
+
 ## Compile as C++14, supported in ROS Noetic and newer
 add_compile_options(-std=c++14)
 

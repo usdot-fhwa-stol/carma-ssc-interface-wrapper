@@ -16,11 +16,6 @@ FROM usdotfhwastoldev/autoware.ai:develop AS base_image
 
 FROM base_image as source-code
 
-# Install remaining package deps
-RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
-COPY --chown=carma . /home/carma/workspace_ros1/src/ 
-RUN sudo rm -rf ~/workspace_ros1 ~/workspace_ros2
-
 # ROS1 build
 RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
 COPY --chown=carma . /home/carma/workspace_ros1/src/

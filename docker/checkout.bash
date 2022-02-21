@@ -37,29 +37,29 @@ done
 
 cd ${dir}
 if [[ "$BRANCH" = "develop" ]]; then
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch $BRANCH
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch $BRANCH
+      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
+      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch $BRANCH
 else
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ./src/CARMAMsgs --branch develop
-      sudo git clone https://github.com/usdot-fhwa-stol/carma-utils.git ./src/CARMAUtils --branch develop
+      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch develop
+      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch develop
 fi
 
 # Required to build the dbw_pacifica_msgs message set.
-sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ./src/raptor-dbw-ros --branch master 
-cd ./src/raptor-dbw-ros
+sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master 
+cd ${dir}/src/raptor-dbw-ros
 sudo git reset --hard f50f91cd88ad27b2ce05bab1f8ff780931c41475
 cd ${dir}
 
 # Required for ford fusion drive by wire
-sudo git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ./src/dbw-mkz-ros --branch 1.2.4
+sudo git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
-sudo git clone https://github.com/astuff/pacmod3.git ./src/pacmod3 --branch ros1_master
-cd ./src/pacmod3
+sudo git clone https://github.com/astuff/pacmod3.git ${dir}/src/pacmod3 --branch ros1_master
+cd ${dir}/src/pacmod3
 sudo git reset --hard 4e5e9cd5e821f4f19e31e10ba42f20449860b940
 cd ${dir}
 
-sudo git clone https://github.com/astuff/kvaser_interface.git ./src/kvaser_interface --branch ros1_master
-cd ./src/kvaser_interface
+sudo git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros1_master
+cd ${dir}/src/kvaser_interface
 sudo git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
 cd ${dir}
 

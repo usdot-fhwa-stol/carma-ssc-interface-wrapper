@@ -1,4 +1,4 @@
-# Copyright (C) 2021 LEIDOS.
+# Copyright (C) 2022 LEIDOS.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
@@ -53,7 +53,8 @@ def generate_launch_description():
                             'launch', 
                             'speed_steering_control.launch.xml'
                         ])
-                    ])
+                    ]),
+                    launch_arguments = {'json_dir' : '/opt/ros/foxy/share/ssc_pm_lexus/share/json'}
                 )
             ]
         )
