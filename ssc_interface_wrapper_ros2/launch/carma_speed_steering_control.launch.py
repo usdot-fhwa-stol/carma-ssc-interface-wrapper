@@ -54,7 +54,7 @@ def generate_launch_description():
                             'speed_steering_control.launch.xml'
                         ])
                     ]),
-                    launch_arguments = {'json_dir' : '/opt/ros/foxy/share/ssc_pm_lexus/share/json'}.items()
+                    launch_arguments = {'json_dir' : PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'json'])}.items()
                 )
             ]
         )
