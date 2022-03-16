@@ -93,8 +93,8 @@ def generate_launch_description():
     return LaunchDescription([
         declare_vehicle_calibration_dir,
         declare_ssc_package_name,
+        carma_speed_steering_control_group,
         ssc_interface_wrapper_group,
         ssc_lexus_node,
-        carma_speed_steering_control_group,
         autoware_ssc_interface_node
     ])

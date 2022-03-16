@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+from http.server import executable
 from launch import LaunchDescription
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
@@ -29,6 +30,7 @@ from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch.actions import SetEnvironmentVariable
 
+from launch.substitutions import ThisLaunchFileDir
 
 def generate_launch_description():
 
@@ -41,21 +43,18 @@ def generate_launch_description():
     return LaunchDescription([
         declare_vehicle_calibration_dir,
         declare_ssc_package_name,
-
         GroupAction(
             actions = [
                 SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
 
                 IncludeLaunchDescription(
                     AnyLaunchDescriptionSource([
-                        PathJoinSubstitution([
-                            FindPackageShare(ssc_package_name),
-                            'launch', 
-                            'speed_steering_control.launch.xml'
-                        ])
+                        PathJoinSubstitution([ThisLaunchFileDir(),'ssc_pm_lexus.launch.xml'])
                     ]),
-                    launch_arguments = {'json_dir' : PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'json'])}.items()
-                )
+                    launch_arguments = {
+                        'json_dir' : PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'json']),
+                        }.items()
+                ),
             ]
         )
     ])
