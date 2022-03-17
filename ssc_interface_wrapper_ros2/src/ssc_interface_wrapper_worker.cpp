@@ -32,7 +32,7 @@ namespace ssc_interface_wrapper
 
     void Worker::on_new_status_msg(const automotive_navigation_msgs::msg::ModuleState& msg, const rclcpp::Time& current_time)
     {
-        static std::string controller_tag{"veh_controller"};
+        static const std::string controller_tag{"veh_controller"};
         
         if(msg.name.length() >= controller_tag.length() 
             && (0 == msg.name.compare (msg.name.length() - controller_tag.length(), controller_tag.length(), controller_tag)))

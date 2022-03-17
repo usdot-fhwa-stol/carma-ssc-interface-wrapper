@@ -25,10 +25,6 @@ namespace ssc_interface_wrapper{
 
         // Declare parameters
         config_.controller_timeout = declare_parameter<int>("controller_timeout", config_.controller_timeout);
-        config_.use_real_wheel_speed = declare_parameter<bool>("use_rear_wheel_speed", config_.use_real_wheel_speed);
-        config_.use_adaptive_gear_ratio = declare_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio);
-        config_.command_timeout = declare_parameter<int>("command_timeout", config_.command_timeout);
-        config_.loop_rate = declare_parameter<double>("loop_rate", config_.loop_rate);
 
     }
 
@@ -57,11 +53,7 @@ namespace ssc_interface_wrapper{
         worker_ = Worker();
 
         //Load parameters
-        get_parameter<int>("controlller_timeout", config_.controller_timeout);
-        get_parameter<bool>("use_rear_wheel_speed", config_.use_real_wheel_speed);
-        get_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio);
-        get_parameter<int>("command_timeout", config_.command_timeout);
-        get_parameter<double>("loop_rate", config_.loop_rate);
+        get_parameter<int>("controller_timeout", config_.controller_timeout);
 
         //setup subscribers
         ssc_state_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState>("module_states", 5,
@@ -90,7 +82,7 @@ namespace ssc_interface_wrapper{
     carma_ros2_utils::CallbackReturn Node::handle_on_activate(const rclcpp_lifecycle::State& )
     {
         //Timer setup
-        timer_ = this->create_wall_timer(std::chrono::milliseconds(500), 
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(config_.controller_timeout/2), 
         std::bind(&Node::check_driver_timeout, this));
 
         if(reengage_state_)
@@ -136,7 +128,7 @@ namespace ssc_interface_wrapper{
     void Node::ssc_state_cb(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg)
     {
         // message needs to go to library. Unique ptr cant be sent
-        automotive_navigation_msgs::msg::ModuleState module_state = *msg.get();
+        automotive_navigation_msgs::msg::ModuleState module_state = *msg;
         worker_.on_new_status_msg(module_state, this->now());
         // robot_enabled field is true once the lower level controller is running
 	    robotic_status_msg_.robot_enabled = true;
@@ -160,7 +152,7 @@ namespace ssc_interface_wrapper{
 
     void Node::shift_cb(const pacmod_msgs::msg::SystemRptInt::UniquePtr msg)
     {
-        pacmod_msgs::msg::SystemRptInt shift_msg = *msg.get();
+        pacmod_msgs::msg::SystemRptInt shift_msg = *msg;
         j2735_v2x_msgs::msg::TransmissionState transmission_msg;
         transmission_msg.transmission_state = worker_.convert_shift_state_to_J2735(shift_msg);
         transmission_pub_->publish(transmission_msg);

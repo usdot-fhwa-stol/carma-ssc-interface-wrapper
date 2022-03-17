@@ -12,7 +12,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-from ament_index_python import get_package_share_directory
+from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
@@ -36,7 +36,7 @@ def generate_launch_description():
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
 
     # Launch wrapper
-    ssc_interface_wrapper_pkg = get_package_share_directory('ssc_interface_wrapper_ros2')
+    ssc_interface_wrapper_pkg = FindPackageShare('ssc_interface_wrapper_ros2')
     ssc_interface_wrapper_group = GroupAction(
         actions = [
             # Launch Wrapper

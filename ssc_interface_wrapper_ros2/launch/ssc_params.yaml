@@ -1,4 +1,3 @@
-# SSC assumes file names that don't start with / are in the same directory as the launch file
 hardware_interface:
   ssc:
     veh_interface:

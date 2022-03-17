@@ -26,26 +26,14 @@ namespace ssc_interface_wrapper
    */
   struct Config
   {
-    // Timeout threshold for controller, in seconds
-    int controller_timeout = 1;
-    //True if using rear wheel speed data
-    bool use_real_wheel_speed = true;
-    // True if using an adaptive gear ratio
-    bool use_adaptive_gear_ratio = true;
     // Timeout for command receipt in milliseconds
-    int command_timeout = 1000;
-    // Looping rate
-    double loop_rate = 30.0;
+    int controller_timeout = 1000;
 
     // Stream operator for this config
     friend std::ostream &operator<<(std::ostream &output, const Config &c)
     {
       output << "ssc_interface_wrapper::Config { " << std::endl
-           << "controller_timeout: " << c.controller_timeout << std::endl
-           << "use_real_wheel_speed: "<< c.use_real_wheel_speed << std::endl
-           << "use_adaptive_gear_ratio: "<< c.use_adaptive_gear_ratio <<std::endl
-           << "command_timeout: "<< c.command_timeout << std::endl
-           << " loop_rate: " << c.loop_rate << std::endl
+           << "controller_timeout: "<< c.controller_timeout << std::endl
            << "}" << std::endl;
       return output;
     }
