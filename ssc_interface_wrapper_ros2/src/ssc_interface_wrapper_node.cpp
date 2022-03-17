@@ -124,7 +124,7 @@ namespace ssc_interface_wrapper{
         return true;
 
     }
-
+ 
     void Node::ssc_state_cb(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg)
     {
         // message needs to go to library. Unique ptr cant be sent
