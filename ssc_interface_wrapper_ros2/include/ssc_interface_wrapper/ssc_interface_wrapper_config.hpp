@@ -26,8 +26,8 @@ namespace ssc_interface_wrapper
    */
   struct Config
   {
-    // Timeout for command receipt in milliseconds
-    int controller_timeout = 1000;
+    // Timeout for command receipt in seconds
+    int controller_timeout = 1;
 
     // Stream operator for this config
     friend std::ostream &operator<<(std::ostream &output, const Config &c)

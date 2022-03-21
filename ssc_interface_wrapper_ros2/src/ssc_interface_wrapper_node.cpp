@@ -82,7 +82,7 @@ namespace ssc_interface_wrapper{
     carma_ros2_utils::CallbackReturn Node::handle_on_activate(const rclcpp_lifecycle::State& )
     {
         //Timer setup
-        timer_ = this->create_wall_timer(std::chrono::milliseconds(config_.controller_timeout/2), 
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(config_.controller_timeout * 1000/2), 
         std::bind(&Node::check_driver_timeout, this));
 
         if(reengage_state_)
