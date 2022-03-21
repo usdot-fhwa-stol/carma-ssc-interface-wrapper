@@ -24,7 +24,7 @@ namespace ssc_interface_wrapper{
         config_ = Config();
 
         // Declare parameters
-        config_.controller_timeout = declare_parameter<int>("controller_timeout", config_.controller_timeout);
+        config_.controller_timeout = declare_parameter<double>("controller_timeout", config_.controller_timeout);
 
     }
 
@@ -53,7 +53,7 @@ namespace ssc_interface_wrapper{
         worker_ = Worker();
 
         //Load parameters
-        get_parameter<int>("controller_timeout", config_.controller_timeout);
+        get_parameter<double>("controller_timeout", config_.controller_timeout);
 
         //setup subscribers
         ssc_state_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState>("module_states", 5,
@@ -82,7 +82,7 @@ namespace ssc_interface_wrapper{
     carma_ros2_utils::CallbackReturn Node::handle_on_activate(const rclcpp_lifecycle::State& )
     {
         //Timer setup
-        timer_ = this->create_wall_timer(std::chrono::milliseconds(config_.controller_timeout * 1000/2), 
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(config_.controller_timeout * 1000.0/2.0), 
         std::bind(&Node::check_driver_timeout, this));
 
         if(reengage_state_)
