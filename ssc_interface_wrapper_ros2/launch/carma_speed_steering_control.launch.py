@@ -30,6 +30,7 @@ from launch.actions import GroupAction
 from launch.actions import SetEnvironmentVariable
 
 from launch.substitutions import ThisLaunchFileDir
+from launch_ros.actions import set_remap
 
 def generate_launch_description():
 
@@ -45,6 +46,18 @@ def generate_launch_description():
         GroupAction(
             actions = [
                 SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
+
+                set_remap.SetRemap('/ssc/speed_model/change_state', '/ssc/speed_model/false_change_state'),
+                set_remap.SetRemap('/ssc/speed_model/change_state', '/ssc/speed_model/false_change_state'),
+
+                set_remap.SetRemap('/ssc/steering_model/change_state', '/ssc/steering_model/false_change_state'),
+                set_remap.SetRemap('/ssc/steering_model/change_state', '/ssc/steering_model/false_change_state'),
+                
+                set_remap.SetRemap('/ssc/veh_controller/change_state', '/ssc/veh_controller/false_change_state'),
+                set_remap.SetRemap('/ssc/veh_controller/change_state', '/ssc/veh_controller/false_change_state'),
+
+                set_remap.SetRemap('/ssc/veh_interface/change_state', '/ssc/veh_interface/false_change_state'),
+                set_remap.SetRemap('/ssc/veh_interface/change_state', '/ssc/veh_interface/false_change_state'),
 
                 IncludeLaunchDescription(
                     AnyLaunchDescriptionSource([

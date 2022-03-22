@@ -76,7 +76,7 @@ namespace ssc_interface_wrapper{
         enable_robotic_control_srv_ = create_service<carma_driver_msgs::srv::SetEnableRobotic>("controller/enable_robotic", 
                                                                                     std::bind(&Node::enable_robotic_control_cb, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));                                                                  
 
-
+        return CallbackReturn::SUCCESS;
     }
 
     carma_ros2_utils::CallbackReturn Node::handle_on_activate(const rclcpp_lifecycle::State& )
@@ -90,6 +90,7 @@ namespace ssc_interface_wrapper{
             reengage_robotic_control();
         }
 
+        return CallbackReturn::SUCCESS;
     }
 
     void Node::check_driver_timeout()
