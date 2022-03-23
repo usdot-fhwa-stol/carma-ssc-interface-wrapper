@@ -47,17 +47,17 @@ def generate_launch_description():
             actions = [
                 SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
 
-                set_remap.SetRemap('/ssc/speed_model/change_state', '/ssc/speed_model/false_change_state'),
-                set_remap.SetRemap('/ssc/speed_model/change_state', '/ssc/speed_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/speed_model/change_state', '/hardware_interface/ssc/speed_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/speed_model/change_state', '/hardware_interface/ssc/speed_model/false_change_state'),
 
-                set_remap.SetRemap('/ssc/steering_model/change_state', '/ssc/steering_model/false_change_state'),
-                set_remap.SetRemap('/ssc/steering_model/change_state', '/ssc/steering_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/steering_model/change_state', '/hardware_interface/ssc/steering_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/steering_model/change_state', '/hardware_interface/ssc/steering_model/false_change_state'),
                 
-                set_remap.SetRemap('/ssc/veh_controller/change_state', '/ssc/veh_controller/false_change_state'),
-                set_remap.SetRemap('/ssc/veh_controller/change_state', '/ssc/veh_controller/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/veh_controller/change_state', '/hardware_interface/ssc/veh_controller/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/veh_controller/change_state', '/hardware_interface/ssc/veh_controller/false_change_state'),
 
-                set_remap.SetRemap('/ssc/veh_interface/change_state', '/ssc/veh_interface/false_change_state'),
-                set_remap.SetRemap('/ssc/veh_interface/change_state', '/ssc/veh_interface/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/veh_interface/change_state', '/hardware_interface/ssc/veh_interface/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/ssc/veh_interface/change_state', '/hardware_interface/ssc/veh_interface/false_change_state'),
 
                 IncludeLaunchDescription(
                     AnyLaunchDescriptionSource([

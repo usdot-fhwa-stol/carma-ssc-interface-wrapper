@@ -38,10 +38,11 @@ namespace ssc_interface_wrapper
         int convert_shift_state_to_J2735(const pacmod_msgs::msg::SystemRptInt& shift_state);
         std::string get_current_ssc_state();
 
+        rclcpp::Time last_vehicle_status_time_;
+
     private:
         std::string latest_ssc_status_info_;
         std::string latest_ssc_status_;
-        rclcpp::Time last_vehicle_status_time_;
-
+        
     };
 }

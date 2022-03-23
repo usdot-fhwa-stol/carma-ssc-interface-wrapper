@@ -85,6 +85,9 @@ namespace ssc_interface_wrapper{
         timer_ = this->create_wall_timer(std::chrono::duration<double>(config_.controller_timeout/2.0), 
         std::bind(&Node::check_driver_timeout, this));
 
+        // Initialize timeout check
+        worker_.last_vehicle_status_time_ = this->now();
+
         if(reengage_state_)
         {
             reengage_robotic_control();
