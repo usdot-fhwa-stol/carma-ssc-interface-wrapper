@@ -57,7 +57,8 @@ def generate_launch_description():
                     parameters=[ param_file_path ],
                     remappings= [
                         ("/controller/vehicle_commands", "/vehicle_cmd"),
-                        ("/can/wheel_speed", "/parsed_tx/wheel_speed_rpt")  
+                        ("/can/wheel_speed", "/parsed_tx/wheel_speed_rpt"), 
+                        ("module_states", "ssc/module_states") 
                     ]
             ),
         ]
