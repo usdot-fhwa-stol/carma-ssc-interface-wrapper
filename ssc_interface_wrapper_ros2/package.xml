@@ -38,6 +38,8 @@
   <depend>autoware_auto_msgs</depend>
   <depend>automotive_navigation_msgs</depend>
 
+  <depend>automotive_platform_msgs</depend>
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>
 
