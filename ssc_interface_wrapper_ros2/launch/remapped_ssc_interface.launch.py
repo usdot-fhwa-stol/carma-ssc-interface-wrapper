@@ -26,6 +26,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch_ros.actions import set_remap
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
@@ -37,6 +38,10 @@ def generate_launch_description():
 
     loop_rate = LaunchConfiguration('loop_rate')
     declare_loop_rate = DeclareLaunchArgument(name ='loop_rate', default_value='30.0')
+
+    # Get parameter file path
+    param_file_path = os.path.join(
+        FindPackageShare('ssc_interface_wrapper_ros2'), 'config/converter_params.yaml')
 
     ssc_interface_group = GroupAction(
         actions = [
@@ -64,6 +69,23 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([get_package_share_directory('ssc_interface'), '/launch','/ssc_interface.launch.py']),
                 launch_arguments={'use_adaptive_gear_ratio':use_adaptive_gear_ratio, 'command_timeout': command_timeout, 'loop_rate': loop_rate}.items()
+            ),
+
+            # Launch conveter node as container
+            ComposableNodeContainer(
+                name='pacmod_container',
+                namespace= GetCurrentNamespace(),
+                package='rclcpp_components',
+                executable='component_container',
+                composable_node_descriptions=[
+                    # pacmod3 launch
+                    ComposableNode(
+                        package='ssc_interface_wrapper_ros2',
+                        plugin='ssc_interface_wrapper::Converter',
+                        name='ssc_converter_node',
+                        parameters=[ param_file_path ],
+                    ),
+                ]
             )
 
         ]

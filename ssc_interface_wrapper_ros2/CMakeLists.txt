@@ -52,6 +52,12 @@ target_link_libraries(${node_exec}
         ${node_lib}
 )
 
+ament_auto_add_library(converter_node SHARED
+        src/converter_worker.cpp)
+ament_auto_add_executable(converter_exec 
+                src/converter_node.cpp)        
+rclcpp_components_register_nodes(converter_node "ssc_interface_wrapper::Converter") 
+
 # Testing
 if(BUILD_TESTING)  
 

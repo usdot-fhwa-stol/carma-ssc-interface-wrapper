@@ -21,6 +21,21 @@
 #include <std_srvs/srv/empty.hpp>
 
 #include <carma_ros2_utils/carma_lifecycle_node.hpp>
+#include <automotive_platform_msgs/msg/velocity_accel_cov.hpp>
+#include <automotive_platform_msgs/msg/curvature_feedback.hpp>
+#include <automotive_platform_msgs/msg/throttle_feedback.hpp>
+#include <automotive_platform_msgs/msg/brake_feedback.hpp>
+#include <automotive_platform_msgs/msg/gear_feedback.hpp>
+#include <automotive_platform_msgs/msg/steering_feedback.hpp>
+#include <autoware_msgs/msg/vehicle_status.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <std_msgs/msg/bool.hpp>
+#include <automotive_navigation_msgs/msg/module_state.hpp>
+#include <carma_planning_msgs/msg/guidance_state.hpp>
+#include <autoware_msgs/msg/vehicle_cmd.hpp>
+#include <autoware_auto_msgs/msg/vehicle_state_command.hpp>
+#include <autoware_auto_msgs/msg/vehicle_control_command.hpp>
+
 #include <automotive_platform_msgs/msg/gear.hpp>
 
 
@@ -33,22 +48,38 @@ namespace ssc_interface_wrapper{
 
 static const std::string BASE_FRAME_ID = "base_link";
 
-class Convertor : public carma_ros2_utils::CarmaLifecycleNode
+  struct ConverterConfig
+  {
+   
+    bool use_adaptive_gear_ratio_ = true;
+    double wheel_base_ = 2.79;
+    double status_pub_rate_ =  30.0;
+    double agr_coef_a_ = 15.713;
+    double agr_coef_b_ = 0.053;
+    double agr_coef_c_ = 0.042;
+
+    // Stream operator for this config
+    
+    friend std::ostream &operator<<(std::ostream &output, const ConverterConfig &c)
+    {
+      output << "ssc_interface_wrapper::ConverterConfig { " << std::endl
+           << "use_adaptive_gear_ratio_: " << c.use_adaptive_gear_ratio_ << std::endl
+           << "wheel_base_: " << c.wheel_base_ << std::endl
+           << "status_pub_rate: " << c.status_pub_rate_ << std::endl
+           << "agr_coef_a_: " << c.agr_coef_a_ << std::endl
+           << "agr_coef_b_: " << c.agr_coef_b_ << std::endl
+           << "agr_coef_c_: " << c.agr_coef_c_ << std::endl
+           << "}" << std::endl;
+      return output;
+    }
+  };
+
+class Converter : public carma_ros2_utils::CarmaLifecycleNode
 {
     private:
-    //Subscribers
-    // From autoware
-
+    
     carma_ros2_utils::PubPtr<autoware_msgs::msg::VehicleStatus> vehicle_status_pub_; 
     carma_ros2_utils::PubPtr<geometry_msgs::msg::TwistStamped> current_twist_pub_;
-
-    // Callbacks
-    void auto_gear_cb(const automotive_platform_msgs::msg::GearCommand& m_gear_msg);
-    void auto_speed_cb(const automotive_platform_msgs::msg::SpeedMode& m_speed_msg);
-    void auto_steer_cb(const automotive_platform_msgs::msg::SteerMode& m_steer_msg);
-    void auto_turn_signal_cb(const automotive_platform_msgs::msg::TurnSignalCommand& m_turn_signal_msg);
-    void auto_kinematic_state_cb(const autoware_auto_msgs::msg::VehicleKinematicState& kinematic_state_msg);
-
 
     //autoware.ai publishes a vehicle status topic after subscribing to ssc topics, that needs to be created here
     //Create vehicle status message after subscribing to ssc topics
@@ -84,32 +115,39 @@ class Convertor : public carma_ros2_utils::CarmaLifecycleNode
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
 
-    //Things autoware.ai is subscribing to
+    //autoware.ai subscriptions from autoware
     carma_ros2_utils::SubPtr<carma_planning_msgs::msg::GuidanceState> guidance_state_sub_;
     carma_ros2_utils::SubPtr<autoware_msgs::msg::VehicleCmd> vehicle_cmd_sub_;
     carma_ros2_utils::SubPtr<std_msgs::msg::Bool> engage_sub_;
     carma_ros2_utils::SubPtr<automotive_navigation_msgs::msg::ModuleState> module_states_sub_;
     // Callbacks
-    void callback_from_guidance_state(const carma_planning_msgs::msg::GuidanceState::UniqPtr msg);
-    void callback_from_vehicle_cmd(const autoware_msgs::msg::VehicleCmd::UniqPtr msg);
+    void callback_from_guidance_state(const carma_planning_msgs::msg::GuidanceState::UniquePtr msg);
+    void callback_from_vehicle_cmd(const autoware_msgs::msg::VehicleCmd::UniquePtr msg);
     void callback_from_engage(const std_msgs::msg::Bool::UniquePtr msg);
     void callback_from_ssc_module_states(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg);
-    
+
+    // Convert autoware.ai subscriptions to autoware.auto subscriptions
+    carma_ros2_utils::PubPtr<autoware_auto_msgs::msg::VehicleStateCommand> m_state_pub_;
+    carma_ros2_utils::PubPtr<autoware_auto_msgs::msg::VehicleControlCommand> m_command_pub_;
+
+    void publish_vehicle_state(const autoware_msgs::msg::VehicleStatus& vehicle_status);
+
     //Timer callback
     void publish_vehicle_status();
 
-    rclcpp::TimerBase::SharedPtr example_timer_;
+    rclcpp::TimerBase::SharedPtr status_pub_timer;
 
 
     //Constants from autoware.ai as package config - ros params 
     // Check values in config
     bool use_adaptive_gear_ratio_ =true;
     double status_pub_rate = 30.0;
-
     double agr_coef_a_ = 15.713;
     double agr_coef_b_ = 0.053;
     double agr_coef_c_ = 0.042;
     double wheel_base_ = 2.79;
+    
+    ConverterConfig config_;
 
     // Other global variables
     bool engage_;
@@ -134,7 +172,7 @@ class Convertor : public carma_ros2_utils::CarmaLifecycleNode
     /**
      * \brief constructor 
      */
-    explicit Convertor(const rclcpp::NodeOptions &);
+    explicit Converter(const rclcpp::NodeOptions &);
 
     ////
     // Overrides

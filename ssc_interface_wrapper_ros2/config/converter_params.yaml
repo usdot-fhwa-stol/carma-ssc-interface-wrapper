@@ -1,0 +1,19 @@
+    #bool 
+    use_adaptive_gear_ratio: true
+
+    #double 
+    wheel_base : 2.79
+
+    #double 
+    status_pub_rate: 30.0
+
+    #double 
+    agr_coef_a: 15.713
+
+    #double 
+    agr_coef_b : 0.053
+
+    #double 
+    agr_coef_c: 0.042
+    
+ 
