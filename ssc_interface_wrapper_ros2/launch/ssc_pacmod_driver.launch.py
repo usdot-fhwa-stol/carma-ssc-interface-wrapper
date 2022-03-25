@@ -101,12 +101,6 @@ def generate_launch_description():
     return LaunchDescription([
         declare_vehicle_calibration_dir,
         declare_ssc_package_name,
-        declare_use_adaptive_gear_ratio,
-        declare_wheel_base,
-        declare_tire_base,
-        declare_acceleration_limit,
-        declare_deceleration_limit,
-        declare_max_curvature_rate,
         declare_vehicle_config_param_file_arg,
         carma_speed_steering_control_group,
         ssc_interface_wrapper_group,
