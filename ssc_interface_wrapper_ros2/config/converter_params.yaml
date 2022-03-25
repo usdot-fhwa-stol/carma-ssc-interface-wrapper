@@ -1,11 +1,29 @@
     #bool 
     use_adaptive_gear_ratio: true
 
-    #double 
-    wheel_base : 2.79
+    #int
+    command_timeout: 1000  
 
     #double 
     status_pub_rate: 30.0
+
+    #double 
+    wheel_base : 2.79
+
+    #double
+    tire_radius: 0.39
+
+    #double
+    ssc_gear_ratio: 16.135
+
+    #double
+    acceleration_limit: 3.0
+
+    #double
+    deceleration_limit: 3.0
+
+    #double
+    max_curvature_rate: 0.15
 
     #double 
     agr_coef_a: 15.713

@@ -26,7 +26,6 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch_ros.actions import set_remap
-from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
@@ -41,7 +40,7 @@ def generate_launch_description():
 
     # Get parameter file path
     param_file_path = os.path.join(
-        FindPackageShare('ssc_interface_wrapper_ros2'), 'config/converter_params.yaml')
+        get_package_share_directory('ssc_interface_wrapper_ros2'), 'config/converter_params.yaml')
 
     ssc_interface_group = GroupAction(
         actions = [
@@ -73,7 +72,7 @@ def generate_launch_description():
 
             # Launch conveter node as container
             ComposableNodeContainer(
-                name='pacmod_container',
+                name='ssc_interface_wrapper_converter_container',
                 namespace= GetCurrentNamespace(),
                 package='rclcpp_components',
                 executable='component_container',

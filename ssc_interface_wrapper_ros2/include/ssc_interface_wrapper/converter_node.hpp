@@ -33,15 +33,13 @@
 #include <automotive_navigation_msgs/msg/module_state.hpp>
 #include <carma_planning_msgs/msg/guidance_state.hpp>
 #include <autoware_msgs/msg/vehicle_cmd.hpp>
-#include <autoware_auto_msgs/msg/vehicle_state_command.hpp>
-#include <autoware_auto_msgs/msg/vehicle_control_command.hpp>
+
+#include <automotive_platform_msgs/msg/steer_mode.hpp>
+#include <automotive_platform_msgs/msg/speed_mode.hpp>
+#include <automotive_platform_msgs/msg/turn_signal_command.hpp>
+#include <automotive_platform_msgs/msg/gear_command.hpp>
 
 #include <automotive_platform_msgs/msg/gear.hpp>
-
-
-/* This is a temporary class for the carma ssc wrapper that supports communication with the ssc.
-This node is responsible for converting information published and subscribed to by the autoware.auto ssc package to the message format
-accepted by the ssc while the ros2 conversion is ongoing */
 
 
 namespace ssc_interface_wrapper{
@@ -52,8 +50,14 @@ static const std::string BASE_FRAME_ID = "base_link";
   {
    
     bool use_adaptive_gear_ratio_ = true;
+    int command_timeout_ = 1000;
+    double status_pub_rate_ = 30.0;
     double wheel_base_ = 2.79;
-    double status_pub_rate_ =  30.0;
+    double tire_radius_ = 0.39;
+    double ssc_gear_ratio_ = 16.135;
+    double acceleration_limit_ = 3.0;
+    double deceleration_limit_ = 3.0;
+    double max_curvature_rate_ = 0.15;
     double agr_coef_a_ = 15.713;
     double agr_coef_b_ = 0.053;
     double agr_coef_c_ = 0.042;
@@ -64,8 +68,14 @@ static const std::string BASE_FRAME_ID = "base_link";
     {
       output << "ssc_interface_wrapper::ConverterConfig { " << std::endl
            << "use_adaptive_gear_ratio_: " << c.use_adaptive_gear_ratio_ << std::endl
+           << "command_timeout:" << c.command_timeout_ <<std::endl
+           << "status_pub_rate:" << c.status_pub_rate_<<std::endl
            << "wheel_base_: " << c.wheel_base_ << std::endl
-           << "status_pub_rate: " << c.status_pub_rate_ << std::endl
+           << "tire_radius: " << c.tire_radius_ << std::endl
+           << "ssc_gear_ratio: " << c.ssc_gear_ratio_ << std::endl
+           << "acceleration_limit: " << c.acceleration_limit_ << std::endl
+           << "deceleration_limit: " << c.deceleration_limit_ << std::endl
+           << "max_curvature_rate: "<< c.max_curvature_rate_ <<std::endl
            << "agr_coef_a_: " << c.agr_coef_a_ << std::endl
            << "agr_coef_b_: " << c.agr_coef_b_ << std::endl
            << "agr_coef_c_: " << c.agr_coef_c_ << std::endl
@@ -126,26 +136,20 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     void callback_from_engage(const std_msgs::msg::Bool::UniquePtr msg);
     void callback_from_ssc_module_states(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg);
 
-    // Convert autoware.ai subscriptions to autoware.auto subscriptions
-    carma_ros2_utils::PubPtr<autoware_auto_msgs::msg::VehicleStateCommand> m_state_pub_;
-    carma_ros2_utils::PubPtr<autoware_auto_msgs::msg::VehicleControlCommand> m_command_pub_;
-
     void publish_vehicle_state(const autoware_msgs::msg::VehicleStatus& vehicle_status);
 
     //Timer callback
     void publish_vehicle_status();
+    void publish_command();
 
-    rclcpp::TimerBase::SharedPtr status_pub_timer;
+    carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::SteerMode> steer_mode_pub_;
+    carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::SpeedMode> speed_mode_pub_;
+    carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::TurnSignalCommand> turn_signal_pub_;
+    carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::GearCommand> gear_pub_;
 
+    rclcpp::TimerBase::SharedPtr status_pub_timer_;
+    rclcpp::TimerBase::SharedPtr command_pub_timer_;
 
-    //Constants from autoware.ai as package config - ros params 
-    // Check values in config
-    bool use_adaptive_gear_ratio_ =true;
-    double status_pub_rate = 30.0;
-    double agr_coef_a_ = 15.713;
-    double agr_coef_b_ = 0.053;
-    double agr_coef_c_ = 0.042;
-    double wheel_base_ = 2.79;
     
     ConverterConfig config_;
 
@@ -158,7 +162,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     autoware_msgs::msg::VehicleCmd vehicle_cmd_;
     automotive_navigation_msgs::msg::ModuleState module_states_;
 
-    // rclcpp::rate status_pub_rate_;
     // Flag to indicate whether the ssc should shift the vehicle to park
     bool shift_to_park_{false};
 
@@ -166,6 +169,9 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     bool have_twist_ = false;
     geometry_msgs::msg::TwistStamped current_twist_msg_; // Current twist message recieved from ssc
     autoware_msgs::msg::VehicleStatus current_status_msg_; // Current status message recieved from ssc
+
+     //A small static value for comparing doubles
+    static constexpr double epsilon_ = 0.001;
 
     public:
 

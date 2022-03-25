@@ -29,8 +29,14 @@ namespace ssc_interface_wrapper{
 
         // Declare parameters
         config_.use_adaptive_gear_ratio_ = declare_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio_);
-        config_.wheel_base_ = declare_parameter<double>("wheel_base", config_.wheel_base_);
+        config_.command_timeout_ = declare_parameter<int>("command_timeout", config_.command_timeout_);
         config_.status_pub_rate_ = declare_parameter<double>("status_pub_rate", config_.status_pub_rate_);
+        config_.wheel_base_ = declare_parameter<double>("wheel_base", config_.wheel_base_);
+        config_.tire_radius_ = declare_parameter<double>("tire_radius", config_.tire_radius_);
+        config_.ssc_gear_ratio_ = declare_parameter<double>("ssc_gear_ratio", config_.ssc_gear_ratio_);
+        config_.acceleration_limit_ = declare_parameter<double>("acceleration_limit", config_.acceleration_limit_);
+        config_.deceleration_limit_ = declare_parameter<double>("deceleration_limit", config_.deceleration_limit_);
+        config_.max_curvature_rate_ = declare_parameter<double>("max_curvature_rate", config_.max_curvature_rate_);
         config_.agr_coef_a_ = declare_parameter<double>("agr_coef_a", config_.agr_coef_a_);
         config_.agr_coef_b_ = declare_parameter<double>("agr_coef_b", config_.agr_coef_b_);
         config_.agr_coef_c_ = declare_parameter<double>("agr_coef_c", config_.agr_coef_c_);
@@ -40,13 +46,17 @@ namespace ssc_interface_wrapper{
    {
        // Load parameters
         get_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio_);
-        get_parameter<double>("wheel_base", config_.wheel_base_);
+        get_parameter<int>("command_timeout", config_.command_timeout_);
         get_parameter<double>("status_pub_rate", config_.status_pub_rate_);
+        get_parameter<double>("wheel_base", config_.wheel_base_);
+        get_parameter<double>("tire_radius", config_.tire_radius_);
+        get_parameter<double>("ssc_gear_ratio", config_.ssc_gear_ratio_);
+        get_parameter<double>("acceleration_limit", config_.acceleration_limit_);
+        get_parameter<double>("deceleration_limit", config_.deceleration_limit_);
+        get_parameter<double>("max_curvature_rate", config_.max_curvature_rate_);
         get_parameter<double>("agr_coef_a", config_.agr_coef_a_);
         get_parameter<double>("agr_coef_b", config_.agr_coef_b_);
         get_parameter<double>("agr_coef_c", config_.agr_coef_c_);
-
-        // status_pub_rate_ = rclcpp::rate::GenericRate(config_.status_pub_rate_);
 
         //Setup Subscribers
 
@@ -69,9 +79,9 @@ namespace ssc_interface_wrapper{
                                                                     std::bind(&Converter::curvature_feedback_cb, this, std_ph::_1));
         throttle_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::ThrottleFeedback>("as/throttle_feedback", 10,
                                                                     std::bind(&Converter::throttle_feedback_cb, this, std_ph::_1));
-        brake_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::BrakeFeedback>("as/gear_feedback", 10,
+        brake_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::BrakeFeedback>("as/brake_feedback", 10,
                                                                     std::bind(&Converter::brake_feedback_cb, this, std_ph::_1));
-        gear_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::GearFeedback>("as/steering_feedback", 10, 
+        gear_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::GearFeedback>("as/gear_feedback", 10, 
                                                                     std::bind(&Converter::gear_feedback_cb, this, std_ph::_1));
         steering_wheel_sub_ = create_subscription<automotive_platform_msgs::msg::SteeringFeedback>("as/steering_feedback", 10,
                                                                     std::bind(&Converter::steering_feedback_cb, this, std_ph::_1));
@@ -80,86 +90,27 @@ namespace ssc_interface_wrapper{
         callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_);
 
         // Setup publishers
-        // To autoware system
+        // To autoware 
         vehicle_status_pub_ = create_publisher<autoware_msgs::msg::VehicleStatus>("vehicle_status",10);
         current_twist_pub_ = create_publisher<geometry_msgs::msg::TwistStamped>("vehicle/twist",10);
-        // To autoware.auto
-        m_state_pub_ = create_publisher<autoware_auto_msgs::msg::VehicleStateCommand>("",10);
-        m_command_pub_ = create_publisher<autoware_auto_msgs::msg::VehicleControlCommand>("vehicle_command",10);
+        // To SSC
+        steer_mode_pub_ = create_publisher<automotive_platform_msgs::msg::SteerMode>("as/arbitrated_steering_commands", 10);
+        speed_mode_pub_ = create_publisher<automotive_platform_msgs::msg::SpeedMode>("as/arbitrated_speed_commands",10);
+        turn_signal_pub_ = create_publisher<automotive_platform_msgs::msg::TurnSignalCommand>("as/turn_signal_command",10);
+        gear_pub_ = create_publisher<automotive_platform_msgs::msg::GearCommand>("as/gear_select", 1);
 
 
+        command_pub_timer_ = create_timer(get_clock(), std::chrono::duration<double>(config_.command_timeout_/2), 
+                                        std::bind(&Converter::publish_command, this));
         // These are published in a timed callback
-        // Using 30Hz as callback rate - TO DO: Update this to use status_pub_rate
-        //std::chrono::milliseconds(33.333333333333)
-        status_pub_timer = create_timer(
-        get_clock(),
-        std::chrono::milliseconds(33),    
-        std::bind(&Converter::publish_vehicle_status, this));
+        
+        status_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(config_.status_pub_rate_),    
+                             std::bind(&Converter::publish_vehicle_status, this));
 
         // Return success if everthing initialized successfully
         return CallbackReturn::SUCCESS;
    }
    
-   void Converter::publish_vehicle_state(const autoware_msgs::msg::VehicleStatus& vehicle_status){
-       //Publishes autoware_auto_msgs::msg::VehicleStateCommand which is subscribed to by autoware.auto
-       autoware_auto_msgs::msg::VehicleStateCommand vehicle_state_cmd;
-       vehicle_state_cmd.stamp = vehicle_status.header.stamp;
-
-       //Get info from vehicle_status
-
-        //Get blinker - autoware_msgs doesn't have BLINKER_OFF type which exists in autoware_auto_msgs
-        if(vehicle_status.lamp == autoware_msgs::msg::VehicleStatus::LAMP_LEFT){
-            vehicle_state_cmd.blinker = autoware_auto_msgs::msg::VehicleStateCommand::BLINKER_LEFT;
-        }
-        else if(vehicle_status.lamp == autoware_msgs::msg::VehicleStatus::LAMP_RIGHT){
-            vehicle_state_cmd.blinker = autoware_auto_msgs::msg::VehicleStateCommand::BLINKER_RIGHT;
-        }
-        else if(vehicle_status.lamp == autoware_msgs::msg::VehicleStatus::LAMP_HAZARD){
-            vehicle_state_cmd.blinker = autoware_auto_msgs::msg::VehicleStateCommand::BLINKER_HAZARD;
-        }
-        else{
-            vehicle_state_cmd.blinker = autoware_auto_msgs::msg::VehicleStateCommand::BLINKER_NO_COMMAND;
-        }
-
-        //autoware_msgs doesn't define light types
-        // Get gear
-       if (vehicle_status.current_gear.gear == autoware_msgs::msg::Gear::NONE)
-        {
-            vehicle_state_cmd.gear = autoware_auto_msgs::msg::VehicleStateCommand::GEAR_NO_COMMAND;
-        }
-        else if (vehicle_status.current_gear.gear == autoware_msgs::msg::Gear::PARK)
-        {
-            vehicle_state_cmd.gear = autoware_auto_msgs::msg::VehicleStateCommand::GEAR_PARK;
-        }
-        else if (vehicle_status.current_gear.gear == autoware_msgs::msg::Gear::REVERSE)
-        {
-            vehicle_state_cmd.gear= autoware_auto_msgs::msg::VehicleStateCommand::GEAR_REVERSE;
-        }
-        else if (vehicle_status.current_gear.gear == autoware_msgs::msg::Gear::NEUTRAL)
-        {
-            vehicle_state_cmd.gear = autoware_auto_msgs::msg::VehicleStateCommand::GEAR_NEUTRAL;
-        }
-        else if (vehicle_status.current_gear.gear == autoware_msgs::msg::Gear::DRIVE)
-        {
-            vehicle_state_cmd.gear = autoware_auto_msgs::msg::VehicleStateCommand::GEAR_DRIVE;
-        }
-
-        // Get Mode
-        if(vehicle_status.drivemode == autoware_msgs::msg::VehicleStatus::MODE_MANUAL){
-            vehicle_state_cmd.mode = autoware_auto_msgs::msg::VehicleStateCommand::MODE_MANUAL;
-        }
-        else if(vehicle_status.drivemode == autoware_msgs::msg::VehicleStatus::MODE_AUTO){
-            vehicle_state_cmd.mode = autoware_auto_msgs::msg::VehicleStateCommand::MODE_AUTONOMOUS;
-        }
-        else{
-            vehicle_state_cmd.mode = autoware_auto_msgs::msg::VehicleStateCommand::MODE_NO_COMMAND;
-        }
-
-        /*Note: headlight, wiper, hand_brake, horn not defined in autoware_msgs (but exist in autoware_auto_msgs) */
-        m_state_pub_->publish(vehicle_state_cmd);
-
-   }
-
     void Converter::publish_vehicle_status(){
           if (have_vehicle_status_) {
             vehicle_status_pub_->publish(current_status_msg_);
@@ -187,14 +138,6 @@ namespace ssc_interface_wrapper{
         vehicle_cmd_ = *msg;
         command_initialized_ = true;
 
-        autoware_auto_msgs::msg::VehicleControlCommand vehicle_control_cmd;
-        vehicle_control_cmd.stamp = msg->header.stamp;
-        vehicle_control_cmd.long_accel_mps2 = msg->ctrl_cmd.linear_acceleration;
-        vehicle_control_cmd.velocity_mps = msg->ctrl_cmd.linear_velocity;
-        vehicle_control_cmd.front_wheel_angle_rad = msg->ctrl_cmd.steering_angle; 
-        vehicle_control_cmd.rear_wheel_angle_rad; //***Assumption - steering_angle defined in autoware_msgs is only front_wheel_angle
-
-        m_command_pub_->publish(vehicle_control_cmd);
     }
 
     void Converter::callback_from_engage(const std_msgs::msg::Bool::UniquePtr msg){
@@ -204,7 +147,7 @@ namespace ssc_interface_wrapper{
     void Converter::callback_from_ssc_module_states(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg){
         if (msg->name.find("veh_controller") != std::string::npos)
         {
-            module_states_ = *msg;  // *_veh_controller status is used for 'drive/steeringmode'
+            module_states_ = *msg;
         }
     }
 
@@ -247,7 +190,7 @@ namespace ssc_interface_wrapper{
         // current steering curvature
         double curvature = !config_.use_adaptive_gear_ratio_ ?
                          (msg_curvature.curvature) :
-                         std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / wheel_base_;
+                         std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
 
         // Set current_velocity_ variable [m/s]
         current_velocity_ = msg_velocity.velocity;
@@ -271,7 +214,7 @@ namespace ssc_interface_wrapper{
         vehicle_status.brakepedal = (int)(1000 * msg_brake.brake_pedal);
 
         // steering angle [rad]
-        vehicle_status.angle = std::atan(curvature * wheel_base_);
+        vehicle_status.angle = std::atan(curvature * config_.wheel_base_);
 
         // gearshift
         if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NONE)
@@ -311,7 +254,7 @@ namespace ssc_interface_wrapper{
         // current steering curvature
         double curvature = !config_.use_adaptive_gear_ratio_ ?
                          (msg_curvature.curvature) :
-                         std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / wheel_base_;
+                         std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
 
         geometry_msgs::msg::TwistStamped twist;
         twist.header.frame_id = BASE_FRAME_ID;
@@ -323,7 +266,122 @@ namespace ssc_interface_wrapper{
         have_twist_ = true;
     }                                  
 
+    void Converter::publish_command()
+    {
+        // 
+        // This method will publish 0 commands until the vehicle_cmd has actually been populated with non-zeros
+        // When the vehicle_cmd_ becomes populated it will start to forward that instead
 
+        rclcpp::Time stamp = this->now();
+
+        // Desired values
+        // Driving mode (If autonomy mode should be active, mode = 1)
+        unsigned char desired_mode = engage_ ? 1 : 0;
+
+        // Speed for SSC speed_model
+        double desired_speed = vehicle_cmd_.ctrl_cmd.linear_velocity;
+
+        // Curvature for SSC steer_model
+        double desired_steering_angle = !config_.use_adaptive_gear_ratio_ ?
+                                      vehicle_cmd_.ctrl_cmd.steering_angle :
+                                      vehicle_cmd_.ctrl_cmd.steering_angle * config_.ssc_gear_ratio_ / adaptive_gear_ratio_;
+
+        double desired_curvature = std::tan(desired_steering_angle) / config_.wheel_base_;  
+
+        // Gear (TODO: Use vehicle_cmd.gear)
+        unsigned char desired_gear = automotive_platform_msgs::msg::Gear::NONE;   
+
+        if (engage_) 
+        {
+            if (shift_to_park_) 
+            {
+            if (current_velocity_ < epsilon_){
+                desired_gear = automotive_platform_msgs::msg::Gear::PARK;
+            }
+            }
+            else
+            {
+            desired_gear = automotive_platform_msgs::msg::Gear::DRIVE;
+            }
+        }
+        else
+        {
+            desired_gear = automotive_platform_msgs::msg::Gear::NONE;
+        }   
+
+        // Turn signal
+        unsigned char desired_turn_signal = automotive_platform_msgs::msg::TurnSignalCommand::NONE;
+
+        if (vehicle_cmd_.lamp_cmd.l == 0 && vehicle_cmd_.lamp_cmd.r == 0)
+        {
+            desired_turn_signal = automotive_platform_msgs::msg::TurnSignalCommand::NONE;
+        }
+        else if (vehicle_cmd_.lamp_cmd.l == 1 && vehicle_cmd_.lamp_cmd.r == 0)
+        {
+            desired_turn_signal = automotive_platform_msgs::msg::TurnSignalCommand::LEFT;
+        }
+        else if (vehicle_cmd_.lamp_cmd.l == 0 && vehicle_cmd_.lamp_cmd.r == 1)
+        {
+            desired_turn_signal = automotive_platform_msgs::msg::TurnSignalCommand::RIGHT;
+        }
+        else if (vehicle_cmd_.lamp_cmd.l == 1 && vehicle_cmd_.lamp_cmd.r == 1)
+        {
+            // NOTE: HAZARD signal cannot be used in automotive_platform_msgs::msg::TurnSignalCommand
+        }
+
+         // Override desired speed to ZERO by emergency/timeout
+        bool emergency = (vehicle_cmd_.emergency == 1);
+        bool timeouted = command_initialized_ && (((this->now() - command_time_).seconds() * 1000) > config_.command_timeout_);
+
+        if (emergency || timeouted)
+        {
+            // RCLCPP_ERROR_STREAM(get_logger(), "Emergency Stopping, emergency = %d, timeouted = %d", emergency, timeouted);
+            desired_speed = 0.0;
+        }
+
+        // speed command
+        automotive_platform_msgs::msg::SpeedMode speed_mode;
+        speed_mode.header.frame_id = BASE_FRAME_ID;
+        speed_mode.header.stamp = stamp;
+        speed_mode.mode = desired_mode;
+        speed_mode.speed = desired_speed;
+        speed_mode.acceleration_limit = config_.acceleration_limit_;
+        speed_mode.deceleration_limit = config_.deceleration_limit_;
+
+        // steer command
+        automotive_platform_msgs::msg::SteerMode steer_mode;
+        steer_mode.header.frame_id = BASE_FRAME_ID;
+        steer_mode.header.stamp = stamp;
+        steer_mode.mode = desired_mode;
+        steer_mode.curvature = desired_curvature;
+        steer_mode.max_curvature_rate = config_.max_curvature_rate_;
+
+        // turn signal command
+        automotive_platform_msgs::msg::TurnSignalCommand turn_signal;
+        turn_signal.header.frame_id = BASE_FRAME_ID;
+        turn_signal.header.stamp = stamp;
+        turn_signal.mode = desired_mode;
+        turn_signal.turn_signal = desired_turn_signal;
+
+        // gear command
+        automotive_platform_msgs::msg::GearCommand gear_cmd;
+        gear_cmd.header.frame_id = BASE_FRAME_ID;
+        gear_cmd.header.stamp = stamp;
+        gear_cmd.command.gear = desired_gear;
+
+        // publish
+        speed_mode_pub_->publish(speed_mode);
+        steer_mode_pub_->publish(steer_mode);
+        turn_signal_pub_->publish(turn_signal);
+        gear_pub_->publish(gear_cmd);
+
+        RCLCPP_INFO_STREAM(get_logger(), "Mode: " << (int)desired_mode << ", "
+                           << "Speed: " << speed_mode.speed << ", "
+                           << "Curvature: " << steer_mode.curvature << ", "
+                           << "Gear: " << (int)gear_cmd.command.gear << ", "
+                           << "TurnSignal: " << (int)turn_signal.turn_signal);
+
+    }
 
 }
 
