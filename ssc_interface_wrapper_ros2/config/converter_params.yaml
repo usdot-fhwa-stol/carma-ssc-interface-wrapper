@@ -1,6 +1,9 @@
     #bool 
     use_adaptive_gear_ratio: true
 
+    # double
+    loop_rate: 30.0
+
     #int
     command_timeout: 1000  
 

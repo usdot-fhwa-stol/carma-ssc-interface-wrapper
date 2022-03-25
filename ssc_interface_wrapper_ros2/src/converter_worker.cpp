@@ -1,18 +1,23 @@
 /*
- * Copyright (C) 2022 LEIDOS.
+ * Copyright 2017-2019 Autoware Foundation. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+ 
+ /**
+  * Modification (C) Leidos 2022
+  * Updated ssc_interface to ROS2 as new converter_node
+  */
 
 #include "ssc_interface_wrapper/converter_node.hpp"
 
@@ -29,6 +34,7 @@ namespace ssc_interface_wrapper{
 
         // Declare parameters
         config_.use_adaptive_gear_ratio_ = declare_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio_);
+        config_.loop_rate_ = declare_parameter<double>("loop_rate", config_.loop_rate_);
         config_.command_timeout_ = declare_parameter<int>("command_timeout", config_.command_timeout_);
         config_.status_pub_rate_ = declare_parameter<double>("status_pub_rate", config_.status_pub_rate_);
         config_.wheel_base_ = declare_parameter<double>("wheel_base", config_.wheel_base_);
@@ -46,6 +52,7 @@ namespace ssc_interface_wrapper{
    {
        // Load parameters
         get_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio_);
+        get_parameter<double>("loop_rate", config_.loop_rate_);
         get_parameter<int>("command_timeout", config_.command_timeout_);
         get_parameter<double>("status_pub_rate", config_.status_pub_rate_);
         get_parameter<double>("wheel_base", config_.wheel_base_);
@@ -63,7 +70,7 @@ namespace ssc_interface_wrapper{
         //subscribers from CARMA
         guidance_state_sub_ = create_subscription<carma_planning_msgs::msg::GuidanceState>("/state", 1, 
                                                                     std::bind(&Converter::callback_from_guidance_state, this, std_ph::_1));
-        // autoware.ai subscribers from autoware                                                                  
+        //subscribers from autoware                                                                  
         vehicle_cmd_sub_ = create_subscription<autoware_msgs::msg::VehicleCmd>("vehicle_cmd", 1,
                                                                     std::bind(&Converter::callback_from_vehicle_cmd, this, std_ph::_1));
         engage_sub_ = create_subscription<std_msgs::msg::Bool>("vehicle/engage", 1,
@@ -100,11 +107,10 @@ namespace ssc_interface_wrapper{
         gear_pub_ = create_publisher<automotive_platform_msgs::msg::GearCommand>("as/gear_select", 1);
 
 
-        command_pub_timer_ = create_timer(get_clock(), std::chrono::duration<double>(config_.command_timeout_/2), 
+        command_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(1.0/config_.loop_rate_),
                                         std::bind(&Converter::publish_command, this));
-        // These are published in a timed callback
         
-        status_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(config_.status_pub_rate_),    
+        status_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(1.0/config_.status_pub_rate_),    
                              std::bind(&Converter::publish_vehicle_status, this));
 
         // Return success if everthing initialized successfully
@@ -295,13 +301,13 @@ namespace ssc_interface_wrapper{
         {
             if (shift_to_park_) 
             {
-            if (current_velocity_ < epsilon_){
-                desired_gear = automotive_platform_msgs::msg::Gear::PARK;
-            }
+                if (current_velocity_ < epsilon_){
+                    desired_gear = automotive_platform_msgs::msg::Gear::PARK;
+                }
             }
             else
             {
-            desired_gear = automotive_platform_msgs::msg::Gear::DRIVE;
+                desired_gear = automotive_platform_msgs::msg::Gear::DRIVE;
             }
         }
         else

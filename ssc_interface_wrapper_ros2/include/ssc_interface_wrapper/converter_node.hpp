@@ -1,18 +1,24 @@
 /*
- * Copyright (C) 2022 LEIDOS.
+ * Copyright 2017-2019 Autoware Foundation. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+ 
+ /**
+  * Modification (C) Leidos 2022
+  * Updated ssc_interface to ROS2 as new converter_node
+  */
+ 
 #pragma once
 
 #include <rclcpp/rclcpp.hpp>
@@ -50,6 +56,7 @@ static const std::string BASE_FRAME_ID = "base_link";
   {
    
     bool use_adaptive_gear_ratio_ = true;
+    double loop_rate_ = 30.0;
     int command_timeout_ = 1000;
     double status_pub_rate_ = 30.0;
     double wheel_base_ = 2.79;
@@ -68,6 +75,7 @@ static const std::string BASE_FRAME_ID = "base_link";
     {
       output << "ssc_interface_wrapper::ConverterConfig { " << std::endl
            << "use_adaptive_gear_ratio_: " << c.use_adaptive_gear_ratio_ << std::endl
+           << "loop_rate:" << c.loop_rate_ <<std::endl
            << "command_timeout:" << c.command_timeout_ <<std::endl
            << "status_pub_rate:" << c.status_pub_rate_<<std::endl
            << "wheel_base_: " << c.wheel_base_ << std::endl
@@ -153,7 +161,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     
     ConverterConfig config_;
 
-    // Other global variables
     bool engage_;
     bool command_initialized_; 
     double current_velocity_;

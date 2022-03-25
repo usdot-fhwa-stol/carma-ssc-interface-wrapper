@@ -26,6 +26,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch_ros.actions import set_remap
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
@@ -35,8 +36,23 @@ def generate_launch_description():
     command_timeout = LaunchConfiguration('command_timeout')
     declare_command_timeout = DeclareLaunchArgument(name ='command_timeout', default_value='1000')
 
-    loop_rate = LaunchConfiguration('loop_rate')
-    declare_loop_rate = DeclareLaunchArgument(name ='loop_rate', default_value='30.0')
+    status_pub_rate = LaunchConfiguration('status_pub_rate')
+    declare_status_pub_rate = DeclareLaunchArgument(name ='status_pub_rate', default_value='30.0')
+
+    wheel_base = LaunchConfiguration('wheel_base')
+    declare_wheel_base = DeclareLaunchArgument(name='wheel_base', default_value='2.79')
+
+    tire_radius = LaunchConfiguration('tire_radius')
+    declare_tire_base = DeclareLaunchArgument(name='tire_radius', default_value='0.39')
+
+    acceleration_limit = LaunchConfiguration('acceleration_limit')
+    declare_acceleration_limit =DeclareLaunchArgument(name='acceleration_limit', default_value='3.0')
+    
+    deceleration_limit = LaunchConfiguration('deceleration_limit')
+    declare_deceleration_limit =DeclareLaunchArgument(name='deceleration_limit', default_value='3.0')
+
+    max_curvature_rate = LaunchConfiguration('max_curvature_rate')
+    declare_max_curvature_rate = DeclareLaunchArgument(name='max_curvature_rate', default_value='0.15')
 
     # Get parameter file path
     param_file_path = os.path.join(
@@ -58,17 +74,6 @@ def generate_launch_description():
             set_remap.SetRemap('as/velocity_accel','velocity_accel'),
             set_remap.SetRemap('as/velocity_accel_cov', 'velocity_accel_cov'),
 
-            set_remap.SetRemap('wheel_base','/vehicle_wheel_base'),
-            set_remap.SetRemap('tire_radius','/vehicle_tire_radius'),
-            set_remap.SetRemap('acceleration_limit','/vehicle_acceleration_limit'),
-            set_remap.SetRemap('deceleration_limit','/vehicle_deceleration_limit'),
-            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
-            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
-
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([get_package_share_directory('ssc_interface'), '/launch','/ssc_interface.launch.py']),
-                launch_arguments={'use_adaptive_gear_ratio':use_adaptive_gear_ratio, 'command_timeout': command_timeout, 'loop_rate': loop_rate}.items()
-            ),
 
             # Launch conveter node as container
             ComposableNodeContainer(
@@ -77,12 +82,11 @@ def generate_launch_description():
                 package='rclcpp_components',
                 executable='component_container',
                 composable_node_descriptions=[
-                    # pacmod3 launch
                     ComposableNode(
                         package='ssc_interface_wrapper_ros2',
                         plugin='ssc_interface_wrapper::Converter',
                         name='ssc_converter_node',
-                        parameters=[ param_file_path ],
+                        parameters=[ param_file_path],
                     ),
                 ]
             )
@@ -93,6 +97,11 @@ def generate_launch_description():
     return LaunchDescription([
         declare_use_adaptive_gear_ratio,
         declare_command_timeout,
-        declare_loop_rate,
+        declare_status_pub_rate,
+        declare_wheel_base,
+        declare_tire_base,
+        declare_acceleration_limit,
+        declare_deceleration_limit,
+        declare_max_curvature_rate,
         ssc_interface_group
     ])
