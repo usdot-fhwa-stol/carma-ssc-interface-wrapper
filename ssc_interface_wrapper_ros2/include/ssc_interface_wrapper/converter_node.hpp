@@ -140,9 +140,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     bool brake_msg_exists_ = false;
     bool gear_msg_exists_ = false;
     bool steering_msg_exists_ = false;
-    bool received_new_msg_ = false;
-    bool single_update_processed_ =  false; //Since the received new msg flag is reset after both ssc_feedback and twist update, this flag ensures that 
-                                            // both operation can happen once a new msg is received
 
     //autoware.ai subscriptions from autoware
     carma_ros2_utils::SubPtr<carma_planning_msgs::msg::GuidanceState> guidance_state_sub_;
