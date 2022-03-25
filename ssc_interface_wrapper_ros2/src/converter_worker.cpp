@@ -164,14 +164,16 @@ namespace ssc_interface_wrapper{
         twist_vel_msg_ = true;
         velocity_feedback_ = *msg_velocity;
 
-        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_) &&
-            callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
 
-                set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
-                twist_vel_msg_ = false;
-                twist_curvature_msg_ = false;
-                twist_steering_msg_ = false;
-            }
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+                
+        }
+        if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
+            twist_vel_msg_ = false;
+            twist_curvature_msg_ = false;
+            twist_steering_msg_ = false;
+        }
     }
 
     void Converter::curvature_feedback_cb(const automotive_platform_msgs::msg::CurvatureFeedback::UniquePtr msg_curvature){
@@ -179,11 +181,12 @@ namespace ssc_interface_wrapper{
         twist_curvature_msg_ = true;
         curvature_feedback_ = *msg_curvature;
 
-        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_) &&
-        callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_))
-        {
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
 
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+                
+        }
+        if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
             twist_vel_msg_ = false;
             twist_curvature_msg_ = false;
             twist_steering_msg_ = false;
@@ -231,10 +234,10 @@ namespace ssc_interface_wrapper{
         twist_steering_msg_ = true;
         steering_feedback_ = *msg_steering_wheel;
 
-        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_) &&
-            callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
-                
-            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);    
+        }
+        if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
             twist_vel_msg_ = false;
             twist_curvature_msg_ = false;
             twist_steering_msg_ = false;
