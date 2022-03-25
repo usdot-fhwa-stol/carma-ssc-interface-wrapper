@@ -163,49 +163,77 @@ namespace ssc_interface_wrapper{
         velocity_msg_exists_ = true;
         velocity_feedback_ = *msg_velocity;
 
-        callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_);
-        callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_) &&
+            callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
 
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+            
+            }
     }
 
     void Converter::curvature_feedback_cb(const automotive_platform_msgs::msg::CurvatureFeedback::UniquePtr msg_curvature){
         curvature_msg_exists_ = true;
         curvature_feedback_ = *msg_curvature;
 
-        callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_);
-        callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_) &&
+        callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_))
+        {
+
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        
+        }
+
     }
 
     void Converter::throttle_feedback_cb(const automotive_platform_msgs::msg::ThrottleFeedback::UniquePtr msg_throttle){
         throttle_msg_exists_ = true;
         throttle_feedback_ = *msg_throttle;
 
-        callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
+            
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        }
+        
+
     }
 
     void Converter::brake_feedback_cb(const automotive_platform_msgs::msg::BrakeFeedback::UniquePtr msg_brake){
         brake_msg_exists_ = true;
         brake_feedback_ = *msg_brake;
 
-        callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_))
+        {
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        }
+
     }
 
     void Converter::gear_feedback_cb(const automotive_platform_msgs::msg::GearFeedback::UniquePtr msg_gear){
         gear_msg_exists_ = true;
         gear_feedback_ = *msg_gear;
 
-        callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
+
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        }
+        
+
     }
 
     void Converter::steering_feedback_cb(const automotive_platform_msgs::msg::SteeringFeedback::UniquePtr msg_steering_wheel){
         steering_msg_exists_ = true;
         steering_feedback_ = *msg_steering_wheel;
 
-        callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_);
-        callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_);
+        if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_) &&
+            callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
+                
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        }
+        
+
     }
 
-    void Converter::callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
+    bool Converter::callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                                 const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                                 const automotive_platform_msgs::msg::ThrottleFeedback& msg_throttle,
                                                 const automotive_platform_msgs::msg::BrakeFeedback& msg_brake,
@@ -214,7 +242,7 @@ namespace ssc_interface_wrapper{
     {
         if(velocity_msg_exists_ && curvature_msg_exists_  && throttle_msg_exists_ && brake_msg_exists_ && gear_msg_exists_ && steering_msg_exists_){
             builtin_interfaces::msg::Time stamp = msg_velocity.header.stamp;
-            // update adaptive gear ratio (avoiding zero divizion)
+            // update adaptive gear ratio (avoiding zero division)
             adaptive_gear_ratio_ =
                 std::max(1e-5, config_.agr_coef_a_ + config_.agr_coef_b_ * msg_velocity.velocity * msg_velocity.velocity - config_.agr_coef_c_ * msg_steering_wheel.steering_wheel_angle);
 
@@ -276,12 +304,14 @@ namespace ssc_interface_wrapper{
             current_status_msg_ = vehicle_status;
             have_vehicle_status_ = true; // Set vehicle status message flag to true
 
+            return true;
 
         }
+        return false;
         
     }                                    
 
-    void Converter::callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
+    bool Converter::callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
@@ -301,9 +331,21 @@ namespace ssc_interface_wrapper{
 
             have_twist_ = true;
 
+            return true;
         }
         
-    }                                  
+        return false;
+    }        
+
+    void Converter::set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2, bool& flag3, bool& flag4, bool& flag5){
+        
+        flag0 = false;
+        flag1 = false;                                  
+        flag2 = false;
+        flag3 = false;
+        flag4 = false;
+        flag5 = false;
+    }                          
 
     void Converter::publish_command()
     {

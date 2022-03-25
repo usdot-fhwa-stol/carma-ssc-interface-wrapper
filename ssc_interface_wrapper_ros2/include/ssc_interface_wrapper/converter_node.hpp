@@ -122,14 +122,14 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     automotive_platform_msgs::msg::GearFeedback gear_feedback_;
     automotive_platform_msgs::msg::SteeringFeedback steering_feedback_;
     // Consolidated Feedback for vehicle status
-    void callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
+    bool callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                     const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                     const automotive_platform_msgs::msg::ThrottleFeedback& msg_throttle,
                                     const automotive_platform_msgs::msg::BrakeFeedback& msg_brake,
                                     const automotive_platform_msgs::msg::GearFeedback& msg_gear,
                                     const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
     // Consolidated Feedback for twist
-    void callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
+    bool callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
 
@@ -157,6 +157,8 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     //Timer callback
     void publish_vehicle_status();
     void publish_command();
+
+    void set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2, bool& flag3, bool& flag4, bool& flag5);
 
     carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::SteerMode> steer_mode_pub_;
     carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::SpeedMode> speed_mode_pub_;
