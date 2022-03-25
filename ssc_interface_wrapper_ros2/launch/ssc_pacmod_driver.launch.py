@@ -35,23 +35,12 @@ def generate_launch_description():
     ssc_package_name = LaunchConfiguration('ssc_package_name')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
 
-    use_adaptive_gear_ratio = LaunchConfiguration('use_adaptive_gear_ratio')
-    declare_use_adaptive_gear_ratio = DeclareLaunchArgument(name ='use_adaptive_gear_ratio', default_value='true')
-
-    wheel_base = LaunchConfiguration('wheel_base')
-    declare_wheel_base = DeclareLaunchArgument(name='wheel_base', default_value='2.79')
-
-    tire_radius = LaunchConfiguration('tire_radius')
-    declare_tire_base = DeclareLaunchArgument(name='tire_radius', default_value='0.39')
-
-    acceleration_limit = LaunchConfiguration('acceleration_limit')
-    declare_acceleration_limit =DeclareLaunchArgument(name='acceleration_limit', default_value='3.0')
-    
-    deceleration_limit = LaunchConfiguration('deceleration_limit')
-    declare_deceleration_limit =DeclareLaunchArgument(name='deceleration_limit', default_value='3.0')
-
-    max_curvature_rate = LaunchConfiguration('max_curvature_rate')
-    declare_max_curvature_rate = DeclareLaunchArgument(name='max_curvature_rate', default_value='0.15')
+    vehicle_config_param_file = LaunchConfiguration('vehicle_config_param_file')
+    declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
+        name = 'vehicle_config_param_file',
+        default_value = "/opt/carma/vehicle/config/VehicleConfigParams.yaml",
+        description = "Path to file contain vehicle configuration parameters"
+    )
 
     # Launch wrapper
     ssc_interface_wrapper_pkg = FindPackageShare('ssc_interface_wrapper_ros2')
@@ -106,14 +95,7 @@ def generate_launch_description():
     #SSC Interface
     autoware_ssc_interface_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ssc_interface_wrapper_pkg,'/launch', '/remapped_ssc_interface.launch.py']),
-        launch_arguments={
-                'use_adaptive_gear_ratio':use_adaptive_gear_ratio, 
-                'wheel_base' : wheel_base,
-                'tire_radius' : tire_radius,
-                'acceleration_limit' : acceleration_limit,
-                'deceleration_limit' : deceleration_limit,
-                'max_curvature_rate' : max_curvature_rate
-        }.items()
+        launch_arguments={'vehicle_config_param_file' : vehicle_config_param_file}.items()
     )
 
     return LaunchDescription([
@@ -125,6 +107,7 @@ def generate_launch_description():
         declare_acceleration_limit,
         declare_deceleration_limit,
         declare_max_curvature_rate,
+        declare_vehicle_config_param_file_arg,
         carma_speed_steering_control_group,
         ssc_interface_wrapper_group,
         ssc_lexus_node,

@@ -79,7 +79,9 @@ namespace ssc_interface_wrapper{
         // ssc topic subscribers
         module_states_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState> ("as/module_states", 1, 
                                                                     std::bind(&Converter::callback_from_ssc_module_states, this, std_ph::_1));
-
+        // TO DO: The output from callback_from_ssc_feedbacks and callback_for_twist_update needs to be kept synchronized
+        // This was being done in autoware.ai using message_filters https://github.com/usdot-fhwa-stol/autoware.ai/blob/1cb4e74b810111369a6bbe49b0e64e07767454c0/drivers/as/nodes/ssc_interface/ssc_interface.h#L58
+        // The implementation here should be updated to keep the output relatively synchronized
         velocity_accel_sub_ = create_subscription<automotive_platform_msgs::msg::VelocityAccelCov>("as/velocity_accel_cov",10,
                                                                     std::bind(&Converter::velocity_accel_cb, this, std_ph::_1));
         curvature_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::CurvatureFeedback>("as/curvature_feedback", 10,
@@ -104,7 +106,10 @@ namespace ssc_interface_wrapper{
         steer_mode_pub_ = create_publisher<automotive_platform_msgs::msg::SteerMode>("as/arbitrated_steering_commands", 10);
         speed_mode_pub_ = create_publisher<automotive_platform_msgs::msg::SpeedMode>("as/arbitrated_speed_commands",10);
         turn_signal_pub_ = create_publisher<automotive_platform_msgs::msg::TurnSignalCommand>("as/turn_signal_command",10);
-        gear_pub_ = create_publisher<automotive_platform_msgs::msg::GearCommand>("as/gear_select", 1);
+
+        rclcpp::QoS qos(1);
+        qos.transient_local();
+        gear_pub_ = create_publisher<automotive_platform_msgs::msg::GearCommand>("as/gear_select", qos);
 
 
         command_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(1.0/config_.loop_rate_),
@@ -158,26 +163,38 @@ namespace ssc_interface_wrapper{
     }
 
     void Converter::velocity_accel_cb(const automotive_platform_msgs::msg::VelocityAccelCov::UniquePtr msg_velocity){
+        velocity_msg_exists_ = true;
+        received_new_msg_ = true;
         velocity_feedback_ = *msg_velocity;
     }
 
     void Converter::curvature_feedback_cb(const automotive_platform_msgs::msg::CurvatureFeedback::UniquePtr msg_curvature){
+        curvature_msg_exists_ = true;
+        received_new_msg_ = true;
         curvature_feedback_ = *msg_curvature;
     }
 
     void Converter::throttle_feedback_cb(const automotive_platform_msgs::msg::ThrottleFeedback::UniquePtr msg_throttle){
+        throttle_msg_exists_ = true;
+        received_new_msg_ = true;
         throttle_feedback_ = *msg_throttle;
     }
 
     void Converter::brake_feedback_cb(const automotive_platform_msgs::msg::BrakeFeedback::UniquePtr msg_brake){
+        brake_msg_exists_ = true;
+        received_new_msg_ = true;
         brake_feedback_ = *msg_brake;
     }
 
     void Converter::gear_feedback_cb(const automotive_platform_msgs::msg::GearFeedback::UniquePtr msg_gear){
+        gear_msg_exists_ = true;
+        received_new_msg_ = true;
         gear_feedback_ = *msg_gear;
     }
 
     void Converter::steering_feedback_cb(const automotive_platform_msgs::msg::SteeringFeedback::UniquePtr msg_steering_wheel){
+        steering_msg_exists_ = true;
+        received_new_msg_ = true;
         steering_feedback_ = *msg_steering_wheel;
     }
 
@@ -188,88 +205,104 @@ namespace ssc_interface_wrapper{
                                                 const automotive_platform_msgs::msg::GearFeedback& msg_gear,
                                                 const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
-        builtin_interfaces::msg::Time stamp = msg_velocity.header.stamp;
-        // update adaptive gear ratio (avoiding zero divizion)
-        adaptive_gear_ratio_ =
-            std::max(1e-5, config_.agr_coef_a_ + config_.agr_coef_b_ * msg_velocity.velocity * msg_velocity.velocity - config_.agr_coef_c_ * msg_steering_wheel.steering_wheel_angle);
+        if(velocity_msg_exists_ && curvature_msg_exists_  && throttle_msg_exists_ && brake_msg_exists_ && gear_msg_exists_ && steering_msg_exists_
+            && (received_new_msg_  || single_update_processed_)){
+            builtin_interfaces::msg::Time stamp = msg_velocity.header.stamp;
+            // update adaptive gear ratio (avoiding zero divizion)
+            adaptive_gear_ratio_ =
+                std::max(1e-5, config_.agr_coef_a_ + config_.agr_coef_b_ * msg_velocity.velocity * msg_velocity.velocity - config_.agr_coef_c_ * msg_steering_wheel.steering_wheel_angle);
 
-        // current steering curvature
-        double curvature = !config_.use_adaptive_gear_ratio_ ?
-                         (msg_curvature.curvature) :
-                         std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
+            // current steering curvature
+            double curvature = !config_.use_adaptive_gear_ratio_ ?
+                            (msg_curvature.curvature) :
+                            std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
 
-        // Set current_velocity_ variable [m/s]
-        current_velocity_ = msg_velocity.velocity;
+            // Set current_velocity_ variable [m/s]
+            current_velocity_ = msg_velocity.velocity;
 
-        // vehicle_status (autoware_msgs::msg::VehicleStatus)
-        autoware_msgs::msg::VehicleStatus vehicle_status;
-        vehicle_status.header.frame_id = BASE_FRAME_ID;
-        vehicle_status.header.stamp = stamp;
+            // vehicle_status (autoware_msgs::msg::VehicleStatus)
+            autoware_msgs::msg::VehicleStatus vehicle_status;
+            vehicle_status.header.frame_id = BASE_FRAME_ID;
+            vehicle_status.header.stamp = stamp;
 
-        // drive/steeringmode
-        vehicle_status.drivemode = (module_states_.state == "active") ? autoware_msgs::msg::VehicleStatus::MODE_AUTO :
-                                                                  autoware_msgs::msg::VehicleStatus::MODE_MANUAL;
+            // drive/steeringmode
+            vehicle_status.drivemode = (module_states_.state == "active") ? autoware_msgs::msg::VehicleStatus::MODE_AUTO :
+                                                                    autoware_msgs::msg::VehicleStatus::MODE_MANUAL;
 
-        vehicle_status.steeringmode = vehicle_status.drivemode;
+            vehicle_status.steeringmode = vehicle_status.drivemode;
 
-        // speed [km/h]
-        vehicle_status.speed = msg_velocity.velocity * 3.6;
+            // speed [km/h]
+            vehicle_status.speed = msg_velocity.velocity * 3.6;
 
-        // drive/brake pedal [0,1000] (TODO: Scaling)
-        vehicle_status.drivepedal = (int)(1000 * msg_throttle.throttle_pedal);
-        vehicle_status.brakepedal = (int)(1000 * msg_brake.brake_pedal);
+            // drive/brake pedal [0,1000] (TODO: Scaling)
+            vehicle_status.drivepedal = (int)(1000 * msg_throttle.throttle_pedal);
+            vehicle_status.brakepedal = (int)(1000 * msg_brake.brake_pedal);
 
-        // steering angle [rad]
-        vehicle_status.angle = std::atan(curvature * config_.wheel_base_);
+            // steering angle [rad]
+            vehicle_status.angle = std::atan(curvature * config_.wheel_base_);
 
-        // gearshift
-        if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NONE)
-        {
-            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NONE;
+            // gearshift
+            if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NONE)
+            {
+                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NONE;
+            }
+            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::PARK)
+            {
+                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::PARK;
+            }
+            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::REVERSE)
+            {
+                vehicle_status.current_gear.gear= automotive_platform_msgs::msg::Gear::REVERSE;
+            }
+            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NEUTRAL)
+            {
+                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NEUTRAL;
+            }
+            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::DRIVE)
+            {
+                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::DRIVE;
+            }
+
+            // lamp/light cannot be obtain from SSC
+            // vehicle_status.lamp
+            // vehicle_status.light
+
+            current_status_msg_ = vehicle_status;
+            have_vehicle_status_ = true; // Set vehicle status message flag to true
+
+            // Reset flags
+            received_new_msg_ = false;
+            single_update_processed_ = !single_update_processed_;
+
         }
-        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::PARK)
-        {
-            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::PARK;
-        }
-        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::REVERSE)
-        {
-            vehicle_status.current_gear.gear= automotive_platform_msgs::msg::Gear::REVERSE;
-        }
-        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NEUTRAL)
-        {
-            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NEUTRAL;
-        }
-        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::DRIVE)
-        {
-            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::DRIVE;
-        }
-
-        // lamp/light cannot be obtain from SSC
-        // vehicle_status.lamp
-        // vehicle_status.light
-
-        current_status_msg_ = vehicle_status;
-        have_vehicle_status_ = true; // Set vehicle status message flag to true
-
+        
     }                                    
 
     void Converter::callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
-        // current steering curvature
-        double curvature = !config_.use_adaptive_gear_ratio_ ?
-                         (msg_curvature.curvature) :
-                         std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
+        if(velocity_msg_exists_ && curvature_msg_exists_ && steering_msg_exists_ && (received_new_msg_  || single_update_processed_))
+        {
+            // current steering curvature
+            double curvature = !config_.use_adaptive_gear_ratio_ ?
+                            (msg_curvature.curvature) :
+                            std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
 
-        geometry_msgs::msg::TwistStamped twist;
-        twist.header.frame_id = BASE_FRAME_ID;
-        twist.header.stamp = msg_velocity.header.stamp;
-        twist.twist.linear.x = msg_velocity.velocity;               // [m/s]
-        twist.twist.angular.z = curvature * msg_velocity.velocity;  // [rad/s]
-        current_twist_msg_ = twist;
+            geometry_msgs::msg::TwistStamped twist;
+            twist.header.frame_id = BASE_FRAME_ID;
+            twist.header.stamp = msg_velocity.header.stamp;
+            twist.twist.linear.x = msg_velocity.velocity;               // [m/s]
+            twist.twist.angular.z = curvature * msg_velocity.velocity;  // [rad/s]
+            current_twist_msg_ = twist;
 
-        have_twist_ = true;
+            have_twist_ = true;
+
+            // Reset flags
+            received_new_msg_ = false;
+            single_update_processed_ = !single_update_processed_;
+        }
+        
     }                                  
 
     void Converter::publish_command()

@@ -133,6 +133,17 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
 
+    //Flags to achieve approximate synchronization
+    bool velocity_msg_exists_ = false;
+    bool curvature_msg_exists_ = false;                                  
+    bool throttle_msg_exists_ = false;
+    bool brake_msg_exists_ = false;
+    bool gear_msg_exists_ = false;
+    bool steering_msg_exists_ = false;
+    bool received_new_msg_ = false;
+    bool single_update_processed_ =  false; //Since the received new msg flag is reset after both ssc_feedback and twist update, this flag ensures that 
+                                            // both operation can happen once a new msg is received
+
     //autoware.ai subscriptions from autoware
     carma_ros2_utils::SubPtr<carma_planning_msgs::msg::GuidanceState> guidance_state_sub_;
     carma_ros2_utils::SubPtr<autoware_msgs::msg::VehicleCmd> vehicle_cmd_sub_;

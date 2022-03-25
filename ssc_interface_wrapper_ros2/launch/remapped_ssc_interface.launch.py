@@ -54,6 +54,13 @@ def generate_launch_description():
     max_curvature_rate = LaunchConfiguration('max_curvature_rate')
     declare_max_curvature_rate = DeclareLaunchArgument(name='max_curvature_rate', default_value='0.15')
 
+    vehicle_config_param_file = LaunchConfiguration('vehicle_config_param_file')
+    declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
+        name = 'vehicle_config_param_file',
+        default_value = "/opt/carma/vehicle/config/VehicleConfigParams.yaml",
+        description = "Path to file contain vehicle configuration parameters"
+    )
+
     # Get parameter file path
     param_file_path = os.path.join(
         get_package_share_directory('ssc_interface_wrapper_ros2'), 'config/converter_params.yaml')
@@ -74,6 +81,12 @@ def generate_launch_description():
             set_remap.SetRemap('as/velocity_accel','velocity_accel'),
             set_remap.SetRemap('as/velocity_accel_cov', 'velocity_accel_cov'),
 
+            # Remap parameters to match vehicle config
+            set_remap.SetRemap('wheel_base','vehicle_wheel_base'),
+            set_remap.SetRemap('tire_radius','vehicle_tire_radius'),
+            set_remap.SetRemap('acceleration_limit','vehicle_acceleration_limit'),
+            set_remap.SetRemap('deceleration_limit','vehicle_deceleration_limit'),
+            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
 
             # Launch conveter node as container
             ComposableNodeContainer(
@@ -86,7 +99,8 @@ def generate_launch_description():
                         package='ssc_interface_wrapper_ros2',
                         plugin='ssc_interface_wrapper::Converter',
                         name='ssc_converter_node',
-                        parameters=[ param_file_path],
+                        parameters=[ param_file_path,
+                                    vehicle_config_param_file],
                     ),
                 ]
             )
@@ -103,5 +117,6 @@ def generate_launch_description():
         declare_acceleration_limit,
         declare_deceleration_limit,
         declare_max_curvature_rate,
+        declare_vehicle_config_param_file_arg,
         ssc_interface_group
     ])
