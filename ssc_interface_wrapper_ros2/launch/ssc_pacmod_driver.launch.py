@@ -38,7 +38,7 @@ def generate_launch_description():
     vehicle_config_param_file = LaunchConfiguration('vehicle_config_param_file')
     declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
         name = 'vehicle_config_param_file',
-        default_value = "/opt/carma/vehicle/config/VehicleConfigParams.yaml",
+        default_value = '/opt/carma/vehicle/config/VehicleConfigParams.yaml',
         description = "Path to file contain vehicle configuration parameters"
     )
 

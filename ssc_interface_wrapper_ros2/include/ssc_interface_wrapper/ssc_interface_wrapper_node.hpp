@@ -45,9 +45,9 @@ namespace ssc_interface_wrapper
             rclcpp::Subscription<automotive_navigation_msgs::msg::ModuleState>::SharedPtr ssc_state_sub_;
 
             // subscribers for reading CAN data
-            rclcpp::Subscription<pacmod_msgs::msg::SystemRptFloat>::SharedPtr steer_sub_;
-            rclcpp::Subscription<pacmod_msgs::msg::SystemRptFloat>::SharedPtr brake_sub_;
-            rclcpp::Subscription<pacmod_msgs::msg::SystemRptInt>::SharedPtr shift_sub_;
+            rclcpp::Subscription<pacmod3_msgs::msg::SystemRptFloat>::SharedPtr steer_sub_;
+            rclcpp::Subscription<pacmod3_msgs::msg::SystemRptFloat>::SharedPtr brake_sub_;
+            rclcpp::Subscription<pacmod3_msgs::msg::SystemRptInt>::SharedPtr shift_sub_;
 
             // publishers for sending CAN data to CARMA
             std::shared_ptr<rclcpp::Publisher<std_msgs::msg::Float64>> steering_wheel_angle_pub_;
@@ -87,9 +87,9 @@ namespace ssc_interface_wrapper
 
             // callback functions to handle CAN messages from PACMOD driver
             void ssc_state_cb(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg);
-            void steer_cb(const pacmod_msgs::msg::SystemRptFloat::UniquePtr msg);
-            void brake_cb(const pacmod_msgs::msg::SystemRptFloat::UniquePtr msg);
-            void shift_cb(const pacmod_msgs::msg::SystemRptInt::UniquePtr msg);
+            void steer_cb(const pacmod3_msgs::msg::SystemRptFloat::UniquePtr msg);
+            void brake_cb(const pacmod3_msgs::msg::SystemRptFloat::UniquePtr msg);
+            void shift_cb(const pacmod3_msgs::msg::SystemRptInt::UniquePtr msg);
 
             // process the latest vehicle status message and publish as robot status topic
             void publish_robot_status();

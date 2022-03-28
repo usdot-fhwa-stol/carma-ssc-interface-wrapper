@@ -48,17 +48,17 @@ namespace ssc_interface_wrapper
         return this->latest_ssc_status_;
     }
 
-    int Worker::convert_shift_state_to_J2735(const pacmod_msgs::msg::SystemRptInt& shift_state)
+    int Worker::convert_shift_state_to_J2735(const pacmod3_msgs::msg::SystemRptInt& shift_state)
     {
         switch(shift_state.output)
         {
-        case pacmod_msgs::msg::SystemRptInt::SHIFT_PARK:
+        case pacmod3_msgs::msg::SystemRptInt::SHIFT_PARK:
             return j2735_v2x_msgs::msg::TransmissionState::PARK;
-        case pacmod_msgs::msg::SystemRptInt::SHIFT_REVERSE:
+        case pacmod3_msgs::msg::SystemRptInt::SHIFT_REVERSE:
             return j2735_v2x_msgs::msg::TransmissionState::REVERSEGEARS;
-        case pacmod_msgs::msg::SystemRptInt::SHIFT_NEUTRAL:
+        case pacmod3_msgs::msg::SystemRptInt::SHIFT_NEUTRAL:
             return j2735_v2x_msgs::msg::TransmissionState::NEUTRAL;
-        case pacmod_msgs::msg::SystemRptInt::SHIFT_FORWARD:
+        case pacmod3_msgs::msg::SystemRptInt::SHIFT_FORWARD:
             return j2735_v2x_msgs::msg::TransmissionState::FORWARDGEARS;
         default:
             return j2735_v2x_msgs::msg::TransmissionState::UNAVAILABLE;

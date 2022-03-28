@@ -1,5 +1,5 @@
 hardware_interface:
-  ssc:
+  as:
     veh_interface:
       ros__parameters:
         json_filename: "veh_interface.json"

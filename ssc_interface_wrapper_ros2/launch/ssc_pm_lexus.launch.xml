@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="namespace" default="ssc" />
+  <arg name="namespace" default="as" />
   <arg name="dbw_namespace" default="pacmod" />
 
   <arg name="json_dir" default="$(find-pkg-share ssc_pm_lexus)/json" />

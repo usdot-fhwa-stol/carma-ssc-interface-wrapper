@@ -57,7 +57,7 @@ def generate_launch_description():
     vehicle_config_param_file = LaunchConfiguration('vehicle_config_param_file')
     declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
         name = 'vehicle_config_param_file',
-        default_value = "/opt/carma/vehicle/config/VehicleConfigParams.yaml",
+        default_value = '/opt/carma/vehicle/calibration/VehicleConfigParams.yaml',
         description = "Path to file contain vehicle configuration parameters"
     )
 
@@ -68,25 +68,28 @@ def generate_launch_description():
     ssc_interface_group = GroupAction(
         actions = [
             # Launch Wrapper
-            set_remap.SetRemap('as/arbitrated_speed_commands', 'arbitrated_speed_commands'),
-            set_remap.SetRemap('as/arbitrated_steering_commands', 'arbitrated_steering_commands'),
-            set_remap.SetRemap('as/brake_feedback', 'brake_feedback'),
-            set_remap.SetRemap('as/steering_feedback', 'steering_feedback'),
-            set_remap.SetRemap('as/curvature_feedback', 'curvature_feedback'),
-            set_remap.SetRemap('as/gear_feedback', 'gear_feedback'),
-            set_remap.SetRemap('as/gear_select', 'gear_select'),
-            set_remap.SetRemap('as/module_states','module_states'),
-            set_remap.SetRemap('as/throttle_feedback','throttle_feedback'),
-            set_remap.SetRemap('as/turn_signal_command', 'turn_signal_command'),
-            set_remap.SetRemap('as/velocity_accel','velocity_accel'),
-            set_remap.SetRemap('as/velocity_accel_cov', 'velocity_accel_cov'),
+            # set_remap.SetRemap('as/arbitrated_speed_commands', 'arbitrated_speed_commands'),
+            # set_remap.SetRemap('as/arbitrated_steering_commands', 'arbitrated_steering_commands'),
+            # set_remap.SetRemap('as/brake_feedback', 'brake_feedback'),
+            # set_remap.SetRemap('as/steering_feedback', 'steering_feedback'),
+            # set_remap.SetRemap('as/curvature_feedback', 'curvature_feedback'),
+            # set_remap.SetRemap('as/gear_feedback', 'gear_feedback'),
+            # set_remap.SetRemap('as/gear_select', 'gear_select'),
+            # set_remap.SetRemap('module_states','as/module_states'),
+            # set_remap.SetRemap('as/throttle_feedback','throttle_feedback'),
+            # set_remap.SetRemap('as/turn_signal_command', 'turn_signal_command'),
+            # set_remap.SetRemap('as/velocity_accel','velocity_accel'),
+            # set_remap.SetRemap('as/velocity_accel_cov', 'velocity_accel_cov'),
+
+            set_remap.SetRemap('/state', 'state'),
 
             # Remap parameters to match vehicle config
             set_remap.SetRemap('wheel_base','vehicle_wheel_base'),
             set_remap.SetRemap('tire_radius','vehicle_tire_radius'),
             set_remap.SetRemap('acceleration_limit','vehicle_acceleration_limit'),
             set_remap.SetRemap('deceleration_limit','vehicle_deceleration_limit'),
-            set_remap.SetRemap('max_curvature_rate','/vehicle_max_curvature_rate'),
+            set_remap.SetRemap('max_curvature_rate','vehicle_max_curvature_rate'),
+            
 
             # Launch conveter node as container
             ComposableNodeContainer(

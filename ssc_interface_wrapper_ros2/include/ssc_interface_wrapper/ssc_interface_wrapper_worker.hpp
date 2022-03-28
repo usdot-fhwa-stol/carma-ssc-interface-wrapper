@@ -35,7 +35,7 @@ namespace ssc_interface_wrapper
         bool is_engaged();
         void check_driver_status(const rclcpp::Time& current_time, double timeout);
         void on_new_status_msg(const automotive_navigation_msgs::msg::ModuleState& msg, const rclcpp::Time& current_time);
-        int convert_shift_state_to_J2735(const pacmod_msgs::msg::SystemRptInt& shift_state);
+        int convert_shift_state_to_J2735(const pacmod3_msgs::msg::SystemRptInt& shift_state);
         std::string get_current_ssc_state();
 
         rclcpp::Time last_vehicle_status_time_;

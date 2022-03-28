@@ -58,11 +58,11 @@ namespace ssc_interface_wrapper{
         //setup subscribers
         ssc_state_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState>("module_states", 5,
                                                                                         std::bind(&Node::ssc_state_cb, this, std::placeholders::_1));
-        steer_sub_ = create_subscription<pacmod_msgs::msg::SystemRptFloat>("parsed_tx/steer_rpt", 5,
+        steer_sub_ = create_subscription<pacmod3_msgs::msg::SystemRptFloat>("parsed_tx/steer_rpt", 5,
                                                                             std::bind(&Node::steer_cb, this, std::placeholders::_1));
-        brake_sub_ = create_subscription<pacmod_msgs::msg::SystemRptFloat>("parsed_tx/brake_rpt", 5, 
+        brake_sub_ = create_subscription<pacmod3_msgs::msg::SystemRptFloat>("parsed_tx/brake_rpt", 5, 
                                                                             std::bind(&Node::brake_cb, this, std::placeholders::_1));
-        shift_sub_ = create_subscription<pacmod_msgs::msg::SystemRptInt>("parsed_tx/shift_rpt", 5, 
+        shift_sub_ = create_subscription<pacmod3_msgs::msg::SystemRptInt>("parsed_tx/shift_rpt", 5, 
                                                                         std::bind(&Node::shift_cb, this, std::placeholders::_1));
 
         //Initialize all publishers
@@ -140,23 +140,23 @@ namespace ssc_interface_wrapper{
 
     }
 
-    void Node::steer_cb(const pacmod_msgs::msg::SystemRptFloat::UniquePtr msg)
+    void Node::steer_cb(const pacmod3_msgs::msg::SystemRptFloat::UniquePtr msg)
     {
         std_msgs::msg::Float64 steer_msg;
         steer_msg.data = msg->output;
         steering_wheel_angle_pub_->publish(steer_msg);
     }
 
-    void Node::brake_cb(const pacmod_msgs::msg::SystemRptFloat::UniquePtr msg)
+    void Node::brake_cb(const pacmod3_msgs::msg::SystemRptFloat::UniquePtr msg)
     {
         std_msgs::msg::Float64 brake_msg;
         brake_msg.data = msg->output;
         brake_position_pub_->publish(brake_msg);
     }
 
-    void Node::shift_cb(const pacmod_msgs::msg::SystemRptInt::UniquePtr msg)
+    void Node::shift_cb(const pacmod3_msgs::msg::SystemRptInt::UniquePtr msg)
     {
-        pacmod_msgs::msg::SystemRptInt shift_msg = *msg;
+        pacmod3_msgs::msg::SystemRptInt shift_msg = *msg;
         j2735_v2x_msgs::msg::TransmissionState transmission_msg;
         transmission_msg.transmission_state = worker_.convert_shift_state_to_J2735(shift_msg);
         transmission_pub_->publish(transmission_msg);

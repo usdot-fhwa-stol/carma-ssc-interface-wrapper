@@ -31,7 +31,7 @@
   <depend>carma_ros2_utils</depend>
   <depend>rclcpp_components</depend>
   <depend>std_srvs</depend>
-  <depend>pacmod_msgs</depend>
+  <depend>pacmod3_msgs</depend>
   <depend>j2735_v2x_msgs</depend>
   <depend>cav_srvs</depend>
   <depend>carma_driver_msgs</depend>

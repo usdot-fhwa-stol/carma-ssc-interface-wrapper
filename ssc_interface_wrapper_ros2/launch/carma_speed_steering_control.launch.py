@@ -47,18 +47,19 @@ def generate_launch_description():
             actions = [
                 SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
 
-                set_remap.SetRemap('/hardware_interface/ssc/speed_model/change_state', '/hardware_interface/ssc/speed_model/false_change_state'),
-                set_remap.SetRemap('/hardware_interface/ssc/speed_model/change_state', '/hardware_interface/ssc/speed_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/speed_model/change_state', '/hardware_interface/as/speed_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/speed_model/change_state', '/hardware_interface/as/speed_model/false_change_state'),
 
-                set_remap.SetRemap('/hardware_interface/ssc/steering_model/change_state', '/hardware_interface/ssc/steering_model/false_change_state'),
-                set_remap.SetRemap('/hardware_interface/ssc/steering_model/change_state', '/hardware_interface/ssc/steering_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/steering_model/change_state', '/hardware_interface/as/steering_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/steering_model/change_state', '/hardware_interface/as/steering_model/false_change_state'),
                 
-                set_remap.SetRemap('/hardware_interface/ssc/veh_controller/change_state', '/hardware_interface/ssc/veh_controller/false_change_state'),
-                set_remap.SetRemap('/hardware_interface/ssc/veh_controller/change_state', '/hardware_interface/ssc/veh_controller/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/veh_controller/change_state', '/hardware_interface/as/veh_controller/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/veh_controller/change_state', '/hardware_interface/as/veh_controller/false_change_state'),
 
-                set_remap.SetRemap('/hardware_interface/ssc/veh_interface/change_state', '/hardware_interface/ssc/veh_interface/false_change_state'),
-                set_remap.SetRemap('/hardware_interface/ssc/veh_interface/change_state', '/hardware_interface/ssc/veh_interface/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/veh_interface/change_state', '/hardware_interface/as/veh_interface/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/veh_interface/change_state', '/hardware_interface/as/veh_interface/false_change_state'),
 
+            
                 IncludeLaunchDescription(
                     AnyLaunchDescriptionSource([
                         PathJoinSubstitution([ThisLaunchFileDir(),'ssc_pm_lexus.launch.xml'])
