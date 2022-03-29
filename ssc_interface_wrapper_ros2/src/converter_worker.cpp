@@ -68,7 +68,7 @@ namespace ssc_interface_wrapper{
         //Setup Subscribers
 
         //subscribers from CARMA
-        guidance_state_sub_ = create_subscription<carma_planning_msgs::msg::GuidanceState>("/state", 1, 
+        guidance_state_sub_ = create_subscription<carma_planning_msgs::msg::GuidanceState>("state", 1, 
                                                                     std::bind(&Converter::callback_from_guidance_state, this, std_ph::_1));
         //subscribers from autoware                                                                  
         vehicle_cmd_sub_ = create_subscription<autoware_msgs::msg::VehicleCmd>("vehicle_cmd", 1,

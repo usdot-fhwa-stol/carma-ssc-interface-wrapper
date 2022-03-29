@@ -47,16 +47,16 @@ def generate_launch_description():
             actions = [
                 SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
 
-                set_remap.SetRemap('/hardware_interface/as/speed_model/change_state', '/hardware_interface/as/speed_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/speed_model/get_state', '/hardware_interface/as/speed_model/false_get_state'),
                 set_remap.SetRemap('/hardware_interface/as/speed_model/change_state', '/hardware_interface/as/speed_model/false_change_state'),
 
-                set_remap.SetRemap('/hardware_interface/as/steering_model/change_state', '/hardware_interface/as/steering_model/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/steering_model/get_state', '/hardware_interface/as/steering_model/false_get_state'),
                 set_remap.SetRemap('/hardware_interface/as/steering_model/change_state', '/hardware_interface/as/steering_model/false_change_state'),
                 
-                set_remap.SetRemap('/hardware_interface/as/veh_controller/change_state', '/hardware_interface/as/veh_controller/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/veh_controller/get_state', '/hardware_interface/as/veh_controller/false_get_state'),
                 set_remap.SetRemap('/hardware_interface/as/veh_controller/change_state', '/hardware_interface/as/veh_controller/false_change_state'),
 
-                set_remap.SetRemap('/hardware_interface/as/veh_interface/change_state', '/hardware_interface/as/veh_interface/false_change_state'),
+                set_remap.SetRemap('/hardware_interface/as/veh_interface/get_state', '/hardware_interface/as/veh_interface/false_get_state'),
                 set_remap.SetRemap('/hardware_interface/as/veh_interface/change_state', '/hardware_interface/as/veh_interface/false_change_state'),
 
             
