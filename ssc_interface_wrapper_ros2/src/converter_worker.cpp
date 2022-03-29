@@ -170,9 +170,9 @@ namespace ssc_interface_wrapper{
                 
         }
         if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
-            twist_vel_msg_ = false;
-            twist_curvature_msg_ = false;
-            twist_steering_msg_ = false;
+
+            set_all_flags_to_false(twist_vel_msg_, twist_curvature_msg_, twist_steering_msg_);
+
         }
     }
 
@@ -187,9 +187,9 @@ namespace ssc_interface_wrapper{
                 
         }
         if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
-            twist_vel_msg_ = false;
-            twist_curvature_msg_ = false;
-            twist_steering_msg_ = false;
+            
+            set_all_flags_to_false(twist_vel_msg_, twist_curvature_msg_, twist_steering_msg_);
+
         }
 
     }
@@ -201,6 +201,7 @@ namespace ssc_interface_wrapper{
         if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
             
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+        
         }
         
 
@@ -235,12 +236,14 @@ namespace ssc_interface_wrapper{
         steering_feedback_ = *msg_steering_wheel;
 
         if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
+            
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);    
+        
         }
         if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
-            twist_vel_msg_ = false;
-            twist_curvature_msg_ = false;
-            twist_steering_msg_ = false;
+            
+            set_all_flags_to_false(twist_vel_msg_, twist_curvature_msg_, twist_steering_msg_);
+
         }
         
 
@@ -315,7 +318,7 @@ namespace ssc_interface_wrapper{
             // vehicle_status.light
 
             current_status_msg_ = vehicle_status;
-            have_vehicle_status_ = true; // Set vehicle status message flag to true
+            have_vehicle_status_ = true;
 
             return true;
 
@@ -358,7 +361,13 @@ namespace ssc_interface_wrapper{
         flag3 = false;
         flag4 = false;
         flag5 = false;
-    }                          
+    }   
+    void Converter::set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2){
+        
+        flag0 = false;
+        flag1 = false;                                  
+        flag2 = false;
+    }                        
 
     void Converter::publish_command()
     {

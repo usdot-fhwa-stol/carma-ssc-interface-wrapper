@@ -164,6 +164,7 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     void publish_command();
 
     void set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2, bool& flag3, bool& flag4, bool& flag5);
+    void set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2);
 
     carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::SteerMode> steer_mode_pub_;
     carma_ros2_utils::PubPtr<automotive_platform_msgs::msg::SpeedMode> speed_mode_pub_;
