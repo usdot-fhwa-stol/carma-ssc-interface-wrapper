@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2018-2021 LEIDOS.
+#  Copyright (C) 2018-2022 LEIDOS.
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
@@ -44,6 +44,12 @@ while [[ $# -gt 0 ]]; do
             COMPONENT_VERSION_STRING=develop
             shift
             ;;
+        *) ##Arguments for ssc_pm_lexus
+            access_id=${arg}
+            secret_key="$2"
+            shift
+            shift
+            ;;
     esac
 done
 
@@ -54,18 +60,35 @@ fi
 echo "Building docker image for $IMAGE version: $COMPONENT_VERSION_STRING"
 echo "Final image name: $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING"
 
+# Get arguments for ssc_pm_lexus
+if [ -z $access_id ];
+    then 
+        echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
+        exit 1
+fi
+
+if [ -z $secret_key ];
+    then 
+        echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
+        exit 1
+fi
+
 cd ..
 if [[ $COMPONENT_VERSION_STRING = "develop" ]]; then
     sed "s|usdotfhwastoldev/|$USERNAME/|g; s|usdotfhwastolcandidate/|$USERNAME/|g; s|usdotfhwastol/|$USERNAME/|g; s|:[0-9]*\.[0-9]*\.[0-9]*|:$COMPONENT_VERSION_STRING|g; s|checkout.bash|checkout.bash -d|g" \
-        Dockerfile | docker build -f - --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
+        Dockerfile | docker build --network=host -f - --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
-        --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` .
+        --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
+        --build-arg ACCESS_ID=$access_id \
+        --build-arg SECRET_KEY=$secret_key .
 else
-    docker build --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
+    docker build --network=host --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
-        --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` .
+        --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
+        --build-arg ACCESS_ID=$access_id \
+        --build-arg SECRET_KEY=$secret_key .
 fi
 
 TAGS=()
