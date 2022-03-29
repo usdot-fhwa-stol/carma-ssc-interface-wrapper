@@ -35,10 +35,17 @@ def generate_launch_description():
     ssc_package_name = LaunchConfiguration('ssc_package_name')
     declare_ssc_package_name = DeclareLaunchArgument(name = 'ssc_package_name', default_value = 'ssc_pm_lexus')
 
+    vehicle_config_dir = LaunchConfiguration('vehicle_config_dir')
+    declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
+        name = 'vehicle_config_dir',
+        default_value = "/opt/carma/vehicle/config",
+        description = "Path to directory contain vehicle configuration parameters"
+    )
+
     vehicle_config_param_file = LaunchConfiguration('vehicle_config_param_file')
     declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
         name = 'vehicle_config_param_file',
-        default_value = '/opt/carma/vehicle/config/VehicleConfigParams.yaml',
+        default_value = [vehicle_config_dir, "/VehicleConfigParams.yaml"],
         description = "Path to file contain vehicle configuration parameters"
     )
 

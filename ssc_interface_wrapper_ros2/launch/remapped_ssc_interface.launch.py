@@ -27,6 +27,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import GroupAction
 from launch_ros.actions import set_remap
 from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import PathJoinSubstitution
 
 def generate_launch_description():
 
@@ -57,13 +58,14 @@ def generate_launch_description():
     vehicle_config_param_file = LaunchConfiguration('vehicle_config_param_file')
     declare_vehicle_config_param_file_arg = DeclareLaunchArgument(
         name = 'vehicle_config_param_file',
-        default_value = '/opt/carma/vehicle/config/VehicleConfigParams.yaml',
+        default_value = ["/opt/carma/vehicle/config/VehicleConfigParams.yaml"],
         description = "Path to file contain vehicle configuration parameters"
     )
 
     # Get parameter file path
     param_file_path = os.path.join(
         get_package_share_directory('ssc_interface_wrapper_ros2'), 'config/converter_params.yaml')
+
 
     ssc_interface_group = GroupAction(
         actions = [

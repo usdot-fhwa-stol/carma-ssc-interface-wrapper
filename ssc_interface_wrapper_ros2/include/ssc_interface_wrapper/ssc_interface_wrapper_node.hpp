@@ -27,8 +27,8 @@
 
 #include <automotive_navigation_msgs/msg/module_state.hpp>
 #include <j2735_v2x_msgs/msg/transmission_state.hpp>
-#include <pacmod_msgs/msg/system_rpt_float.hpp>
-#include <pacmod_msgs/msg/system_rpt_int.hpp>
+#include <pacmod3_msgs/msg/system_rpt_float.hpp>
+#include <pacmod3_msgs/msg/system_rpt_int.hpp>
 #include <std_msgs/msg/float64.hpp>
 #include <std_msgs/msg/bool.hpp>
 #include <carma_driver_msgs/msg/robot_enabled.hpp>

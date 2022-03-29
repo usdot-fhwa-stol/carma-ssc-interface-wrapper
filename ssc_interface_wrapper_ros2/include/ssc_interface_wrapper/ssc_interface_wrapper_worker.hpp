@@ -20,7 +20,7 @@
 #include <functional>
 #include <std_msgs/msg/string.hpp>
 #include <automotive_navigation_msgs/msg/module_state.hpp>
-#include <pacmod_msgs/msg/system_rpt_int.hpp>
+#include <pacmod3_msgs/msg/system_rpt_int.hpp>
 #include <j2735_v2x_msgs/msg/transmission_state.hpp>
 #include <carma_driver_msgs/msg/driver_status.hpp>
 
