@@ -51,11 +51,11 @@ done
 
 cd ${dir}
 if [[ "$BRANCH" = "develop" ]]; then
-      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
-      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch $BRANCH
+      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch release/jetta-gillet
+      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch release/jetta-gillet
 else
-      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch develop
-      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch develop
+      git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch release/jetta-gillet
+      git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch release/jetta-gillet
 fi
 
 if [ $build_ros1_pkgs -eq 1 ]; then
@@ -98,7 +98,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     # kvaser
     sudo git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros2_master
     cd ./src/kvaser_interface
-    sudo git reset --hard 89a6293ac0229c2c82a1fb33f72311e46f81c85b
+    sudo git reset --hard d7ea2fb82a1b61d0ce4c96d1422599f7ee6ed1b7
     cd ${dir}
 
     # Install automotive_autonomy_msgs
