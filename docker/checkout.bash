@@ -98,7 +98,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     # kvaser
     sudo git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros2_master
     cd ./src/kvaser_interface
-    sudo git reset --hard 89a6293ac0229c2c82a1fb33f72311e46f81c85b
+    sudo git reset --hard d7ea2fb82a1b61d0ce4c96d1422599f7ee6ed1b7
     cd ${dir}
 
     # Install automotive_autonomy_msgs
