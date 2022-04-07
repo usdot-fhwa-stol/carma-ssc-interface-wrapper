@@ -55,6 +55,8 @@ namespace ssc_interface_wrapper{
         //Load parameters
         get_parameter<double>("controller_timeout", config_.controller_timeout);
 
+        reengage_state_ = false;
+
         //setup subscribers
         ssc_state_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState>("module_states", 5,
                                                                                         std::bind(&Node::ssc_state_cb, this, std::placeholders::_1));
@@ -75,8 +77,6 @@ namespace ssc_interface_wrapper{
         // initialize services
         enable_robotic_control_srv_ = create_service<carma_driver_msgs::srv::SetEnableRobotic>("controller/enable_robotic", 
                                                                                     std::bind(&Node::enable_robotic_control_cb, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));                                                                  
-
-        reengage_state_ = false;
         
         return CallbackReturn::SUCCESS;
     }
