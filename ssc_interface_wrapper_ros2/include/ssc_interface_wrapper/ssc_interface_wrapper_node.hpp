@@ -107,5 +107,6 @@ namespace ssc_interface_wrapper
             ////
             carma_ros2_utils::CallbackReturn handle_on_configure(const rclcpp_lifecycle::State &);
             carma_ros2_utils::CallbackReturn handle_on_activate(const rclcpp_lifecycle::State &);
+            carma_ros2_utils::CallbackReturn handle_on_deactivate(const rclcpp_lifecycle::State &);
     };
 } // ssc_interface_wrapper

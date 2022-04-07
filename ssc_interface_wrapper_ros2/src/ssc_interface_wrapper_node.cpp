@@ -76,6 +76,8 @@ namespace ssc_interface_wrapper{
         enable_robotic_control_srv_ = create_service<carma_driver_msgs::srv::SetEnableRobotic>("controller/enable_robotic", 
                                                                                     std::bind(&Node::enable_robotic_control_cb, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));                                                                  
 
+        reengage_state_ = false;
+        
         return CallbackReturn::SUCCESS;
     }
 
@@ -88,11 +90,13 @@ namespace ssc_interface_wrapper{
         // Initialize timeout check
         worker_.last_vehicle_status_time_ = this->now();
 
-        if(reengage_state_)
-        {
-            reengage_robotic_control();
-        }
+        return CallbackReturn::SUCCESS;
+    }
 
+    carma_ros2_utils::CallbackReturn Node::handle_on_deactivate(const rclcpp_lifecycle::State &prev_state) 
+    {
+        reengage_state_ = false; // Do not allow this flag to remain set if the node is deactivated. 
+                                 // An additional re-engagement should be required in that case.
         return CallbackReturn::SUCCESS;
     }
 
@@ -122,6 +126,10 @@ namespace ssc_interface_wrapper{
             engage_cmd.data = false;
             vehicle_engage_pub_->publish(engage_cmd);
             if(req->set == carma_driver_msgs::srv::SetEnableRobotic::Request::ENABLE) {
+                // This flag is required because the SSC needs to be sent a negative engagement after operator override 
+                // before it will accept a positive engagement.
+                // In the lines above we send the negative engagement, but we need to wait for the status to change again
+                // before we send the re-engagement. This flag tells us of the need to do that. 
                 reengage_state_ = true;
             }
         }
@@ -137,6 +145,12 @@ namespace ssc_interface_wrapper{
         // robot_enabled field is true once the lower level controller is running
 	    robotic_status_msg_.robot_enabled = true;
         publish_robot_status();
+
+        // When we get a new status message we need to check if the system is trying to renegage and do so if it is. 
+        if(reengage_state_)
+        {
+            reengage_robotic_control();
+        }
 
     }
 
