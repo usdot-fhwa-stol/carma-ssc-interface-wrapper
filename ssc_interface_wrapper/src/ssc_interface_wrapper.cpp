@@ -102,6 +102,10 @@ bool SSCInterfaceWrapper::enable_robotic_control_cb(cav_srvs::SetEnableRoboticRe
         engage_cmd.data = false;
         vehicle_engage_pub_.publish(engage_cmd);
         if(req.set == cav_srvs::SetEnableRoboticRequest::ENABLE) {
+            // This flag is required because the SSC needs to be sent a negative engagement after operator override 
+            // before it will accept a positive engagement.
+            // In the lines above we send the negative engagement, but we need to wait for the status to change again
+            // before we send the re-engagement. This flag tells us of the need to do that. 
             reengage_state_ = true;
         }
     }
