@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastolcandidate/autoware.ai:jetta-gillet AS base_image
+FROM usdotfhwastol/autoware.ai:carma-system-4.0.0 AS base_image
 
 FROM base_image as source-code
 
