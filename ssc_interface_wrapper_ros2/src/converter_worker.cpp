@@ -437,11 +437,7 @@ namespace ssc_interface_wrapper{
             // NOTE: HAZARD signal cannot be used in automotive_platform_msgs::msg::TurnSignalCommand
         }
 
-        std::cerr << "command initialized: " << command_initialized_ << std::endl;
-        std::cerr << "command_time_: " << command_time_.seconds() << std::endl;
-        std::cerr << "(this->now(): " << this->now().seconds() << std::endl;
-
-         // Override desired speed to ZERO by emergency/timeout
+        // Override desired speed to ZERO by emergency/timeout
         bool emergency = (vehicle_cmd_.emergency == 1);
         bool timeouted = command_initialized_ && (((this->now() - command_time_).seconds() * 1000) > config_.command_timeout_);
 
