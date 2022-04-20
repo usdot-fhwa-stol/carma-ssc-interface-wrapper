@@ -36,6 +36,7 @@
   <depend>cav_srvs</depend>
   <depend>carma_driver_msgs</depend>
   <depend>automotive_navigation_msgs</depend>
+  <depend>lifecycle_msgs</depend>
 
   <depend>automotive_platform_msgs</depend>
   <depend>autoware_msgs</depend>
