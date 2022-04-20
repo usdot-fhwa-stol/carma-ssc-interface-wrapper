@@ -142,6 +142,11 @@ namespace ssc_interface_wrapper{
     }
 
     void Converter::callback_from_vehicle_cmd(const autoware_msgs::msg::VehicleCmd::UniquePtr msg){
+        // If the current state is not active we will return to avoid comparing timestamps from different time sources (ie. states)
+        if (get_current_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE)
+        {
+            return;
+        }
         command_time_ = this->now();
         vehicle_cmd_ = *msg;
         command_initialized_ = true;
@@ -432,7 +437,7 @@ namespace ssc_interface_wrapper{
             // NOTE: HAZARD signal cannot be used in automotive_platform_msgs::msg::TurnSignalCommand
         }
 
-         // Override desired speed to ZERO by emergency/timeout
+        // Override desired speed to ZERO by emergency/timeout
         bool emergency = (vehicle_cmd_.emergency == 1);
         bool timeouted = command_initialized_ && (((this->now() - command_time_).seconds() * 1000) > config_.command_timeout_);
 

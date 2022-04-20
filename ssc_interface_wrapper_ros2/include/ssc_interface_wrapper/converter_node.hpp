@@ -177,8 +177,8 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     
     ConverterConfig config_;
 
-    bool engage_;
-    bool command_initialized_; 
+    bool engage_ = false;
+    bool command_initialized_ = false; 
     double current_velocity_;
     double adaptive_gear_ratio_;
     rclcpp::Time command_time_;

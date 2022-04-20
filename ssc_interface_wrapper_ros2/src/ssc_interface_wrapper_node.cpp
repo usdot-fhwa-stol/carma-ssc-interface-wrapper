@@ -14,6 +14,7 @@
  * the License.
  */
 #include "ssc_interface_wrapper/ssc_interface_wrapper_node.hpp"
+#include "lifecycle_msgs/msg/state.hpp"
 
 namespace ssc_interface_wrapper{
     
@@ -139,6 +140,12 @@ namespace ssc_interface_wrapper{
  
     void Node::ssc_state_cb(const automotive_navigation_msgs::msg::ModuleState::UniquePtr msg)
     {
+        // If the current state is not active we will return to avoid comparing timestamps from different time sources (ie. states)
+        if (get_current_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE)
+        {
+            return;
+        }
+
         // message needs to go to library. Unique ptr cant be sent
         automotive_navigation_msgs::msg::ModuleState module_state = *msg;
         worker_.on_new_status_msg(module_state, this->now());

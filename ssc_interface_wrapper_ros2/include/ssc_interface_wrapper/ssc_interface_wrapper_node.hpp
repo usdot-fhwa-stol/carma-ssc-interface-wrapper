@@ -70,7 +70,7 @@ namespace ssc_interface_wrapper
             carma_driver_msgs::msg::RobotEnabled robotic_status_msg_;
 
             // bool flag indicates the wrapper is in the reengage mode
-            bool reengage_state_;
+            bool reengage_state_ = false;
 
             rclcpp::TimerBase::SharedPtr timer_;
 
