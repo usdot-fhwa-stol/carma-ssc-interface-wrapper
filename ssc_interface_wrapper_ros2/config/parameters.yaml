@@ -1,0 +1,6 @@
+# Note: Vehicle Config Parameters are remapped to those provided by the carma platform
+# Specifically [wheel_base, tire_radius, acceleration_limit, deceleration_limit, max_curvature_rate]
+
+# Timeout threshold for controller, in seconds
+controller_timeout: 1.0
+
