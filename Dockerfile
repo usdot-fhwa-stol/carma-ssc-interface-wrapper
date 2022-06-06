@@ -16,6 +16,11 @@ FROM usdotfhwastoldev/autoware.ai:develop AS base_image
 
 FROM base_image as source-code
 
+ARG ROS1_PACKAGES=""
+ENV ROS1_PACKAGES=${ROS1_PACKAGES}
+ARG ROS2_PACKAGES=""
+ENV ROS2_PACKAGES=${ROS2_PACKAGES}
+
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG ACCESS_ID="NULL"
 ARG SECRET_KEY="NULL"
