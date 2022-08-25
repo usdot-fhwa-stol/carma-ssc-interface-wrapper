@@ -1,3 +1,7 @@
+| CicleCI Build Status | Sonar Code Quality | DockerHub Release | DockerHub Release Candidate | DockerHub Develop |
+|------|-----|-----|-----|-----|
+[![CircleCI](https://img.shields.io/circleci/build/gh/usdot-fhwa-stol/carma-ssc-interface-wrapper/develop?label=CircleCI)](https://app.circleci.com/pipelines/github/usdot-fhwa-stol/carma-ssc-interface-wrapper?branch=develop) | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=usdot-fhwa-stol_CARMASscInterfaceWrapper&metric=alert_status)](https://sonarcloud.io/dashboard?id=usdot-fhwa-stol_CARMASscInterfaceWrapper) | [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/usdotfhwastol/carma-ssc-interface-wrapper?label=carma-ssc-interface-wrapper)](https://hub.docker.com/repository/docker/usdotfhwastol/carma-ssc-interface-wrapper) | [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/usdotfhwastolcandidate/carma-ssc-interface-wrapper?label=carma-ssc-interface-wrapper)](https://hub.docker.com/repository/docker/usdotfhwastolcandidate/carma-ssc-interface-wrapper) | [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/usdotfhwastoldev/carma-ssc-interface-wrapper?label=carma-ssc-interface-wrapper)](https://hub.docker.com/repository/docker/usdotfhwastoldev/carma-ssc-interface-wrapper)
+
 # CARMASscInterfaceWrapper
 CARMASscInterfaceWrapper contains a driver wrapper for usage with the Autoware speed and steering control interface in combination with the AutonomouStuff controller and driver
 
