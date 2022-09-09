@@ -72,6 +72,8 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     sudo apt-get install ros-noetic-pacmod-msgs
 
     sudo apt-get install python3-catkin-pkg
+    sudo apt install python3-catkin-pkg catkin
+    sudo apt-get install python3-catkin-tools
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
     chmod -R ugo+x /opt/carma/install
     unset ROS_LANG_DISABLE
@@ -95,7 +97,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     sudo apt-get install ros-foxy-pacmod-msgs
     sudo apt-get install ros-foxy-pacmod3-msgs
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
     
     # Get the exit code from the ROS2 build
     status=$?
