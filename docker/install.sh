@@ -91,6 +91,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 elif [ $build_ros2_pkgs -eq 1 ]; then
 
     cd ~/workspace_ros2
+    source /home/carma/catkin/setup.bash
     source /opt/autoware.ai/ros/install_ros2/setup.bash
     sudo apt-get update
     sudo apt-get install -y apt-utils
