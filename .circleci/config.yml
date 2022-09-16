@@ -56,6 +56,8 @@ jobs:
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             #./src/CARMASscInterfaceWrapper/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
             #./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+            source /opt/ros/foxy/setup.bash
+            rosdep install --rosdistro noetic --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
       - run:
           name: Build Driver
           command: |
