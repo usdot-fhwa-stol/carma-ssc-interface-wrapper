@@ -49,6 +49,7 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
+            rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Build Driver
