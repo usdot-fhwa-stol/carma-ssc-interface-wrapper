@@ -49,7 +49,9 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            rosdep install --rosdistro noetic --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y
+            rosdep --rosdistro melodic init
+            rosdep --rosdistro melodic update
+            rosdep install --rosdistro melodic --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Build Driver
