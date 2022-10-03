@@ -55,7 +55,7 @@ jobs:
             #Build ros1 pkgs
             #./src/CARMASscInterfaceWrapper/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
             #Build ros2 pkgs
-            #./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
       - run:
           name: Build Driver
           command: |
