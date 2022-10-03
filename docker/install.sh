@@ -48,17 +48,17 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Check if valid arguments are passed
-if [ -z $access_id ];
-    then 
-        echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
-        exit 1
-fi
+#if [ -z $access_id ];
+#    then 
+#        echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
+#        exit 1
+#fi
 
-if [ -z $secret_key ];
-    then 
-        echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
-        exit 1
-fi
+#if [ -z $secret_key ];
+#    then 
+#        echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
+#        exit 1
+#fi
 
 if [ $build_ros1_pkgs -eq 1 ]; then
     # ROS1 build and install
