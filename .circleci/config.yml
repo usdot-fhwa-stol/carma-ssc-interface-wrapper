@@ -51,11 +51,9 @@ jobs:
             source ${INIT_ENV}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             # Install ssc_pm_lexus
-            ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
-            # Build ros1 pkgs
-            ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+            ./src/CARMASscInterfaceWrapper/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
             #Build ros2 pkgs
-            ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
       - run:
           name: Build Driver
           command: |
