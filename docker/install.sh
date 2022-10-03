@@ -94,6 +94,8 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     sudo apt-get install -y apt-utils
     sudo apt-get install ros-foxy-pacmod-msgs
     sudo apt-get install ros-foxy-pacmod3-msgs
+    sudo apt-get install ros-foxy-pacmod3
+    sudo apt-get install ros-foxy-kvaser-interface
 
     colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
     
