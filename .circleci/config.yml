@@ -49,6 +49,8 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
+            mkdir -p /home/carma/workspace_ros2
+            cp -r src/CARMASscInterfaceWrapper /home/carma/workspace_ros2/src
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -ros2 -r ${PWD}
             # Install ssc_pm_lexus
             ./src/CARMASscInterfaceWrapper/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
