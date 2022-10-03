@@ -61,7 +61,7 @@ jobs:
           command: |
             source ${INIT_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
-            sudo apt-get -y install ros-foxy-pacmod-msgs ros-foxy-pacmod3-msgs ros-foxy-pacmod3 ros-foxy-kvaser-interface
+            #sudo apt-get -y install ros-foxy-pacmod-msgs ros-foxy-pacmod3-msgs ros-foxy-pacmod3 ros-foxy-kvaser-interface
             build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
