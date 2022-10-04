@@ -50,8 +50,8 @@ jobs:
           command: |
             source ${INIT_ENV}
             export ROS_DISTRO=noetic
-            #sudo rosdep --rosdistro=noetic init
-            rosdep --rosdistro=noetic update
+            sudo rosdep --rosdistro noetic init
+            rosdep --rosdistro noetic update
             #mkdir -p /home/carma/workspace_ros2
             #cp -r src/CARMASscInterfaceWrapper /home/carma/workspace_ros2/src
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -ros2 -r ${PWD}
