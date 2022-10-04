@@ -68,7 +68,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     source /opt/autoware.ai/ros/install/setup.bash
     sudo apt-get install -y apt-utils
 
-    rosdep install --from-paths src --ignore-src -r -y
+    rosdep install --rosdistro noetic --from-paths src --ignore-src -r -y
     sudo apt-get install ros-noetic-pacmod-msgs
 
     sudo apt-get install python3-catkin-pkg
