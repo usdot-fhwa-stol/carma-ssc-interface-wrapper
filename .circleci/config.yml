@@ -49,15 +49,19 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            mkdir -p /home/carma/workspace_ros2
-            cp -r src/CARMASscInterfaceWrapper /home/carma/workspace_ros2/src
+            export ROS_DISTRO=noetic
+            #sudo rosdep --rosdistro=noetic init
+            rosdep --rosdistro=noetic update
+            #mkdir -p /home/carma/workspace_ros2
+            #cp -r src/CARMASscInterfaceWrapper /home/carma/workspace_ros2/src
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -ros2 -r ${PWD}
             # Install ssc_pm_lexus
-            ./src/CARMASscInterfaceWrapper/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+            #./src/CARMASscInterfaceWrapper/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
             #Build ros1 pkgs
             #./src/CARMASscInterfaceWrapper/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
             #Build ros2 pkgs
-            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+            #./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+            rosdep install --rosdistro noetic --from-paths src --ignore-src -r -y
       - run:
           name: Build Driver
           command: |
