@@ -78,7 +78,7 @@ COVERAGE_FLAGS="-g --coverage -fprofile-arcs -ftest-coverage"
 
 if [ "${do_make}" = true ]; then
   echo "Calling catkin_make"
-  colcon build --parallel-workers 4 --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_C_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_BUILD_TYPE="Debug"
+  colcon build --parallel-workers 4 --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_C_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_BUILD_TYPE="Debug" --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface
 fi
 
 if [ "${do_test}" = true ]; then
