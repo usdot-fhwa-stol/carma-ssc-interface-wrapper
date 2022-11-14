@@ -33,14 +33,22 @@ while [[ $# -gt 0 ]]; do
                   shift
             ;;
             -ros1|--ros1_build)
-                  dir=~/workspace_ros1
+                  if [[ "$CI" == "true" ]]; then
+                    dir="/opt/carma"
+                  else
+                      dir=~/workspace_ros1
+                  fi
                   echo "Checkout ros1 dependencies"
                   build_ros1_pkgs="$true"
                   build_ros2_pkgs="$false"
                   shift
             ;;
             -ros2|--ros2_build)
-                  dir=~/workspace_ros2
+                  if [[ "$CI" == "true" ]]; then
+                    dir="/opt/carma"
+                  else
+                      dir=~/workspace_ros2
+                  fi
                   echo "Checkout ros2 dependencies"
                   build_ros1_pkgs="$false"
                   build_ros2_pkgs="$true"
