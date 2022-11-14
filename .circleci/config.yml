@@ -50,8 +50,8 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
-            chmod +x /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros2_build -r ${PWD}
+            sed -i '/colcon build/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
       - run:
           name: Build Driver
           command: |
