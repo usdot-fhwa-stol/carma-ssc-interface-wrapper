@@ -53,6 +53,7 @@ jobs:
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros1_build -r ${PWD}
             ./src/CARMASscInterfaceWrapper/docker/install.sh "$ACCESS_ID" "$SECRET_KEY" --ros1_build
             sed -i '/colcon build/ s/$/ --packages-up-to ssc_interface_wrapper/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+            sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash         
             sudo apt-get update
             sudo apt-get -y install ros-noetic-autoware-msgs
       - run:
