@@ -80,7 +80,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
     rosdep install --from-paths src --ignore-src -r -y
     sudo apt-get install ros-noetic-pacmod-msgs
-
+    sudo apt-get -y install ros-noetic-autoware-msgs
     sudo apt-get install python3-catkin-pkg
     if [ -z "$CI" ]; then
         colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
