@@ -34,6 +34,7 @@ jobs:
           TERM: xterm # use xterm to get full display output from build
           INIT_ENV: /home/carma/.base-image/init-env.sh
           ROS_1_ENV: /opt/ros/noetic/setup.bash
+          ROS_2_ENV: /opt/ros/foxy/setup.bash
     working_directory: "/opt/carma/"
     # Execution steps
     steps:
@@ -46,28 +47,60 @@ jobs:
             mkdir CARMASscInterfaceWrapper
       - checkout:
           path: src/CARMASscInterfaceWrapper
-      - run: 
-          name: Pull Deps
+      - run:
+          name: Pull ROS 1 Deps
           command: |
             source ${INIT_ENV}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros1_build -r ${PWD}
             ./src/CARMASscInterfaceWrapper/docker/install.sh "$ACCESS_ID" "$SECRET_KEY" --ros1_build
-            sed -i '/colcon build/ s/$/ --packages-up-to ssc_interface_wrapper/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
-            sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash         
-            sudo apt-get update
-            sudo apt-get -y install ros-noetic-autoware-msgs
       - run:
-          name: Build Driver
+          name: Build ROS 1 Driver
           command: |
             source ${INIT_ENV}
             source ${ROS_1_ENV}
+            sed -i '/colcon build/ s/$/ --packages-up-to ssc_interface_wrapper/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
             source ${ROS_1_ENV}
+            sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
+      - run:
+          name: Backup ROS1 compile_commands.json
+          command: |
+            mv /opt/carma/build/compile_commands.json /opt/carma/compile_commands.ros1.json
+      - run:
+          name: Cleanup before ROS 2 build
+          command: |
+            rm -rf /opt/carma/install
+            rm -rf /opt/carma/build
+      - run:
+          name: Pull ROS 2 Deps
+          command: |
+            source ${INIT_ENV}
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros2_build -r ${PWD}
+            ./src/CARMASscInterfaceWrapper/docker/install.sh "$ACCESS_ID" "$SECRET_KEY" --ros2_build
+      - run:
+          name: Build ROS 2 Driver
+          command: |
+            source ${INIT_ENV}
+            source ${ROS_2_ENV}
+            sed -i '/colcon build/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+            make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
+      - run:
+          name: Run C++ Tests
+          command: |
+            source ${INIT_ENV}
+            source ${ROS_2_ENV}
+            sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+            make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
+      - run:
+          name: Combine ROS1 and ROS2 compile_commands.json files
+          command: |
+            mv /opt/carma/build/compile_commands.json /opt/carma/compile_commands.ros2.json
+            jq -s add /opt/carma/compile_commands.ros1.json /opt/carma/compile_commands.ros2.json > /opt/carma/build/compile_commands.json
       # Run SonarCloud analysis
       # PR Branchs and number extracted from Circle variables and github api
       # Circle CI seems to make a change to the base branch, so we must fetch --force to ensure correct git file change stats
