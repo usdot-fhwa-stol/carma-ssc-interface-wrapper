@@ -25,14 +25,22 @@ while [[ $# -gt 0 ]]; do
       arg="$1"
       case $arg in
             -ros1|--ros1_build)
-                  dir=~/workspace_ros1
+                  if [[ "$CI" == "true" ]]; then
+                    dir=/opt/carma
+                  else
+                    dir=~/workspace_ros1
+                  fi
                   echo "Install and build ros1 packages"
                   build_ros1_pkgs="$true"
                   build_ros2_pkgs="$false"
                   shift
                 ;;
             -ros2|--ros2_build)
-                  dir=~/workspace_ros2
+                  if [[ "$CI" == "true" ]]; then
+                    dir=/opt/carma
+                  else
+                    dir=~/workspace_ros2
+                  fi
                   echo "Install and build ros2 packages"
                   build_ros1_pkgs="$false"
                   build_ros2_pkgs="$true"
@@ -60,9 +68,11 @@ if [ -z $secret_key ];
         exit 1
 fi
 
+sudo apt-get update
+
 if [ $build_ros1_pkgs -eq 1 ]; then
     # ROS1 build and install
-    cd ~/workspace_ros1
+    cd "$dir" || exit 1
     echo "ROS1 build"
     source /home/carma/catkin/setup.bash
     source /opt/autoware.ai/ros/install/setup.bash
@@ -72,8 +82,10 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     sudo apt-get install ros-noetic-pacmod-msgs
 
     sudo apt-get install python3-catkin-pkg
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
-    chmod -R ugo+x /opt/carma/install
+    if [ -z "$CI" ]; then
+        colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
+        chmod -R ugo+x /opt/carma/install
+    fi
     unset ROS_LANG_DISABLE
 
     # Get the exit code from the ROS1 build so we can skip the ROS2 build if the ROS1 build failed
@@ -88,15 +100,15 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
 elif [ $build_ros2_pkgs -eq 1 ]; then
 
-    cd ~/workspace_ros2
+    cd "$dir" || exit 1
     source /opt/autoware.ai/ros/install_ros2/setup.bash
-    sudo apt-get update
     sudo apt-get install -y apt-utils
     sudo apt-get install ros-foxy-pacmod-msgs
     sudo apt-get install ros-foxy-pacmod3-msgs
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
-    
+    if [ -z "$CI" ]; then
+        colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
+    fi
     # Get the exit code from the ROS2 build
     status=$?
 
@@ -108,9 +120,11 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     exit #Success building ros2 pkgs
 fi
 
-cd ~
+if [[ "$CI" == "true" ]]; then
+    exit
+fi
+
 source /opt/autoware.ai/ros/install_ros2/setup.bash
-sudo apt-get update
 sudo apt-get -qq install apt-transport-s3
 
 sudo sh -c 'echo "AccessKeyId = '$access_id'" > /etc/apt/s3auth.conf'
