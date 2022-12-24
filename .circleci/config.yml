@@ -76,7 +76,7 @@ jobs:
           command: |
             rm -rf /opt/carma/build
             rm -rf /opt/carma/install
-            rm -rf /opt/carma/src
+            sudo rm -rf /opt/carma/src
       - checkout:
           path: src/CARMASscInterfaceWrapper
       - run:
