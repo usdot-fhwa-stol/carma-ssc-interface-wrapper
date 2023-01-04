@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
                   if [[ "$CI" == "true" ]]; then
                     dir="/opt/carma"
                   else
-                      dir=~/workspace_ros1
+                    dir=~/workspace_ros1
                   fi
                   echo "Checkout ros1 dependencies"
                   build_ros1_pkgs="$true"
@@ -47,7 +47,7 @@ while [[ $# -gt 0 ]]; do
                   if [[ "$CI" == "true" ]]; then
                     dir="/opt/carma"
                   else
-                      dir=~/workspace_ros2
+                    dir=~/workspace_ros2
                   fi
                   echo "Checkout ros2 dependencies"
                   build_ros1_pkgs="$false"
@@ -57,7 +57,8 @@ while [[ $# -gt 0 ]]; do
       esac
 done
 
-cd ${dir}
+sudo rm -rf ${dir}/src/{CARMAMsgs,CARMAUtils}
+
 if [[ "$BRANCH" = "develop" ]]; then
       git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
       git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch $BRANCH
@@ -69,51 +70,50 @@ fi
 if [ $build_ros1_pkgs -eq 1 ]; then
 
     # Required to build the dbw_pacifica_msgs message set.
+    sudo rm -rf ${dir}/src/raptor-dbw-ros
     sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master 
     cd ${dir}/src/raptor-dbw-ros
     sudo git reset --hard f50f91cd88ad27b2ce05bab1f8ff780931c41475
-    cd ${dir}
 
     # Required for ford fusion drive by wire
+    sudo rm -rf ${dir}/src/dbw-mkz-ros
     sudo git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
+    sudo rm -rf ${dir}/src/pacmod3
     sudo git clone https://github.com/astuff/pacmod3.git ${dir}/src/pacmod3 --branch ros1_master
     cd ${dir}/src/pacmod3
     sudo git reset --hard 4e5e9cd5e821f4f19e31e10ba42f20449860b940
-    cd ${dir}
 
+    sudo rm -rf ${dir}/src/kvaser_interface
     sudo git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros1_master
     cd ${dir}/src/kvaser_interface
     sudo git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
-    cd ${dir}
 
 elif [ $build_ros2_pkgs -eq 1 ]; then
-    sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy 
+    sudo rm -rf ${dir}/src/raptor-dbw-ros2
+    sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ${dir}/src/raptor-dbw-ros2 --branch foxy
     cd ${dir}/src/raptor-dbw-ros2
     sudo git reset --hard 4ad958dd07bb9c7128dc75bc7397bc8f5be30a3c
-    cd ${dir}
 
     # TO DO: Add ros2 version for Ford fusion drive by wire
     # Required for ford fusion drive by wire
     # sudo git clone https://bitbucket.org/DataspeedInc/dbw_mkz_ros.git ${dir}/src/dbw-mkz-ros --branch 1.2.4
 
     #Pacmod3
-    sudo git clone https://github.com/astuff/pacmod3.git ./src/pacmod3_ros2 --branch ros2_master
-    cd ./src/pacmod3_ros2
+    sudo rm -rf ${dir}/src/pacmod3_ros2
+    sudo git clone https://github.com/astuff/pacmod3.git ${dir}/src/pacmod3_ros2 --branch ros2_master
+    cd ${dir}/src/pacmod3_ros2
     sudo git reset --hard 159ef36f26726cf8d7f58e67add8c8319a67ae85
-    cd ${dir}
 
     # kvaser
+    sudo rm -rf ${dir}/src/kvaser_interface
     sudo git clone https://github.com/astuff/kvaser_interface.git ${dir}/src/kvaser_interface --branch ros2_master
-    cd ./src/kvaser_interface
+    cd ${dir}/src/kvaser_interface
     sudo git reset --hard d7ea2fb82a1b61d0ce4c96d1422599f7ee6ed1b7
-    cd ${dir}
 
     # Install automotive_autonomy_msgs
+    sudo rm -rf ${dir}/src/automotive_autonomy_msgs
     sudo git clone https://github.com/astuff/automotive_autonomy_msgs.git ${dir}/src/automotive_autonomy_msgs --branch master
-    cd ./src/automotive_autonomy_msgs 
+    cd ${dir}/src/automotive_autonomy_msgs
     sudo git reset --hard 191dce1827023bef6d69b31e8c2514cf82bf10c5
-    cd ${dir}
 fi
-
-

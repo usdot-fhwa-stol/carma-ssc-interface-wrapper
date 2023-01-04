@@ -78,9 +78,7 @@ jobs:
       - run:
           name: Cleanup before ROS 2 build
           command: |
-            rm -rf /opt/carma/build
-            rm -rf /opt/carma/install
-            sudo rm -rf /opt/carma/src/{CARMAMsgs,CARMAUtils,raptor-dbw-ros,dbw-mkz-ros,pacmod3,kvaser_interface}
+            rm -rf /opt/carma/{build,install}
       - run:
           name: Pull ROS 2 Deps
           command: |
