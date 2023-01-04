@@ -80,9 +80,7 @@ jobs:
           command: |
             rm -rf /opt/carma/build
             rm -rf /opt/carma/install
-            sudo rm -rf /opt/carma/src
-      - checkout:
-          path: src/CARMASscInterfaceWrapper
+            sudo rm -rf /opt/carma/src/{CARMAMsgs,CARMAUtils,raptor-dbw-ros,dbw-mkz-ros,pacmod3,kvaser_interface}
       - run:
           name: Pull ROS 2 Deps
           command: |
