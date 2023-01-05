@@ -97,7 +97,7 @@ jobs:
             unset ROS_DISTRO
             source ${ROS_2_ENV}
             echo "ROS_DISTRO=$ROS_DISTRO"
-            sed -i '/colcon build/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+            sed -i '/colcon build/ s/$/ --event-handlers console_direct+ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
