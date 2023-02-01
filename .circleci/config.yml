@@ -96,18 +96,17 @@ jobs:
           command: |
             source ${INIT_ENV}
             source ${CATKIN_ENV}
-            source ${ROS_2_ENV}
             source ${AUTOWARE_ENV}
+            source ${ROS_2_ENV}
             sed -i '/colcon build/ s/$/ --event-handlers console_direct+ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
-            echo "ROS_DISTRO=$ROS_DISTRO"
-            unset ROS_DISTRO
+            source ${CATKIN_ENV}
+            source ${AUTOWARE_ENV}
             source ${ROS_2_ENV}
-            echo "ROS_DISTRO=$ROS_DISTRO"
             sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
