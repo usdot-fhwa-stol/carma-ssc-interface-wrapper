@@ -31,10 +31,12 @@ jobs:
       - image: usdotfhwastoldev/autoware.ai:develop
         user: carma
         environment:
-          TERM: xterm # use xterm to get full display output from build
+          AUTOWARE_ENV: /opt/autoware.ai/ros/install/setup.bash
+          CATKIN_ENV: /home/carma/catkin/setup.bash
           INIT_ENV: /home/carma/.base-image/init-env.sh
           ROS_1_ENV: /opt/ros/noetic/setup.bash
           ROS_2_ENV: /opt/ros/foxy/setup.bash
+          TERM: xterm # use xterm to get full display output from build
     working_directory: "/opt/carma/"
     # Execution steps
     steps:
@@ -93,10 +95,9 @@ jobs:
           name: Build ROS 2 Driver
           command: |
             source ${INIT_ENV}
-            echo "ROS_DISTRO=$ROS_DISTRO"
-            unset ROS_DISTRO
+            source ${CATKIN_ENV}
             source ${ROS_2_ENV}
-            echo "ROS_DISTRO=$ROS_DISTRO"
+            source ${AUTOWARE_ENV}
             sed -i '/colcon build/ s/$/ --event-handlers console_direct+ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
