@@ -68,6 +68,8 @@ jobs:
     - name: Build ROS 2 Driver
       shell: bash
       run: |
+        sudo apt-get update
+        sudo apt-get -y install ros-noetic-message-runtime
         source ${INIT_ENV}
         source ${CATKIN_ENV}
         source ${ROS_2_ENV}
