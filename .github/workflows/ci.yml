@@ -1,11 +1,6 @@
 name: CI
 on:
   push:
-env:
-  CATKIN_ENV: /home/carma/catkin/setup.bash
-  INIT_ENV: /home/carma/.base-image/init-env.sh
-  ROS_1_ENV: /opt/ros/noetic/setup.bash
-  ROS_2_ENV: /opt/ros/foxy/setup.bash
 jobs:
   build:
     defaults:
@@ -15,8 +10,11 @@ jobs:
     container:
       image: usdotfhwastoldev/autoware.ai:develop
       env:
+        CATKIN_ENV: /home/carma/catkin/setup.bash
+        INIT_ENV: /home/carma/.base-image/init-env.sh
+        ROS_1_ENV: /opt/ros/noetic/setup.bash
+        ROS_2_ENV: /opt/ros/foxy/setup.bash
         TERM: xterm
-        INIT_ENV: "/home/carma/.base-image/init-env.sh"
       options: "--user root"
     steps:
     - uses: actions/checkout@v3.3.0
@@ -84,11 +82,13 @@ jobs:
       if: github.event_name == 'pull_request'
       shell: bash
       run: |
+        source ${INIT_ENV}
         cd src/CARMASscInterfaceWrapper
         sonar-scanner -Dproject.settings=/opt/carma/src/CARMASscInterfaceWrapper/.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.branch=${{ github.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
     - name: Run Sonar Scanner (non-PR)
       if: github.event_name != 'pull_request'
       shell: bash
       run: |
+        source ${INIT_ENV}
         cd src/CARMASscInterfaceWrapper
         sonar-scanner -Dproject.settings=/opt/carma/src/CARMASscInterfaceWrapper/.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }}
