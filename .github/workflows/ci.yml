@@ -16,7 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3.3.0
       with:
-        path: /opt/carma/src/CARMASscInterfaceWrapper
+        path: CARMASscInterfaceWrapper
+    - name: Move working-directory
+      run: |
+        mkdir -p /opt/carma/src/
+        mv $GITHUB_WORKSPACE/CARMASscInterfaceWrapper /opt/carma/src/CARMASscInterfaceWrapper
     - name: Pull Deps
       shell: bash
       run: |
