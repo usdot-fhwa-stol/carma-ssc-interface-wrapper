@@ -84,13 +84,11 @@ jobs:
       if: github.event_name == 'pull_request'
       shell: bash
       run: |
-        source ${INIT_ENV}
         cd src/CARMASscInterfaceWrapper
-        sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.branch=${{ github.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+        sonar-scanner -Dproject.settings=/opt/carma/src/CARMASscInterfaceWrapper/.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.branch=${{ github.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
     - name: Run Sonar Scanner (non-PR)
       if: github.event_name != 'pull_request'
       shell: bash
       run: |
-        source ${INIT_ENV}
         cd src/CARMASscInterfaceWrapper
-        sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        sonar-scanner -Dproject.settings=/opt/carma/src/CARMASscInterfaceWrapper/.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }}
