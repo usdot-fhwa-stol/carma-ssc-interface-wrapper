@@ -95,9 +95,9 @@ jobs:
           name: Build ROS 2 Driver
           command: |
             source ${INIT_ENV}
-            source ${AUTOWARE_ENV}
-            source ${ROS_2_ENV}
             source ${CATKIN_ENV}
+            source ${ROS_2_ENV}
+            source ${AUTOWARE_ENV}
             sed -i '/colcon build/ s/$/ --event-handlers console_direct+ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
