@@ -2,6 +2,7 @@ name: CI
 on:
   push:
 env:
+  INIT_ENV: /home/carma/.base-image/init-env.sh
   ROS_1_ENV: /opt/ros/noetic/setup.bash
   ROS_2_ENV: /opt/ros/foxy/setup.bash
 jobs:
@@ -55,6 +56,7 @@ jobs:
       run: |
         rm -rf /opt/carma/{build,install}
     - name: Pull ROS 2 Deps
+      shell: bash
       run: |
         source ${INIT_ENV}
         ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros2_build -r ${PWD}
@@ -63,6 +65,7 @@ jobs:
       run: |
         cp /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash.backup /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
     - name: Build ROS 2 Driver
+      shell: bash
       run: |
         source ${INIT_ENV}
         source ${ROS_2_ENV}
