@@ -14,13 +14,6 @@ jobs:
         INIT_ENV: "/home/carma/.base-image/init-env.sh"
       options: "--user root"
     steps:
-    - name: Create src folder
-      shell: bash
-      run: |
-        source ${INIT_ENV}
-        mkdir src
-        cd src
-        mkdir CARMASscInterfaceWrapper
     - uses: actions/checkout@v3.3.0
       with:
         path: src/CARMASscInterfaceWrapper
