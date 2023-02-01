@@ -102,8 +102,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
 
     cd "$dir" || exit 1
     source /opt/autoware.ai/ros/install_ros2/setup.bash
-    sudo apt-get install -y apt-utils
-    sudo apt-get install ros-foxy-can-msgs ros-foxy-pacmod-msgs ros-foxy-pacmod3-msgs
+    sudo apt-get install -y apt-utils ros-foxy-can-msgs ros-foxy-pacmod-msgs ros-foxy-pacmod3-msgs
 
     if [ -z "$CI" ]; then
         colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
