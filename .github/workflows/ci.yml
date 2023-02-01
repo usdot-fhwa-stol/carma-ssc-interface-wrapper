@@ -1,0 +1,57 @@
+name: CI
+on:
+  push:
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: "/opt/carma/"
+    runs-on: ubuntu-latest
+    container:
+      image: usdotfhwastoldev/autoware.ai:develop
+      env:
+        TERM: xterm
+        INIT_ENV: "/home/carma/.base-image/init-env.sh"
+      options: "--user carma"
+    steps:
+    - name: Create src folder
+      shell: bash
+      run: |
+        source ${INIT_ENV}
+        mkdir src
+        cd src
+        mkdir CARMASscInterfaceWrapper
+    - uses: actions/checkout@v3.3.0
+      with:
+        path: src/CARMASscInterfaceWrapper
+    - name: Pull Deps
+      shell: bash
+      run: |
+        source ${INIT_ENV}
+        ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+    - name: Build Driver
+      shell: bash
+      run: |
+        source ${INIT_ENV}
+        export ROS_PARALLEL_JOBS='-j1 -l1'
+        build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
+    - name: Run C++ Tests
+      shell: bash
+      run: |
+        source ${INIT_ENV}
+        export ROS_PARALLEL_JOBS='-j1 -l1'
+        bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
+    - name: Run Sonar Scanner (PRs)
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        source ${INIT_ENV}
+        cd src/CARMASscInterfaceWrapper
+        sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.branch=${{ github.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+    - name: Run Sonar Scanner (non-PR)
+      if: github.event_name != 'pull_request'
+      shell: bash
+      run: |
+        source ${INIT_ENV}
+        cd src/CARMASscInterfaceWrapper
+        sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${{ secrets.SONAR_TOKEN }}
