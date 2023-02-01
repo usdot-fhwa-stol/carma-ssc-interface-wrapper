@@ -21,6 +21,8 @@ jobs:
       shell: bash
       run: |
         source ${INIT_ENV}
+        echo $PWD
+        find / -name checkout\.bash
         ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
     - name: Build Driver
       shell: bash
