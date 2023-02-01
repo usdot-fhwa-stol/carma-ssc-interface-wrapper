@@ -12,7 +12,7 @@ jobs:
       env:
         TERM: xterm
         INIT_ENV: "/home/carma/.base-image/init-env.sh"
-      options: "--user carma"
+      options: "--user root"
     steps:
     - name: Create src folder
       shell: bash
