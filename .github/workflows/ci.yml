@@ -26,7 +26,7 @@ jobs:
       run: |
         source ${INIT_ENV}
         ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros1_build -r ${PWD}
-        ./src/CARMASscInterfaceWrapper/docker/install.sh "$ACCESS_ID" "$SECRET_KEY" --ros1_build
+        ./src/CARMASscInterfaceWrapper/docker/install.sh ${{ secrets.ACCESS_ID }} ${{ secrets.SECRET_KEY }} --ros1_build
     - name: Backup make_with_coverage.bash
       shell: bash
       run: |
@@ -55,7 +55,7 @@ jobs:
       run: |
         source ${INIT_ENV}
         ./src/CARMASscInterfaceWrapper/docker/checkout.bash --ros2_build -r ${PWD}
-        ./src/CARMASscInterfaceWrapper/docker/install.sh "$ACCESS_ID" "$SECRET_KEY" --ros2_build
+        ./src/CARMASscInterfaceWrapper/docker/install.sh ${{ secrets.ACCESS_ID }} ${{ secrets.SECRET_KEY }} --ros2_build
     - name: Restore make_with_coverage.bash
       run: |
         cp ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash.backup ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
