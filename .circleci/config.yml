@@ -32,6 +32,7 @@ jobs:
         user: carma
         environment:
           AUTOWARE_ENV: /opt/autoware.ai/ros/install/setup.bash
+          CATKIN_ENV: /home/carma/catkin/setup.bash
           INIT_ENV: /home/carma/.base-image/init-env.sh
           ROS_1_ENV: /opt/ros/noetic/setup.bash
           ROS_2_ENV: /opt/ros/foxy/setup.bash
