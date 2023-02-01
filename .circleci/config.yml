@@ -31,7 +31,7 @@ jobs:
       - image: usdotfhwastoldev/autoware.ai:develop
         user: carma
         environment:
-          AUTOWARE_ENV: /opt/autoware.ai/ros/install/setup.bash
+          AUTOWARE_ENV: /opt/autoware.ai/ros/install_ros2/setup.bash
           CATKIN_ENV: /home/carma/catkin/setup.bash
           INIT_ENV: /home/carma/.base-image/init-env.sh
           ROS_1_ENV: /opt/ros/noetic/setup.bash
@@ -104,9 +104,9 @@ jobs:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
-            source ${AUTOWARE_ENV}
-            source ${ROS_2_ENV}
             source ${CATKIN_ENV}
+            source ${ROS_2_ENV}
+            source ${AUTOWARE_ENV}
             sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
