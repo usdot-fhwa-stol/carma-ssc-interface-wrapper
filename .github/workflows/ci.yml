@@ -1,6 +1,9 @@
 name: CI
 on:
   push:
+env:
+  ROS_1_ENV: /opt/ros/noetic/setup.bash
+  ROS_2_ENV: /opt/ros/foxy/setup.bash
 jobs:
   build:
     defaults:
