@@ -10,7 +10,7 @@ jobs:
     container:
       image: usdotfhwastoldev/autoware.ai:develop
       env:
-        AUTOWARE_ENV: /opt/autoware.ai/ros/install/setup.bash
+        AUTOWARE_ENV: /opt/autoware.ai/ros/install_ros2/setup.bash
         CATKIN_ENV: /home/carma/catkin/setup.bash
         INIT_ENV: /home/carma/.base-image/init-env.sh
         ROS_1_ENV: /opt/ros/noetic/setup.bash
