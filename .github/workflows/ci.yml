@@ -68,11 +68,10 @@ jobs:
     - name: Build ROS 2 Driver
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get -y install ros-noetic-message-runtime
         source ${INIT_ENV}
         source ${CATKIN_ENV}
         source ${ROS_2_ENV}
+        source /opt/autoware.ai/ros/install/setup.bash
         sed -i '/colcon build/ s/$/ --event-handlers console_direct+ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Combine ROS1 and ROS2 compile_commands.json files
