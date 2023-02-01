@@ -16,13 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3.3.0
       with:
-        path: src/CARMASscInterfaceWrapper
+        path: /opt/carma/src/CARMASscInterfaceWrapper
     - name: Pull Deps
       shell: bash
       run: |
         source ${INIT_ENV}
-        echo $PWD
-        find / -name checkout\.bash
         ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
     - name: Build Driver
       shell: bash
