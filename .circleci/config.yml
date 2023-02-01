@@ -104,8 +104,6 @@ jobs:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
-            source ${CATKIN_ENV}
-            source ${ROS_2_ENV}
             source ${AUTOWARE_ENV}
             sed -i '/colcon test/ s/$/ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' ~/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
             make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
