@@ -67,6 +67,7 @@ jobs:
     - name: Build ROS 2 Driver
       shell: bash
       run: |
+        find /opt/carma -name local_setup.bash -delete
         source ${INIT_ENV}
         source ${AUTOWARE_ENV}
         sed -i '/colcon build/ s/$/ --event-handlers console_direct+ --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
