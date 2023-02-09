@@ -45,7 +45,8 @@ def generate_launch_description():
         declare_ssc_package_name,
         GroupAction(
             actions = [
-                SetEnvironmentVariable('RLM_LICENSE', value= PathJoinSubstitution([vehicle_calibration_dir,ssc_package_name, 'as_licenses'])),
+
+                # NOTE: In past versions of the system the RLM_LICENSE env variable was set here however it has been moved to the config due to this issue https://github.com/usdot-fhwa-stol/carma-platform/issues/2002
 
                 set_remap.SetRemap('/hardware_interface/as/speed_model/get_state', '/hardware_interface/as/speed_model/false_get_state'),
                 set_remap.SetRemap('/hardware_interface/as/speed_model/change_state', '/hardware_interface/as/speed_model/false_change_state'),
