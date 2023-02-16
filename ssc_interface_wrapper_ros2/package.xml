@@ -25,7 +25,7 @@
   
   <buildtool_depend>ament_cmake</buildtool_depend>
   <build_depend>carma_cmake_common</build_depend>
-  <build_depend>ament_auto_cmake</build_depend>
+  <build_depend>ament_cmake_auto</build_depend>
 
   <depend>rclcpp</depend>
   <depend>carma_ros2_utils</depend>
