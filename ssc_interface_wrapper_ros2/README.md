@@ -75,5 +75,5 @@ carma $ source install/setup.bash
 ```
 ## Launch the package
 ```sh
-carma $ ros2 launch carma-ssc-interface-wrapper ssc_interface_wrapper.launch.py
+carma $ ros2 launch ssc_interface_wrapper_ros2 ssc_interface_wrapper.launch.py
 ```
