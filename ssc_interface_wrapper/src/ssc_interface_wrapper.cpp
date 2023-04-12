@@ -31,6 +31,7 @@ void SSCInterfaceWrapper::initialize() {
     steer_sub_ = nh_->subscribe("parsed_tx/steer_rpt", 5, &SSCInterfaceWrapper::steer_cb, this);
     brake_sub_ = nh_->subscribe("parsed_tx/brake_rpt", 5, &SSCInterfaceWrapper::brake_cb, this);
     shift_sub_ = nh_->subscribe("parsed_tx/shift_rpt", 5, &SSCInterfaceWrapper::shift_cb, this);
+    hazard_light_sub_ = nh_->subscribe("hazard_light_status", 5, &SSCInterfaceWrapper::hazard_light_cb, this);
 
     // Initialize all publishers
     steering_wheel_angle_pub_ = nh_->advertise<std_msgs::Float64>("can/steering_wheel_angle", 1);
@@ -38,6 +39,7 @@ void SSCInterfaceWrapper::initialize() {
     transmission_pub_ = nh_->advertise<j2735_msgs::TransmissionState>("can/transmission_state", 1);
     robot_status_pub_   = nh_->advertise<cav_msgs::RobotEnabled>("controller/robot_status", 1);
     vehicle_engage_pub_ = nh_->advertise<std_msgs::Bool>("vehicle/engage", 5);
+    hazard_light_cmd_pub_ = nh_->advertise<pacmod_msgs::SystemCmdBool>("as_rx/hazard_lights", 5);
     
     // initialize services
     enable_robotic_control_srv_ = nh_->advertiseService("controller/enable_robotic", &SSCInterfaceWrapper::enable_robotic_control_cb, this);
@@ -76,6 +78,22 @@ void SSCInterfaceWrapper::reengage_robotic_control()
         vehicle_engage_pub_.publish(engage_cmd);
         reengage_state_ = false;
     }
+}
+
+void SSCInterfaceWrapper::hazard_light_cb(const std_msgs::Bool& status)
+{
+    pacmod_msgs::SystemCmdBool cmd;
+    if (status.data == true)
+    {   
+        cmd.enable = true;
+        cmd.command = true;
+    }
+    else
+    {
+        cmd.enable = false;
+        cmd.command = false;
+    }
+    hazard_light_cmd_pub_.publish(cmd);
 }
 
 void SSCInterfaceWrapper::publish_robot_status()
