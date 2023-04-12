@@ -6,7 +6,7 @@ jobs:
     defaults:
       run:
         working-directory: "/opt/carma/"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-8-cores
     container:
       image: usdotfhwastoldev/autoware.ai:develop
       env:
