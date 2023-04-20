@@ -12,7 +12,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-FROM usdotfhwastoldev/autoware.ai:develop AS base_image
+FROM usdotfhwastolcandidate/autoware.ai:k900 AS base_image
 
 FROM base_image as source-code
 
