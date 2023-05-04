@@ -28,6 +28,7 @@
     <remap from="parsed_tx/steer_rpt" to="pacmod/parsed_tx/steer_rpt"/>
     <remap from="parsed_tx/brake_rpt" to="pacmod/parsed_tx/brake_rpt"/>
     <remap from="parsed_tx/shift_rpt" to="pacmod/parsed_tx/shift_rpt"/>
+    <remap from="as_rx/hazard_lights" to="pacmod/as_rx/hazard_lights_cmd"/>
     <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
   </group>
   <!-- Launch Wrapped Nodes -->

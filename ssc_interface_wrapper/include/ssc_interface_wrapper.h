@@ -23,8 +23,10 @@
 #include <j2735_msgs/TransmissionState.h>
 #include <pacmod_msgs/SystemRptFloat.h>
 #include <pacmod_msgs/SystemRptInt.h>
+#include <pacmod_msgs/SystemCmdBool.h>
 #include <automotive_navigation_msgs/ModuleState.h>
 #include "ssc_interface_wrapper_worker.h"
+
 
 class SSCInterfaceWrapper : public cav::DriverWrapper
 {
@@ -42,11 +44,13 @@ private:
     ros::Subscriber steer_sub_;
     ros::Subscriber brake_sub_;
     ros::Subscriber shift_sub_;
+    ros::Subscriber hazard_light_sub_;
 
     // publishers for sending CAN data to CARMA
     ros::Publisher steering_wheel_angle_pub_;
     ros::Publisher brake_position_pub_;
     ros::Publisher transmission_pub_;
+    ros::Publisher hazard_light_cmd_pub_;
 
     // one publisher for SSC Interface node
     ros::Publisher  vehicle_engage_pub_;
@@ -75,6 +79,7 @@ private:
     void steer_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg);
     void brake_cb(const pacmod_msgs::SystemRptFloatConstPtr& msg);
     void shift_cb(const pacmod_msgs::SystemRptIntConstPtr& msg);
+    void hazard_light_cb(const std_msgs::Bool& status);
 
     // process the latest vehicle status message and publish as robot status topic
     void publish_robot_status();
