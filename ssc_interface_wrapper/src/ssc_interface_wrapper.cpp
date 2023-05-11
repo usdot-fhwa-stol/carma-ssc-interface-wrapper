@@ -90,7 +90,7 @@ void SSCInterfaceWrapper::hazard_light_cb(const std_msgs::Bool& status)
     }
     else
     {
-        cmd.enable = true;
+        cmd.enable = false;
         cmd.command = false;
     }
     hazard_light_cmd_pub_.publish(cmd);
