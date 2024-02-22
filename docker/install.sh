@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #  Copyright (C) 2022 LEIDOS.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
-# 
+#
 #  http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -49,13 +49,13 @@ done
 
 # Check if valid arguments are passed
 if [ -z $access_id ];
-    then 
+    then
         echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
         exit 1
 fi
 
 if [ -z $secret_key ];
-    then 
+    then
         echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
         exit 1
 fi
@@ -92,11 +92,10 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     source /opt/autoware.ai/ros/install_ros2/setup.bash
     sudo apt-get update
     sudo apt-get install -y apt-utils
-    sudo apt-get install ros-foxy-pacmod-msgs
     sudo apt-get install ros-foxy-pacmod3-msgs
 
     colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
-    
+
     # Get the exit code from the ROS2 build
     status=$?
 
