@@ -56,6 +56,7 @@ if [[ "$BRANCH" = "develop" ]]; then
 else
       git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch release/lavida
       git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch release/lavida
+fi
 
 if [ $build_ros1_pkgs -eq 1 ]; then
 
