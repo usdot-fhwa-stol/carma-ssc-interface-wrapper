@@ -7,3 +7,6 @@ on:
 jobs:
   docker:
     uses: usdot-fhwa-stol/actions/.github/workflows/docker.yml@fix-dockerhub-action-to-pass-dockerfile-org-and-tag-args
+    secrets:
+        ACCESS_ID: ${{ secrets.ACCESS_ID }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
