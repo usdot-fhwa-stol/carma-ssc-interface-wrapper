@@ -27,8 +27,9 @@ jobs:
   build:
     # Pull docker image from docker hub
     # XTERM used for better catkin_make output
+    # TODO move this worflow to github action to allow dynamic container selection
     docker:
-      - image: usdotfhwastol/autoware.ai:carma-system-4.5.0
+      - image: usdotfhwastoldev/autoware.ai:develop
         user: carma
         environment:
           TERM: xterm # use xterm to get full display output from build

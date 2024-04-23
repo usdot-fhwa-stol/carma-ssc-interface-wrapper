@@ -11,10 +11,12 @@
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #  License for the specific language governing permissions and limitations under
 #  the License.
-
-FROM usdotfhwastol/autoware.ai:carma-system-4.5.0 AS base_image
+ARG DOCKER_ORG=usdotfhwastoldev
+ARG DOCKER_TAG=develop
+FROM ${DOCKER_ORG}/autoware.ai:${DOCKER_TAG} as base_image
 
 FROM base_image as source-code
+ARG GIT_BRANCH=develop
 
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG ACCESS_ID="NULL"
@@ -30,7 +32,7 @@ RUN ~/workspace_ros1/src/docker/checkout.bash -ros1
 COPY --chown=carma . /home/carma/workspace_ros2/src/
 COPY --chown=carma . /home/carma/workspace_ros2/src/
 RUN chmod -R u+x ~/workspace_ros2/src/docker/
-RUN ~/workspace_ros2/src/docker/checkout.bash -ros2
+RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 
 # Install ssc_pm_lexus
 RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
