@@ -27,6 +27,7 @@ jobs:
   build:
     # Pull docker image from docker hub
     # XTERM used for better catkin_make output
+    # TODO (CAR-6024) move this worflow to github action to allow dynamic container selection
     docker:
       - image: usdotfhwastoldev/autoware.ai:develop
         user: carma
