@@ -37,14 +37,14 @@ while [[ $# -gt 0 ]]; do
                   shift
             ;;
             -ros1|--ros1_build)
-                  dir_ros1=$dir/ros1_workspace
-                  echo "Checkout ros1 dependencies"
+                  dir_ros1=$dir/$2
+                  echo "Checkout ros1 dependencies to specified folder"
                   build_ros1_pkgs="$true"
                   shift
             ;;
             -ros2|--ros2_build)
-                  dir_ros2=$dir/ros2_workspace
-                  echo "Checkout ros2 dependencies"
+                  dir_ros2=$dir/$2
+                  echo "Checkout ros2 dependencies to specified folder"
                   build_ros2_pkgs="$true"
                   shift
             ;;
@@ -52,11 +52,17 @@ while [[ $# -gt 0 ]]; do
       esac
 done
 
-# Shared dependency among ROS1 and ROS2
-cd ${dir}
-git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/shared_deps/CARMAMsgs --branch $BRANCH
-git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/shared_deps/CARMAUtils --branch arc-146-remove-ros1
 
+cd ${dir}
+
+# Clone the shared dependency only if it's not already present
+if [ ! -d "${dir}/shared_deps/CARMAMsgs" ]; then
+  git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/shared_deps/CARMAMsgs --branch $BRANCH
+fi
+
+if [ ! -d "${dir}/shared_deps/CARMAUtils" ]; then
+  git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/shared_deps/CARMAMsgs --branch arc-146-remove-ros1
+fi
 
 if [ $build_ros1_pkgs -eq 1 ]; then
     mkdir -p  ${dir_ros1}/src/
