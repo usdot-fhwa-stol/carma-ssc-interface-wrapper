@@ -37,13 +37,13 @@ while [[ $# -gt 0 ]]; do
                   shift
             ;;
             -ros1|--ros1_build)
-                  dir_ros1=$dir/ros1_deps
+                  dir_ros1=$dir/ros1_workspace
                   echo "Checkout ros1 dependencies"
                   build_ros1_pkgs="$true"
                   shift
             ;;
             -ros2|--ros2_build)
-                  dir_ros2=$dir/ros2_deps
+                  dir_ros2=$dir/ros2_workspace
                   echo "Checkout ros2 dependencies"
                   build_ros2_pkgs="$true"
                   shift
@@ -54,14 +54,15 @@ done
 
 # Shared dependency among ROS1 and ROS2
 cd ${dir}
-git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
-git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch arc-146-remove-ros1
+git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/shared_deps/CARMAMsgs --branch $BRANCH
+git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/shared_deps/CARMAUtils --branch arc-146-remove-ros1
 
 
 if [ $build_ros1_pkgs -eq 1 ]; then
+    mkdir -p  ${dir_ros1}/src/
     # symlink the shared dependency
-    ln -sf ${dir}/src/CARMAMsgs ${dir_ros1}/src/CARMAMsgs
-    ln -sf ${dir}/src/CARMAUtils ${dir_ros1}/src/CARMAUtils
+    ln -sf ${dir}/shared_deps/CARMAMsgs ${dir_ros1}/src/
+    ln -sf ${dir}/shared_deps/CARMAUtils ${dir_ros1}/src/
 
     # Required to build the dbw_pacifica_msgs message set.
     sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir_ros1}/src/raptor-dbw-ros --branch master
@@ -85,8 +86,9 @@ fi
 
 if [ $build_ros2_pkgs -eq 1 ]; then
     # symlink the shared dependency
-    ln -sf ${dir}/src/CARMAMsgs ${dir_ros2}/src/CARMAMsgs
-    ln -sf ${dir}/src/CARMAUtils ${dir_ros2}/src/CARMAUtils
+    mkdir -p  ${dir_ros2}/src/
+    ln -sf ${dir}/shared_deps/CARMAMsgs ${dir_ros2}/src/
+    ln -sf ${dir}/shared_deps/CARMAUtils ${dir_ros2}/src/
 
     sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy
     cd ${dir_ros2}/src/raptor-dbw-ros2
