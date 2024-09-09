@@ -47,6 +47,7 @@ while [[ $# -gt 0 ]]; do
                   build_ros2_pkgs="$true"
                   shift
             ;;
+
       esac
 done
 
@@ -75,8 +76,9 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     cd ${dir}/src/kvaser_interface
     sudo git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
     cd ${dir}
+fi
 
-elif [ $build_ros2_pkgs -eq 1 ]; then
+if [ $build_ros2_pkgs -eq 1 ]; then
     sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy
     cd ${dir}/src/raptor-dbw-ros2
     sudo git reset --hard 4ad958dd07bb9c7128dc75bc7397bc8f5be30a3c
