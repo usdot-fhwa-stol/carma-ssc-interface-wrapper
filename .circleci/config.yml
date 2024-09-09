@@ -55,6 +55,7 @@ jobs:
           name: Build Driver
           command: |
             source ${INIT_ENV}
+            sudo apt-get update
             sudo apt-get install -y apt-utils
             sudo apt-get install ros-noetic-pacmod-msgs
             sudo apt-get install python3-catkin-pkg
