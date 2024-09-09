@@ -55,6 +55,9 @@ jobs:
           name: Build Driver
           command: |
             source ${INIT_ENV}
+            sudo apt-get install -y apt-utils
+            sudo apt-get install ros-noetic-pacmod-msgs
+            sudo apt-get install python3-catkin-pkg
             export ROS_PARALLEL_JOBS='-j1 -l1'
             build-wrapper-linux-x86-64 --out-dir ${PWD}/bw-output bash make_with_coverage.bash -m -e ${PWD}/workspace_ros1 -o ./coverage_reports/gcov
       - run:
