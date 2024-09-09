@@ -63,7 +63,7 @@ if [ ! -d "${dir}/shared_deps/CARMAMsgs" ]; then
 fi
 
 if [ ! -d "${dir}/shared_deps/CARMAUtils" ]; then
-  git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/shared_deps/CARMAMsgs --branch arc-146-remove-ros1
+  git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/shared_deps/CARMAUtils --branch arc-146-remove-ros1
 fi
 
 if [ $build_ros1_pkgs -eq 1 ]; then
