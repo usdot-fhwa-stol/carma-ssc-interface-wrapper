@@ -20,24 +20,22 @@ declare -i false=0 true=1
 # These tokens are required to run the script
 access_id=""
 secret_key=""
-ws_dir=""
+
 while [[ $# -gt 0 ]]; do
       arg="$1"
       case $arg in
             -ros1|--ros1_build)
-                  ws_dir=$2
+                  dir=~/workspace_ros1
                   echo "Install and build ros1 packages"
                   build_ros1_pkgs="$true"
                   build_ros2_pkgs="$false"
                   shift
-                  shift
                 ;;
             -ros2|--ros2_build)
-                  ws_dir=$2
+                  dir=~/workspace_ros2
                   echo "Install and build ros2 packages"
                   build_ros1_pkgs="$false"
                   build_ros2_pkgs="$true"
-                  shift
                   shift
                 ;;
             *) ##Arguments for ssc_pm_lexus
@@ -64,7 +62,7 @@ fi
 
 if [ $build_ros1_pkgs -eq 1 ]; then
     # ROS1 build and install
-    cd ${ws_dir}
+    cd ~/workspace_ros1
     echo "ROS1 build"
     source /home/carma/catkin/setup.bash
     source /opt/autoware.ai/ros/install/setup.bash
@@ -90,7 +88,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
 elif [ $build_ros2_pkgs -eq 1 ]; then
 
-    cd ${ws_dir}
+    cd ~/workspace_ros2
     source /opt/autoware.ai/ros/install_ros2/setup.bash
     sudo apt-get update
     sudo apt-get install -y apt-utils
