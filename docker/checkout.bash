@@ -52,12 +52,16 @@ while [[ $# -gt 0 ]]; do
       esac
 done
 
+# Shared dependency among ROS1 and ROS2
 cd ${dir}
 git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
 git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch arc-146-remove-ros1
 
 
 if [ $build_ros1_pkgs -eq 1 ]; then
+    # symlink the shared dependency
+    ln -sf ${dir}/src/CARMAMsgs ${dir_ros1}/src/CARMAMsgs
+    ln -sf ${dir}/src/CARMAUtils ${dir_ros1}/src/CARMAUtils
 
     # Required to build the dbw_pacifica_msgs message set.
     sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir_ros1}/src/raptor-dbw-ros --branch master
@@ -80,6 +84,10 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 fi
 
 if [ $build_ros2_pkgs -eq 1 ]; then
+    # symlink the shared dependency
+    ln -sf ${dir}/src/CARMAMsgs ${dir_ros2}/src/CARMAMsgs
+    ln -sf ${dir}/src/CARMAUtils ${dir_ros2}/src/CARMAUtils
+
     sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy
     cd ${dir_ros2}/src/raptor-dbw-ros2
     sudo git reset --hard 4ad958dd07bb9c7128dc75bc7397bc8f5be30a3c
