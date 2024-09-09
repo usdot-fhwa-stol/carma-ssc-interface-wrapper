@@ -22,24 +22,28 @@ ARG GIT_BRANCH=develop
 ARG ACCESS_ID="NULL"
 ARG SECRET_KEY="NULL"
 
-# ROS1 checkout deps
-RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
-COPY --chown=carma . /home/carma/workspace_ros1/src/
-RUN chmod -R u+x ~/workspace_ros1/src/docker/
-RUN ~/workspace_ros1/src/docker/checkout.bash -ros1 workspace_ros1
+# Setup
+ARG WS_ROS1_DIR=/home/carma/workspace_ros1
+ARG WS_ROS2_DIR=/home/carma/workspace_ros2
+ARG ROOT_DIR=/home/carma/
+
+RUN mkdir -p ${WS_ROS1_DIR}/src ${WS_ROS2_DIR}/src
+
+COPY --chown=carma . ${WS_ROS1_DIR}/src/
+RUN chmod -R u+x ${WS_ROS1_DIR}/src/docker/
+RUN ${WS_ROS1_DIR}/src/docker/checkout.bash -p ${ROOT_DIR} -ros1 ${WS_ROS1_DIR}
 
 # ROS2 checkout deps
-COPY --chown=carma . /home/carma/workspace_ros2/src/
-COPY --chown=carma . /home/carma/workspace_ros2/src/
-RUN chmod -R u+x ~/workspace_ros2/src/docker/
-RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 workspace_ros2 -b ${GIT_BRANCH}
+COPY --chown=carma . ${WS_ROS2_DIR}/src/
+RUN chmod -R u+x ${WS_ROS2_DIR}/src/docker/
+RUN ${WS_ROS2_DIR}/src/docker/checkout.bash -p ${ROOT_DIR} -ros2 ${WS_ROS2_DIR} -b ${GIT_BRANCH}
 
 # Install ssc_pm_lexus
-RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+RUN ${WS_ROS1_DIR}/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
 # Build ros1 pkgs
-RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+RUN ${WS_ROS1_DIR}/src/docker/install.sh -ros1 ${WS_ROS1_DIR} ${ACCESS_ID} ${SECRET_KEY}
 #Build ros2 pkgs
-RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+RUN ${WS_ROS2_DIR}/src/docker/install.sh -ros2 ${WS_ROS2_DIR} ${ACCESS_ID} ${SECRET_KEY}
 
 FROM base_image
 

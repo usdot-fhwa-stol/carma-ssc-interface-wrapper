@@ -37,13 +37,13 @@ while [[ $# -gt 0 ]]; do
                   shift
             ;;
             -ros1|--ros1_build)
-                  dir_ros1=$dir/$2
+                  dir_ros1=$2
                   echo "Checkout ros1 dependencies to specified folder"
                   build_ros1_pkgs="$true"
                   shift
             ;;
             -ros2|--ros2_build)
-                  dir_ros2=$dir/$2
+                  dir_ros2=$2
                   echo "Checkout ros2 dependencies to specified folder"
                   build_ros2_pkgs="$true"
                   shift
