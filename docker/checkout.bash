@@ -22,7 +22,7 @@ declare -i false=0 true=1
 BRANCH=develop
 build_ros1_pkgs="$false"
 build_ros2_pkgs="$false"
-dir=~/
+dir=~
 while [[ $# -gt 0 ]]; do
       arg="$1"
       case $arg in
