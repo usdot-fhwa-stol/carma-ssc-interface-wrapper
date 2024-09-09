@@ -30,12 +30,14 @@ while [[ $# -gt 0 ]]; do
                   build_ros1_pkgs="$true"
                   build_ros2_pkgs="$false"
                   shift
+                  shift
                 ;;
             -ros2|--ros2_build)
                   ws_dir=$2
                   echo "Install and build ros2 packages"
                   build_ros1_pkgs="$false"
                   build_ros2_pkgs="$true"
+                  shift
                   shift
                 ;;
             *) ##Arguments for ssc_pm_lexus
