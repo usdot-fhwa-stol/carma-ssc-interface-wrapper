@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #  Copyright (C) 2022 LEIDOS.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
-# 
+#
 #  http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -52,13 +52,13 @@ done
 
 cd ${dir}
 git clone https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
-git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch $BRANCH
+git clone https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch arc-146-remove-ros1
 
 
 if [ $build_ros1_pkgs -eq 1 ]; then
 
     # Required to build the dbw_pacifica_msgs message set.
-    sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master 
+    sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros.git ${dir}/src/raptor-dbw-ros --branch master
     cd ${dir}/src/raptor-dbw-ros
     sudo git reset --hard f50f91cd88ad27b2ce05bab1f8ff780931c41475
     cd ${dir}
@@ -77,7 +77,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     cd ${dir}
 
 elif [ $build_ros2_pkgs -eq 1 ]; then
-    sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy 
+    sudo git clone https://github.com/NewEagleRaptor/raptor-dbw-ros2.git ./src/raptor-dbw-ros2 --branch foxy
     cd ${dir}/src/raptor-dbw-ros2
     sudo git reset --hard 4ad958dd07bb9c7128dc75bc7397bc8f5be30a3c
     cd ${dir}
@@ -100,9 +100,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
 
     # Install automotive_autonomy_msgs
     sudo git clone https://github.com/astuff/automotive_autonomy_msgs.git ${dir}/src/automotive_autonomy_msgs --branch master
-    cd ./src/automotive_autonomy_msgs 
+    cd ./src/automotive_autonomy_msgs
     sudo git reset --hard 191dce1827023bef6d69b31e8c2514cf82bf10c5
     cd ${dir}
 fi
-
-
