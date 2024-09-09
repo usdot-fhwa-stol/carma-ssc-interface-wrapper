@@ -31,12 +31,12 @@ RUN mkdir -p ${WS_ROS1_DIR}/src ${WS_ROS2_DIR}/src
 
 COPY --chown=carma . ${WS_ROS1_DIR}/src/
 RUN chmod -R u+x ${WS_ROS1_DIR}/src/docker/
-RUN ${WS_ROS1_DIR}/src/docker/checkout.bash -p ${ROOT_DIR} -ros1 ${WS_ROS1_DIR}
+RUN ${WS_ROS1_DIR}/src/docker/checkout.bash -r ${ROOT_DIR} -ros1 ${WS_ROS1_DIR}
 
 # ROS2 checkout deps
 COPY --chown=carma . ${WS_ROS2_DIR}/src/
 RUN chmod -R u+x ${WS_ROS2_DIR}/src/docker/
-RUN ${WS_ROS2_DIR}/src/docker/checkout.bash -p ${ROOT_DIR} -ros2 ${WS_ROS2_DIR} -b ${GIT_BRANCH}
+RUN ${WS_ROS2_DIR}/src/docker/checkout.bash -r ${ROOT_DIR} -ros2 ${WS_ROS2_DIR} -b ${GIT_BRANCH}
 
 # Install ssc_pm_lexus
 RUN ${WS_ROS1_DIR}/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
