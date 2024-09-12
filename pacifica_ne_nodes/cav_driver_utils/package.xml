@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format = "3">
+  <name>cav_driver_utils</name>
+  <version>1.0.6</version>
+  <description>Common CAV Platform driver utilities</description>
+  <maintainer email="support@torcrobotics.com">Torc Robotics</maintainer>
+  <license>BSD</license>
+  <author email="watters@torcrobotics.com">Thomas Watters</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>carma_cmake_common</build_depend>
+
+  <depend>bondcpp</depend>
+  <depend>cav_msgs</depend>
+  <depend>cav_srvs</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>can_msgs</depend>
+
+
+
+
+  <export>
+  </export>
+</package>

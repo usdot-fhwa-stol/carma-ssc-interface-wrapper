@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>socketcan_interface</name>
+  <version>1.3.0</version>
+  <description>This package contains a generic CAN interface description with helpers for filtering and driver implementation. Further a socketcan implementation based on boost::asio is included.</description>
+  <maintainer email="mathias.luedtke@ipa.fraunhofer.de">Mathias Lüdtke</maintainer>
+  <license>LGPLv3</license>
+  <url type="website">http://wiki.ros.org/socketcan_interface</url>
+  <url type="repository">https://github.com/ros-industrial/ros_canopen</url>
+  <url type="bugtracker">https://github.com/ros-industrial/ros_canopen/issues</url>
+  <author email="mathias.luedtke@ipa.fraunhofer.de">Mathias Lüdtke</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>carma_cmake_common</build_depend>
+
+  <depend>boost</depend>
+  <depend>class_loader</depend> 
+  <depend>linux-kernel-headers</depend>
+
+  <test_depend>rosunit</test_depend>
+
+  <export>
+    <socketcan_interface plugin="${prefix}/socketcan_interface_plugin.xml" />
+  </export>
+</package>
