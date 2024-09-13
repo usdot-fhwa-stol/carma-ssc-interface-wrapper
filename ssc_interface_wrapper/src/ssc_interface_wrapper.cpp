@@ -36,7 +36,7 @@ void SSCInterfaceWrapper::initialize() {
     // Initialize all publishers
     steering_wheel_angle_pub_ = nh_->advertise<std_msgs::Float64>("can/steering_wheel_angle", 1);
     brake_position_pub_ = nh_->advertise<std_msgs::Float64>("can/brake_position", 1);
-    transmission_pub_ = nh_->advertise<j2735_msgs::TransmissionState>("can/transmission_state", 1);
+    transmission_pub_ = nh_->advertise<j2735_v2x_msgs::TransmissionState>("can/transmission_state", 1);
     robot_status_pub_   = nh_->advertise<cav_msgs::RobotEnabled>("controller/robot_status", 1);
     vehicle_engage_pub_ = nh_->advertise<std_msgs::Bool>("vehicle/engage", 5);
     hazard_light_cmd_pub_ = nh_->advertise<pacmod_msgs::SystemCmdBool>("as_rx/hazard_lights", 5);
@@ -154,7 +154,7 @@ void SSCInterfaceWrapper::brake_cb(const pacmod_msgs::SystemRptFloatConstPtr& ms
 
 void SSCInterfaceWrapper::shift_cb(const pacmod_msgs::SystemRptIntConstPtr& msg)
 {
-    j2735_msgs::TransmissionState transmission_msg;
+    j2735_v2x_msgs::TransmissionState transmission_msg;
     transmission_msg.transmission_state = worker_.convert_shift_state_to_J2735(msg);
     transmission_pub_.publish(transmission_msg);
 }
