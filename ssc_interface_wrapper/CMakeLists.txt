@@ -31,7 +31,7 @@ find_package(catkin REQUIRED COMPONENTS
   autoware_msgs
   can_msgs  
   pacmod_msgs
-  j2735_msgs
+  j2735_v2x_msgs
   roscpp
   automotive_navigation_msgs
 )
@@ -54,7 +54,7 @@ catkin_package(
         autoware_msgs
         can_msgs  
         pacmod_msgs
-        j2735_msgs
+        j2735_v2x_msgs
         roscpp
         automotive_navigation_msgs
 )

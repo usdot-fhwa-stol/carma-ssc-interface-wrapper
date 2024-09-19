@@ -53,15 +53,15 @@ int SSCInterfaceWrapperWorker::convert_shift_state_to_J2735(const pacmod_msgs::S
 	switch(shift_state -> output)
 	{
 	case pacmod_msgs::SystemRptInt::SHIFT_PARK:
-		return j2735_msgs::TransmissionState::PARK;
+		return j2735_v2x_msgs::TransmissionState::PARK;
 	case pacmod_msgs::SystemRptInt::SHIFT_REVERSE:
-		return j2735_msgs::TransmissionState::REVERSEGEARS;
+		return j2735_v2x_msgs::TransmissionState::REVERSEGEARS;
 	case pacmod_msgs::SystemRptInt::SHIFT_NEUTRAL:
-		return j2735_msgs::TransmissionState::NEUTRAL;
+		return j2735_v2x_msgs::TransmissionState::NEUTRAL;
 	case pacmod_msgs::SystemRptInt::SHIFT_FORWARD:
-		return j2735_msgs::TransmissionState::FORWARDGEARS;
+		return j2735_v2x_msgs::TransmissionState::FORWARDGEARS;
 	default:
-		return j2735_msgs::TransmissionState::UNAVAILABLE;
+		return j2735_v2x_msgs::TransmissionState::UNAVAILABLE;
 	}
 }
 

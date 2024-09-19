@@ -12,7 +12,7 @@
   <depend>can_msgs</depend>
   <depend>cav_driver_utils</depend>
   <depend>cav_msgs</depend>
-  <depend>j2735_msgs</depend>
+  <depend>j2735_v2x_msgs</depend>
   <depend>cav_srvs</depend>
   <depend>autoware_msgs</depend>
   <depend>automotive_navigation_msgs</depend>
