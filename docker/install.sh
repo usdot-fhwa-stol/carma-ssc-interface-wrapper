@@ -108,6 +108,8 @@ fi
 
 cd ~
 source /opt/autoware.ai/ros/install_ros2/setup.bash
+sudo apt-get update
+sudo apt-get -qq install apt-transport-s3
 
 sudo sh -c 'echo "AccessKeyId = '$access_id'" > /etc/apt/s3auth.conf'
 sudo sh -c 'echo "SecretAccessKey = '$secret_key'" >> /etc/apt/s3auth.conf'
