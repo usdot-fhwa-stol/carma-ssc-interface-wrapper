@@ -12,7 +12,7 @@ The primary CARMA Platform repository can be found [here](https://github.com/usd
 github organization. Documentation on how the CARMA Platform functions, how it will evolve over time, and how you can contribute can be found at the above links as well.
 
 ## Current Status of ROS 1 and ROS 2 Packages
-The current CARMA Platform system operates as a hybrid of ROS 1 Noetic and ROS 2 Foxy components. While nearly all components have been upgraded to ROS 2 Foxy, a small amount of ROS 1 Noetic content still exists within the system, including some packages in this repository. For more information, please see the relevant documentation in the [carma-config](https://github.com/usdot-fhwa-stol/carma-config?tab=readme-ov-file#current-status-of-hybrid-ros-1ros-2-system) repository.
+The current CARMA Platform system operates as a hybrid of ROS 1 Noetic and ROS 2 Humble components. While nearly all components have been upgraded to ROS 2 Humble, a small amount of ROS 1 Noetic content still exists within the system, including some packages in this repository. For more information, please see the relevant documentation in the [carma-config](https://github.com/usdot-fhwa-stol/carma-config?tab=readme-ov-file#current-status-of-hybrid-ros-1ros-2-system) repository.
 
 ## Contribution
 Welcome to the CARMA contributing guide. Please read this guide to learn about our development process, how to propose pull requests and improvements, and how to build and test your changes to this project. [CARMA Contributing Guide](https://github.com/usdot-fhwa-stol/carma-platform/blob/develop/Contributing.md)

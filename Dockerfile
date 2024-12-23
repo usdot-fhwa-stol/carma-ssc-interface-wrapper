@@ -12,11 +12,11 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 ARG DOCKER_ORG=usdotfhwastoldev
-ARG DOCKER_TAG=develop
+ARG DOCKER_TAG=develop-humble
 FROM ${DOCKER_ORG}/autoware.ai:${DOCKER_TAG} as base_image
 
 FROM base_image as source-code
-ARG GIT_BRANCH=develop
+ARG GIT_BRANCH=develop-humble
 
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG ACCESS_ID="NULL"
@@ -58,7 +58,7 @@ LABEL org.label-schema.vcs-ref=${VCS_REF}
 LABEL org.label-schema.build-date=${BUILD_DATE}
 
 COPY --from=source-code --chown=carma /opt/carma /opt/carma
-COPY --from=source-code --chown=carma /opt/ros/foxy /opt/ros/foxy
+COPY --from=source-code --chown=carma /opt/ros/humble /opt/ros/humble
 
 # Default launch ros1 verion
 CMD [ "wait-for-it.sh", "localhost:11311", "--", "roslaunch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch"]

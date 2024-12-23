@@ -118,4 +118,4 @@ sudo sh -c 'echo "Region = \"us-east-1\"" >> /etc/apt/s3auth.conf'
 
 sudo sh -c 'echo "deb [trusted=yes] s3://autonomoustuff-ssc $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-ssc.list'
 sudo apt-get update
-sudo apt-get -y install ros-foxy-ssc-pm-lexus ros-foxy-ssc-joystick && exit 0 || echo "Installation failed for ssc_pm_lexus check access_key and secret_id" && exit 1
+sudo apt-get -y install ros-humble-ssc-pm-lexus ros-humble-ssc-joystick && exit 0 || echo "Installation failed for ssc_pm_lexus check access_key and secret_id" && exit 1
