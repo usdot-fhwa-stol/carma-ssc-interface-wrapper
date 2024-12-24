@@ -22,11 +22,11 @@ ARG GIT_BRANCH=develop-humble
 ARG ACCESS_ID="NULL"
 ARG SECRET_KEY="NULL"
 
-# ROS1 checkout deps
-RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
-COPY --chown=carma . /home/carma/workspace_ros1/src/
-RUN chmod -R u+x ~/workspace_ros1/src/docker/
-RUN ~/workspace_ros1/src/docker/checkout.bash -ros1
+# # ROS1 checkout deps
+# RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
+# COPY --chown=carma . /home/carma/workspace_ros1/src/
+# RUN chmod -R u+x ~/workspace_ros1/src/docker/
+# RUN ~/workspace_ros1/src/docker/checkout.bash -ros1
 
 # ROS2 checkout deps
 COPY --chown=carma . /home/carma/workspace_ros2/src/
@@ -36,8 +36,8 @@ RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 
 # Install ssc_pm_lexus
 RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
-# Build ros1 pkgs
-RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+# # Build ros1 pkgs
+# RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
 #Build ros2 pkgs
 RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
 
@@ -60,5 +60,5 @@ LABEL org.label-schema.build-date=${BUILD_DATE}
 COPY --from=source-code --chown=carma /opt/carma /opt/carma
 COPY --from=source-code --chown=carma /opt/ros/humble /opt/ros/humble
 
-# Default launch ros1 verion
-CMD [ "wait-for-it.sh", "localhost:11311", "--", "roslaunch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch"]
+# Default launch ros2 verion
+CMD [ "ros2 launch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch.py"]
