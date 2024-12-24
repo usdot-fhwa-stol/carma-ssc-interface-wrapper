@@ -117,6 +117,7 @@ sudo sh -c 'echo "Token = \"\"" >> /etc/apt/s3auth.conf'
 sudo sh -c 'echo "Region = \"us-east-1\"" >> /etc/apt/s3auth.conf'
 
 sudo sh -c 'echo "deb [trusted=yes] s3://autonomoustuff-ssc $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-ssc.list'
+sudo apt list | grep "autonomoustuff-ssc"
 sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
 sudo apt-get update
-sudo apt-get -y install ros-humble-ssc-pm-lexus ros-humble-ssc-joystick && exit 0 || echo "Installation failed for ssc_pm_lexus check access_key and secret_id" && exit 1
+sudo apt-get -y install ros-humble-ssc-pm-gem && exit 0 || echo "Installation failed for ssc_pm_lexus check access_key and secret_id" && exit 1
