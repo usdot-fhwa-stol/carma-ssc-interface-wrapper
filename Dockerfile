@@ -35,7 +35,7 @@ RUN chmod -R u+x ~/workspace_ros2/src/docker/
 RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 
 # Install ssc_pm_lexus
-RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+# RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
 # # Build ros1 pkgs
 # RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
 #Build ros2 pkgs
