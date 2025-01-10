@@ -56,7 +56,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     cd ~/workspace_ros1
     echo "ROS1 build"
     source /home/carma/catkin/setup.bash
-    #source /opt/autoware.ai/ros/install/setup.bash
+    source /opt/autoware.ai/ros/install/setup.bash
     sudo apt-get install -y apt-utils
 
     rosdep install --from-paths src --ignore-src -r -y
@@ -78,13 +78,37 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     exit #Success building ros1 pkgs
 
 elif [ $build_ros2_pkgs -eq 1 ]; then
-
-    cd ~/workspace_ros2
+    cd ~
     source /opt/autoware.ai/ros/install/setup.bash
-    sudo apt-get update
-    sudo apt-get install -y apt-utils
+    git clone https://$token@github.com/usdot-fhwa-stol/CARMASensitive.git --branch arc-199-humble-lexus-ssc-deb-files
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install --cmake-args -DCMAKE_BUILD_TYPE=Release
+    sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+    sudo apt-add-repository ppa:astuff/kvaser-linux
+    sudo apt-get update
+
+    # Prerequisite for kvaser-interface
+    sudo apt install kvaser-canlib-dev kvaser-drivers-dkms
+
+    # Install necessary dependencies for ssc-pm-lexus
+    sudo apt-get install -y libas-common \
+        ros-humble-automotive-autonomy-msgs \
+        ros-humble-automotive-navigation-msgs \
+        ros-humble-automotive-platform-msgs \
+        ros-humble-pacmod3-msgs \
+        ros-humble-pacmod3 \
+        ros-humble-kvaser-interface \
+        apt-utils
+
+    cd CARMASensitive
+    sudo dpkg -i ros-humble-ssc-joystick_2004.0.0-0jammy_amd64.deb
+    sudo dpkg -i ros-humble-ssc-pm-lexus_1.1.0-0jammy_amd64.deb
+
+    # Build ssc_interface_wrapper_ros2
+    cd ~/workspace_ros2
+    source /opt/ros/humble/setup.bash
+    source /opt/autoware.ai/ros/install/setup.bash
+
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
     # Get the exit code from the ROS2 build
     status=$?
@@ -96,15 +120,3 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
 
     exit #Success building ros2 pkgs
 fi
-
-cd ~
-source /opt/autoware.ai/ros/install/setup.bash
-git clone https://$token@github.com/usdot-fhwa-stol/carmasensitive.git --branch arc-199-humble-lexus-ssc-dev-files
-
-
-sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
-sudo apt-get update
-sudo apt-get install -y libas-common ros-humble-automotive-navigation-msgs ros-humble-automotive-platform-msgs ros-humble-pacmod3-msgs
-cd carmasensitive
-sudo dpkg -i ros-humble-ssc-joystick_2004.0.0-0jammy_amd64.deb
-suddo dpkg -i ros-humble-ssc-pm-lexus_1.1.0-0jammy_amd64.deb

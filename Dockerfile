@@ -19,7 +19,7 @@ FROM base_image as source-code
 ARG GIT_BRANCH=develop-humble
 
 # Install astuff ros2 ssc_pm using tokens as arguments
-ARG ACCESS_ID="NULL"
+ARG ACCESS_TOKEN="NULL"
 
 # # ROS1 checkout deps
 # RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
@@ -34,11 +34,11 @@ RUN chmod -R u+x ~/workspace_ros2/src/docker/
 RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 
 # Install ssc_pm_lexus
-# RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+# RUN ~/workspace_ros1/src/docker/install.sh ${ACCESS_TOKEN} ${SECRET_KEY}
 # # Build ros1 pkgs
-# RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+# RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_TOKEN} ${SECRET_KEY}
 #Build ros2 pkgs
-RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID}
+RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_TOKEN}
 
 FROM base_image
 

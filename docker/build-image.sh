@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #  Copyright (C) 2018-2022 LEIDOS.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
-# 
+#
 #  http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -45,8 +45,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *) ##Arguments for ssc_pm_lexus
-            access_id=${arg}
-            secret_key="$2"
+            access_token="$1"
             shift
             shift
             ;;
@@ -61,34 +60,26 @@ echo "Building docker image for $IMAGE version: $COMPONENT_VERSION_STRING"
 echo "Final image name: $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING"
 
 # Get arguments for ssc_pm_lexus
-if [ -z $access_id ];
-    then 
-        echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
-        exit 1
-fi
-
-if [ -z $secret_key ];
-    then 
-        echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
+if [ -z $access_token ];
+    then
+        echo "No argument provided for access_token, this script needs to be run with <ACCESS_TOKEN>"
         exit 1
 fi
 
 cd ..
 if [[ $COMPONENT_VERSION_STRING = "develop" ]]; then
     sed "s|usdotfhwastoldev/|$USERNAME/|g; s|usdotfhwastolcandidate/|$USERNAME/|g; s|usdotfhwastol/|$USERNAME/|g; s|:[0-9]*\.[0-9]*\.[0-9]*|:$COMPONENT_VERSION_STRING|g; s|checkout.bash|checkout.bash -d|g" \
-        Dockerfile | docker build --network=host -f - --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
+        Dockerfile | docker build --progress=plain --network=host -f - --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-        --build-arg ACCESS_ID=$access_id \
-        --build-arg SECRET_KEY=$secret_key .
+        --build-arg ACCESS_TOKEN=$access_token .
 else
-    docker build --network=host --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
+    docker build --network=host --progress=plain --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-        --build-arg ACCESS_ID=$access_id \
-        --build-arg SECRET_KEY=$secret_key .
+        --build-arg ACCESS_TOKEN=$access_token .
 fi
 
 TAGS=()
