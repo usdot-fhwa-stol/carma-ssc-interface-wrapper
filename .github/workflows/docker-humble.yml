@@ -10,4 +10,4 @@ jobs:
     with:
       file: ./humble/Dockerfile
     secrets:
-        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+      ACCESS_TOKEN: ${{ secrets.GH_PAT }}
