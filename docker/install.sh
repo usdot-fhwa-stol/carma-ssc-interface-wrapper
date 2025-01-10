@@ -116,6 +116,8 @@ sudo sh -c 'echo "SecretAccessKey = '$secret_key'" >> /etc/apt/s3auth.conf'
 sudo sh -c 'echo "Token = \"\"" >> /etc/apt/s3auth.conf'
 sudo sh -c 'echo "Region = \"us-east-1\"" >> /etc/apt/s3auth.conf'
 
+sudo echo /etc/apt/s3auth.con
+
 sudo sh -c 'echo "deb [trusted=yes] s3://autonomoustuff-ssc $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-ssc.list'
 sudo apt list | grep "autonomoustuff-ssc"
 sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
