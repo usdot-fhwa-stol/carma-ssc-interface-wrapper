@@ -1,2 +1,0 @@
-# AutonomouStuff SSC for Lexus RX 450h with PacMod3 Controller
-The package.xml and contents of bin/ and msg/ directories in this package were created by AutonomouStuff and are Closed Source. Permission has been granted by AutonomouStuff to Leidos to post the binaries here for convenience of use. However, a separate license file is required by users to use or run any of the executables in this package. 

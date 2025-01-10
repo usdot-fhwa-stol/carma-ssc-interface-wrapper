@@ -23,7 +23,7 @@ RUN mkdir -p ~/workspace_ros1/src
 RUN echo "Running directory"
 
 COPY --chown=carma . /home/carma/workspace_ros1/src/
-RUN cd /home/carma/workspace_ros1/src/ && ls -la
+RUN ls -la
 RUN chmod -R u+x ~/workspace_ros1/src/docker/
 RUN ~/workspace_ros1/src/docker/checkout.bash -ros1
 

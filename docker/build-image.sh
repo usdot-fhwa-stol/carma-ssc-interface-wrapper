@@ -13,6 +13,7 @@
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #  License for the specific language governing permissions and limitations under
 #  the License.
+declare -i false=0 true=1
 
 USERNAME=usdotfhwastol
 
@@ -23,9 +24,28 @@ echo ""
 echo "##### $IMAGE Docker Image Build Script #####"
 echo ""
 
+access_token=""
+build_ros1_pkgs="$false"
+build_ros2_pkgs="$false"
+dockerfile_dir=""
+
 while [[ $# -gt 0 ]]; do
     arg="$1"
     case $arg in
+        -ros1|--ros1_build)
+            dir=~/workspace_ros1
+            echo "Install and build ros1 packages"
+            build_ros1_pkgs="$true"
+            build_ros2_pkgs="$false"
+            shift
+            ;;
+        -ros2|--ros2_build)
+            dir=~/workspace_ros2
+            echo "Install and build ros2 packages"
+            build_ros1_pkgs="$false"
+            build_ros2_pkgs="$true"
+            shift
+            ;;
         -v|--version)
             COMPONENT_VERSION_STRING="$2"
             shift
@@ -47,7 +67,6 @@ while [[ $# -gt 0 ]]; do
         *) ##Arguments for ssc_pm_lexus
             access_token="$1"
             shift
-            shift
             ;;
     esac
 done
@@ -60,26 +79,33 @@ echo "Building docker image for $IMAGE version: $COMPONENT_VERSION_STRING"
 echo "Final image name: $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING"
 
 # Get arguments for ssc_pm_lexus
-if [ -z $access_token ];
-    then
-        echo "No argument provided for access_token, this script needs to be run with <ACCESS_TOKEN>"
+
+
+if [[ $build_ros1_pkgs -eq 1 ]]; then
+    cd ../noetic
+    echo "======= ROS1 build selected ========"
+elif [[ $build_ros2_pkgs -eq 1 ]]; then
+    cd ../humble
+    if [ -z $access_token ]; then
+        echo "No argument provided for access_token for ROS2 build, this script needs to be run with <ACCESS_TOKEN>"
         exit 1
+    fi
+    echo "======= ROS2 build selected ========"
 fi
 
-cd ..
 if [[ $COMPONENT_VERSION_STRING = "develop" ]]; then
     sed "s|usdotfhwastoldev/|$USERNAME/|g; s|usdotfhwastolcandidate/|$USERNAME/|g; s|usdotfhwastol/|$USERNAME/|g; s|:[0-9]*\.[0-9]*\.[0-9]*|:$COMPONENT_VERSION_STRING|g; s|checkout.bash|checkout.bash -d|g" \
         Dockerfile | docker build --progress=plain --network=host -f - --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-        --build-arg ACCESS_TOKEN=$access_token .
+        --build-arg ACCESS_TOKEN=$access_token ../
 else
     docker build --network=host --progress=plain --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-        --build-arg ACCESS_TOKEN=$access_token .
+        --build-arg ACCESS_TOKEN=$access_token ../
 fi
 
 TAGS=()

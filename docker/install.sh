@@ -45,18 +45,13 @@ while [[ $# -gt 0 ]]; do
       esac
 done
 
-if [ -z $token ];
-    then
-        echo "No argument provided for token, this script needs to be run with <TOKEN>"
-        exit 1
-fi
-
 if [ $build_ros1_pkgs -eq 1 ]; then
     # ROS1 build and install
     cd ~/workspace_ros1
     echo "ROS1 build"
     source /home/carma/catkin/setup.bash
     source /opt/autoware.ai/ros/install/setup.bash
+    sudo apt-get update
     sudo apt-get install -y apt-utils
 
     rosdep install --from-paths src --ignore-src -r -y
@@ -78,6 +73,12 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     exit #Success building ros1 pkgs
 
 elif [ $build_ros2_pkgs -eq 1 ]; then
+
+    if [ -z $token ];
+        then
+            echo "No argument provided for access_token for ROS2 build, this script needs to be run with <TOKEN>"
+            exit 1
+    fi
     cd ~
     source /opt/autoware.ai/ros/install/setup.bash
     git clone https://$token@github.com/usdot-fhwa-stol/CARMASensitive.git --branch arc-199-humble-lexus-ssc-deb-files
