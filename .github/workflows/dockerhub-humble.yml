@@ -1,4 +1,4 @@
-name: Docker Hub build
+name: Docker Hub Humble build
 
 on:
   push:
@@ -15,5 +15,6 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      ACCESS_ID: ${{ secrets.ACCESS_ID }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+    with:
+      file: ./humble/Dockerfile

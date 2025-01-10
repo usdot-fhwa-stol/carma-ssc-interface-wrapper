@@ -1,12 +1,13 @@
-name: Docker build
+name: Docker Humble build
 
 on:
   pull_request:
       types: [opened, synchronize, reopened]
-      
+
 jobs:
   docker:
     uses: usdot-fhwa-stol/actions/.github/workflows/docker.yml@main
+    with:
+      file: ./humble/Dockerfile
     secrets:
-        ACCESS_ID: ${{ secrets.ACCESS_ID }}
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        ACCESS_TOKEN: ${{ secrets.GH_PAT }}

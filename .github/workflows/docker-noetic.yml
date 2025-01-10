@@ -1,0 +1,11 @@
+name: Docker Noetic build
+
+on:
+  pull_request:
+      types: [opened, synchronize, reopened]
+
+jobs:
+  docker:
+    uses: usdot-fhwa-stol/actions/.github/workflows/docker.yml@main
+    with:
+      file: ./noetic/Dockerfile
