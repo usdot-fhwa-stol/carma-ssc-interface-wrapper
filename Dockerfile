@@ -1,11 +1,11 @@
 #  Copyright (C) 2018-2022 LEIDOS.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
-# 
+#
 #  http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -20,7 +20,6 @@ ARG GIT_BRANCH=develop-humble
 
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG ACCESS_ID="NULL"
-ARG SECRET_KEY="NULL"
 
 # # ROS1 checkout deps
 # RUN mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
@@ -39,7 +38,7 @@ RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 # # Build ros1 pkgs
 # RUN ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
 #Build ros2 pkgs
-RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
+RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID}
 
 FROM base_image
 

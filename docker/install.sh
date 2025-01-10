@@ -18,8 +18,7 @@ declare -i false=0 true=1
 
 # This script installs the ssc_pm_lexus package using the access id and secret key as arguments
 # These tokens are required to run the script
-access_id=""
-secret_key=""
+token=""
 
 while [[ $# -gt 0 ]]; do
       arg="$1"
@@ -39,24 +38,16 @@ while [[ $# -gt 0 ]]; do
                   shift
                 ;;
             *) ##Arguments for ssc_pm_lexus
-                access_id=${arg}
-                secret_key="$2"
+                token="$1"
                 shift
                 shift
                 ;;
       esac
 done
 
-# Check if valid arguments are passed
-if [ -z $access_id ];
+if [ -z $token ];
     then
-        echo "No argument provided for access_id, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
-        exit 1
-fi
-
-if [ -z $secret_key ];
-    then
-        echo "No argument provided for secret_key, this script needs to be run with <ACCESS_ID> <SECRET_KEY>"
+        echo "No argument provided for token, this script needs to be run with <TOKEN>"
         exit 1
 fi
 
@@ -108,18 +99,12 @@ fi
 
 cd ~
 source /opt/autoware.ai/ros/install/setup.bash
-sudo apt-get update
-sudo apt-get -qq install apt-transport-s3
+git clone https://$token@github.com/usdot-fhwa-stol/carmasensitive.git --branch arc-199-humble-lexus-ssc-dev-files
 
-sudo sh -c 'echo "AccessKeyId = '$access_id'" > /etc/apt/s3auth.conf'
-sudo sh -c 'echo "SecretAccessKey = '$secret_key'" >> /etc/apt/s3auth.conf'
-sudo sh -c 'echo "Token = \"\"" >> /etc/apt/s3auth.conf'
-sudo sh -c 'echo "Region = \"us-east-1\"" >> /etc/apt/s3auth.conf'
 
-sudo echo /etc/apt/s3auth.con
-
-sudo sh -c 'echo "deb [trusted=yes] s3://autonomoustuff-ssc $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-ssc.list'
-sudo apt list | grep "autonomoustuff-ssc"
 sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
 sudo apt-get update
-sudo apt-get -y install ros-humble-ssc-* && exit 0 || echo "Installation failed for ssc_pm_lexus check access_key and secret_id" && exit 1
+sudo apt-get install -y libas-common ros-humble-automotive-navigation-msgs ros-humble-automotive-platform-msgs ros-humble-pacmod3-msgs
+cd carmasensitive
+sudo dpkg -i ros-humble-ssc-joystick_2004.0.0-0jammy_amd64.deb
+suddo dpkg -i ros-humble-ssc-pm-lexus_1.1.0-0jammy_amd64.deb
