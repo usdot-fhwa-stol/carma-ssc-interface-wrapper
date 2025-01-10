@@ -24,7 +24,7 @@ echo ""
 echo "##### $IMAGE Docker Image Build Script #####"
 echo ""
 
-access_token=""
+token=""
 build_ros1_pkgs="$false"
 build_ros2_pkgs="$false"
 dockerfile_dir=""
@@ -65,7 +65,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *) ##Arguments for ssc_pm_lexus
-            access_token="$1"
+            token="$1"
             shift
             ;;
     esac
@@ -86,8 +86,8 @@ if [[ $build_ros1_pkgs -eq 1 ]]; then
     echo "======= ROS1 build selected ========"
 elif [[ $build_ros2_pkgs -eq 1 ]]; then
     cd ../humble
-    if [ -z $access_token ]; then
-        echo "No argument provided for access_token for ROS2 build, this script needs to be run with <ACCESS_TOKEN>"
+    if [ -z $token ]; then
+        echo "No argument provided for token for ROS2 build, this script needs to be run with <TOKEN>"
         exit 1
     fi
     echo "======= ROS2 build selected ========"
@@ -99,13 +99,13 @@ if [[ $COMPONENT_VERSION_STRING = "develop" ]]; then
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-        --build-arg ACCESS_TOKEN=$access_token ../
+        --build-arg TOKEN=$token ../
 else
     docker build --network=host --progress=plain --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-        --build-arg ACCESS_TOKEN=$access_token ../
+        --build-arg TOKEN=$token ../
 fi
 
 TAGS=()

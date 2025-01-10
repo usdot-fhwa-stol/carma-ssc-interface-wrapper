@@ -15,6 +15,6 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+      TOKEN: ${{ secrets.GH_PAT }}
     with:
       file: ./humble/Dockerfile

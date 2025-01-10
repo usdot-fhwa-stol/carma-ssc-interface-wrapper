@@ -76,7 +76,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
 
     if [ -z $token ];
         then
-            echo "No argument provided for access_token for ROS2 build, this script needs to be run with <TOKEN>"
+            echo "No argument provided for token for ROS2 build, this script needs to be run with <TOKEN>"
             exit 1
     fi
     cd ~

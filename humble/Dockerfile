@@ -19,7 +19,7 @@ FROM base_image as source-code
 ARG GIT_BRANCH=develop-humble
 
 # Install astuff ros2 ssc_pm using tokens as arguments
-ARG ACCESS_TOKEN="NULL"
+ARG TOKEN="NULL"
 
 # ROS2 checkout deps
 COPY --chown=carma . /home/carma/workspace_ros2/src/
@@ -28,7 +28,7 @@ RUN chmod -R u+x ~/workspace_ros2/src/docker/
 RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 
 #Build ros2 pkgs
-RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_TOKEN}
+RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${TOKEN}
 
 FROM base_image
 
