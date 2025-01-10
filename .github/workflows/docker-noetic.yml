@@ -6,6 +6,8 @@ on:
 
 jobs:
   docker:
-    uses: usdot-fhwa-stol/actions/.github/workflows/docker.yml@main
+    uses: usdot-fhwa-stol/actions/.github/workflows/docker.yml@arc-199-support-different-suffix
     with:
       file: ./noetic/Dockerfile
+      tag_name_suffix: noetic
+      replace_suffix: true
