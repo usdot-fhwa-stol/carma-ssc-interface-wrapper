@@ -13,7 +13,7 @@
 #  the License.
 ARG DOCKER_ORG=usdotfhwastoldev
 ARG DOCKER_TAG=develop
-FROM ${DOCKER_ORG}/autoware.ai:${DOCKER_TAG} as base_image
+FROM ${DOCKER_ORG}/carma-base:${DOCKER_TAG} as base_image
 
 FROM base_image as source-code
 ARG GIT_BRANCH=develop

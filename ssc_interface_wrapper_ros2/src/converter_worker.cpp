@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
  /**
   * Modification (C) Leidos 2022
   * Updated ssc_interface to ROS2 as new converter_node
@@ -68,19 +68,19 @@ namespace ssc_interface_wrapper{
         //Setup Subscribers
 
         //subscribers from CARMA
-        guidance_state_sub_ = create_subscription<carma_planning_msgs::msg::GuidanceState>("state", 1, 
+        guidance_state_sub_ = create_subscription<carma_planning_msgs::msg::GuidanceState>("state", 1,
                                                                     std::bind(&Converter::callback_from_guidance_state, this, std_ph::_1));
-        //subscribers from autoware                                                                  
+        //subscribers from autoware
         vehicle_cmd_sub_ = create_subscription<autoware_msgs::msg::VehicleCmd>("vehicle_cmd", 1,
                                                                     std::bind(&Converter::callback_from_vehicle_cmd, this, std_ph::_1));
         engage_sub_ = create_subscription<std_msgs::msg::Bool>("vehicle/engage", 1,
-                                                        std::bind(&Converter::callback_from_engage, this, std_ph::_1));                                                                    
-                                                                                                                                                             
+                                                        std::bind(&Converter::callback_from_engage, this, std_ph::_1));
+
         // ssc topic subscribers
-        module_states_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState> ("as/module_states", 1, 
+        module_states_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState> ("as/module_states", 1,
                                                                     std::bind(&Converter::callback_from_ssc_module_states, this, std_ph::_1));
         // TO DO: The output from callback_from_ssc_feedbacks and callback_for_twist_update needs to be kept synchronized
-        // This was being done in autoware.ai using message_filters https://github.com/usdot-fhwa-stol/autoware.ai/blob/1cb4e74b810111369a6bbe49b0e64e07767454c0/drivers/as/nodes/ssc_interface/ssc_interface.h#L58
+        // This was being done in autoware using message_filters https://github.com/usdot-fhwa-stol/autoware.ai/blob/1cb4e74b810111369a6bbe49b0e64e07767454c0/drivers/as/nodes/ssc_interface/ssc_interface.h#L58
         // The implementation here should be updated to keep the output relatively synchronized
         velocity_accel_sub_ = create_subscription<automotive_platform_msgs::msg::VelocityAccelCov>("as/velocity_accel_cov",10,
                                                                     std::bind(&Converter::velocity_accel_cb, this, std_ph::_1));
@@ -90,13 +90,13 @@ namespace ssc_interface_wrapper{
                                                                     std::bind(&Converter::throttle_feedback_cb, this, std_ph::_1));
         brake_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::BrakeFeedback>("as/brake_feedback", 10,
                                                                     std::bind(&Converter::brake_feedback_cb, this, std_ph::_1));
-        gear_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::GearFeedback>("as/gear_feedback", 10, 
+        gear_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::GearFeedback>("as/gear_feedback", 10,
                                                                     std::bind(&Converter::gear_feedback_cb, this, std_ph::_1));
         steering_wheel_sub_ = create_subscription<automotive_platform_msgs::msg::SteeringFeedback>("as/steering_feedback", 10,
-                                                                    std::bind(&Converter::steering_feedback_cb, this, std_ph::_1));                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                                                    std::bind(&Converter::steering_feedback_cb, this, std_ph::_1));
 
         // Setup publishers
-        // To autoware 
+        // To autoware
         vehicle_status_pub_ = create_publisher<autoware_msgs::msg::VehicleStatus>("vehicle_status",10);
         current_twist_pub_ = create_publisher<geometry_msgs::msg::TwistStamped>("vehicle/twist",10);
         // To SSC
@@ -111,14 +111,14 @@ namespace ssc_interface_wrapper{
 
         command_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(1.0/config_.loop_rate_),
                                         std::bind(&Converter::publish_command, this));
-        
-        status_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(1.0/config_.status_pub_rate_),    
+
+        status_pub_timer_ = create_timer(get_clock(),std::chrono::duration<double>(1.0/config_.status_pub_rate_),
                              std::bind(&Converter::publish_vehicle_status, this));
 
         // Return success if everthing initialized successfully
         return CallbackReturn::SUCCESS;
    }
-   
+
     void Converter::publish_vehicle_status(){
           if (have_vehicle_status_) {
             vehicle_status_pub_->publish(current_status_msg_);
@@ -172,7 +172,7 @@ namespace ssc_interface_wrapper{
         if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
 
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
-                
+
         }
         if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
 
@@ -189,10 +189,10 @@ namespace ssc_interface_wrapper{
         if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
 
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
-                
+
         }
         if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
-            
+
             set_all_flags_to_false(twist_vel_msg_, twist_curvature_msg_, twist_steering_msg_);
 
         }
@@ -204,11 +204,11 @@ namespace ssc_interface_wrapper{
         throttle_feedback_ = *msg_throttle;
 
         if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
-            
+
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
-        
+
         }
-        
+
 
     }
 
@@ -231,7 +231,7 @@ namespace ssc_interface_wrapper{
 
             set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
         }
-        
+
 
     }
 
@@ -241,16 +241,16 @@ namespace ssc_interface_wrapper{
         steering_feedback_ = *msg_steering_wheel;
 
         if(callback_from_ssc_feedbacks(velocity_feedback_, curvature_feedback_, throttle_feedback_, brake_feedback_, gear_feedback_, steering_feedback_)){
-            
-            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);    
-        
+
+            set_all_flags_to_false(velocity_msg_exists_, curvature_msg_exists_, throttle_msg_exists_, brake_msg_exists_, gear_msg_exists_, steering_msg_exists_);
+
         }
         if (callback_for_twist_update(velocity_feedback_,curvature_feedback_,steering_feedback_)){
-            
+
             set_all_flags_to_false(twist_vel_msg_, twist_curvature_msg_, twist_steering_msg_);
 
         }
-        
+
 
     }
 
@@ -329,8 +329,8 @@ namespace ssc_interface_wrapper{
 
         }
         return false;
-        
-    }                                    
+
+    }
 
     bool Converter::callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
@@ -354,29 +354,29 @@ namespace ssc_interface_wrapper{
 
             return true;
         }
-        
+
         return false;
-    }        
+    }
 
     void Converter::set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2, bool& flag3, bool& flag4, bool& flag5){
-        
+
         flag0 = false;
-        flag1 = false;                                  
+        flag1 = false;
         flag2 = false;
         flag3 = false;
         flag4 = false;
         flag5 = false;
-    }   
+    }
     void Converter::set_all_flags_to_false(bool& flag0, bool& flag1, bool& flag2){
-        
+
         flag0 = false;
-        flag1 = false;                                  
+        flag1 = false;
         flag2 = false;
-    }                        
+    }
 
     void Converter::publish_command()
     {
-        // 
+        //
         // This method will publish 0 commands until the vehicle_cmd has actually been populated with non-zeros
         // When the vehicle_cmd_ becomes populated it will start to forward that instead
 
@@ -394,14 +394,14 @@ namespace ssc_interface_wrapper{
                                       vehicle_cmd_.ctrl_cmd.steering_angle :
                                       vehicle_cmd_.ctrl_cmd.steering_angle * config_.ssc_gear_ratio_ / adaptive_gear_ratio_;
 
-        double desired_curvature = std::tan(desired_steering_angle) / config_.wheel_base_;  
+        double desired_curvature = std::tan(desired_steering_angle) / config_.wheel_base_;
 
         // Gear (TODO: Use vehicle_cmd.gear)
-        unsigned char desired_gear = automotive_platform_msgs::msg::Gear::NONE;   
+        unsigned char desired_gear = automotive_platform_msgs::msg::Gear::NONE;
 
-        if (engage_) 
+        if (engage_)
         {
-            if (shift_to_park_) 
+            if (shift_to_park_)
             {
                 if (current_velocity_ < epsilon_){
                     desired_gear = automotive_platform_msgs::msg::Gear::PARK;
@@ -415,7 +415,7 @@ namespace ssc_interface_wrapper{
         else
         {
             desired_gear = automotive_platform_msgs::msg::Gear::NONE;
-        }   
+        }
 
         // Turn signal
         unsigned char desired_turn_signal = automotive_platform_msgs::msg::TurnSignalCommand::NONE;
