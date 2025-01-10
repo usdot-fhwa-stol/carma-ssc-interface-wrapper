@@ -18,3 +18,5 @@ jobs:
       TOKEN: ${{ secrets.GH_PAT }}
     with:
       file: ./humble/Dockerfile
+      tag_name_suffix: humble
+      replace_suffix: true # remove after develop-humble branch is merged to develop

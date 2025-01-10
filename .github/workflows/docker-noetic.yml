@@ -10,4 +10,4 @@ jobs:
     with:
       file: ./noetic/Dockerfile
       tag_name_suffix: noetic
-      replace_suffix: true
+      replace_suffix: true # remove after develop-humble branch is merged to develop
