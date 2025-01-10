@@ -98,6 +98,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
         ros-humble-pacmod3-msgs \
         ros-humble-pacmod3 \
         ros-humble-kvaser-interface \
+        ros-humble-message-filters \
         apt-utils
 
     cd CARMASensitive

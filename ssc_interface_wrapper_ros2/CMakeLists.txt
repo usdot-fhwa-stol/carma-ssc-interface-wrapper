@@ -39,8 +39,8 @@ ament_auto_add_library(${node_lib} SHARED
         src/ssc_interface_wrapper_worker.cpp
 )
 
-ament_auto_add_executable(${node_exec} 
-        src/main.cpp 
+ament_auto_add_executable(${node_exec}
+        src/main.cpp
 )
 
 # Register component
@@ -54,15 +54,15 @@ target_link_libraries(${node_exec}
 
 ament_auto_add_library(converter_node SHARED
         src/converter_worker.cpp)
-ament_auto_add_executable(converter_exec 
-                src/converter_node.cpp)        
-rclcpp_components_register_nodes(converter_node "ssc_interface_wrapper::Converter") 
+ament_auto_add_executable(converter_exec
+                src/converter_node.cpp)
+rclcpp_components_register_nodes(converter_node "ssc_interface_wrapper::Converter")
 target_link_libraries(converter_exec
  converter_node
 )
 
 # Testing
-if(BUILD_TESTING)  
+if(BUILD_TESTING)
 
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies() # This populates the ${${PROJECT_NAME}_FOUND_TEST_DEPENDS} variable
