@@ -17,6 +17,11 @@
 # CARMA packages checkout script
 # Optional argument to set the root checkout directory with no ending '/' default is '~'
 
+sparse_checkout() {
+    cd "$1"
+    git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
+}
+
 set -exo pipefail
 declare -i false=0 true=1
 BRANCH=develop
@@ -54,14 +59,14 @@ cd ${dir}
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch "$BRANCH"
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch "$BRANCH"
 
+# Sparse checkout needs to happen with && to ensure the directory is fully cloned before the git sparse command
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
-      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autoware.ai" --branch carma-develop
+      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autoware.ai" --branch carma-develop && 
+      sparse_checkout "${dir}/src/autoware.ai"
 else
-      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autoware.ai" --branch "$BRANCH"
+      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autoware.ai" --branch "$BRANCH" &&
+      sparse_checkout "${dir}/src/autoware.ai"
 fi
-
-cd ${dir}/src/autoware.ai
-git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
 
 cd ${dir}
 
