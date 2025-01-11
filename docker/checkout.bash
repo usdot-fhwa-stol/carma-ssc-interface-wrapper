@@ -61,11 +61,11 @@ git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/sr
 
 # Sparse checkout needs to happen with && to ensure the directory is fully cloned before the git sparse command
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
-      sudo git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autoware.ai" --branch carma-develop && 
-      sparse_checkout_autoware_msgs "${dir}/src/autoware.ai"
+      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch carma-develop && 
+      sparse_checkout_autoware_msgs "${dir}/src/autowareAi"
 else
-      sudo git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autoware.ai" --branch "$BRANCH" &&
-      sparse_checkout_autoware_msgs "${dir}/src/autoware.ai"
+      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch "$BRANCH" &&
+      sparse_checkout_autoware_msgs "${dir}/src/autowareAi"
 fi
 
 cd ${dir}
