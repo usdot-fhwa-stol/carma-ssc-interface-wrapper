@@ -19,7 +19,7 @@
 
 sparse_checkout_autoware_msgs() {
     cd "$1"
-    git checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
+    git checkout messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
 }
 
 set -exo pipefail
