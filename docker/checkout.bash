@@ -54,7 +54,7 @@ cd ${dir}
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch $BRANCH
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch $BRANCH
 
-if [[ "$BRANCH" == "develop" || "$BRANCH" == "master"]]; then
+if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
       git clone --depth 1 --sparse https://github.com/usdot-fhwa-stol/autoware.ai ${dir}/src/autoware.ai --branch carma-$BRANCH
 else
       git clone --depth 1 --sparse https://github.com/usdot-fhwa-stol/autoware.ai ${dir}/src/autoware.ai --branch $BRANCH
