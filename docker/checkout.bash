@@ -17,11 +17,6 @@
 # CARMA packages checkout script
 # Optional argument to set the root checkout directory with no ending '/' default is '~'
 
-sparse_checkout_autoware_msgs() {
-    cd "$1"
-    git checkout messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
-}
-
 set -exo pipefail
 declare -i false=0 true=1
 BRANCH=develop
@@ -61,13 +56,13 @@ git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/sr
 
 # Sparse checkout needs to happen with && to ensure the directory is fully cloned before the git sparse command
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
-      git clone --depth 1 "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch carma-develop && 
-      sparse_checkout_autoware_msgs "${dir}/src/autowareAi"
+      git clone --depth 1 https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch carma-"$BRANCH"
 else
-      git clone --depth 1 "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch "$BRANCH" &&
-      sparse_checkout_autoware_msgs "${dir}/src/autowareAi"
+      git clone --depth 1 https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch "$BRANCH"
 fi
 
+cd ${dir}/src/autoware.ai
+git checkout messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
 cd ${dir}
 
 if [ $build_ros1_pkgs -eq 1 ]; then
