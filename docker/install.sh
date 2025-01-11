@@ -49,8 +49,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     # ROS1 build and install
     cd ~/workspace_ros1
     echo "ROS1 build"
-    source /home/carma/catkin/setup.bash
-    source /opt/ros/noetic/install/setup.bash
+    source /opt/ros/noetic/setup.bash
     sudo apt-get update
     sudo apt-get install -y apt-utils
 

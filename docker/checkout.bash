@@ -54,7 +54,7 @@ cd ${dir}
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch "$BRANCH"
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch "$BRANCH"
 
-# Sparse checkout needs to happen with && to ensure the directory is fully cloned before the git sparse command
+# Sparse checkout to only get the messages we need
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
       git clone --depth 1 --filter=blob:none --sparse https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch carma-"$BRANCH"
 else

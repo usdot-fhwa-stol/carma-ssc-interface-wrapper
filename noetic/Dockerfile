@@ -20,7 +20,6 @@ ARG GIT_BRANCH=develop
 
 # ROS1 checkout deps
 RUN mkdir -p ~/workspace_ros1/src
-RUN echo "Running directory"
 
 COPY --chown=carma . /home/carma/workspace_ros1/src/
 RUN ls -la
