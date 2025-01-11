@@ -19,7 +19,7 @@
 
 sparse_checkout_autoware_msgs() {
     cd "$1"
-    git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
+    git checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
 }
 
 set -exo pipefail
@@ -61,10 +61,10 @@ git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/sr
 
 # Sparse checkout needs to happen with && to ensure the directory is fully cloned before the git sparse command
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
-      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch carma-develop && 
+      git clone --depth 1 "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch carma-develop && 
       sparse_checkout_autoware_msgs "${dir}/src/autowareAi"
 else
-      git clone --depth 1 --sparse "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch "$BRANCH" &&
+      git clone --depth 1 "https://github.com/usdot-fhwa-stol/autoware.ai.git" "${dir}/src/autowareAi" --branch "$BRANCH" &&
       sparse_checkout_autoware_msgs "${dir}/src/autowareAi"
 fi
 
