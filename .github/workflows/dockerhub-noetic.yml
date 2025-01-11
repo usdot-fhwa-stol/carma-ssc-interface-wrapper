@@ -15,6 +15,7 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      TOKEN: ${{ secrets.GH_PAT }}
     with:
       file: ./noetic/Dockerfile
       tag_name_suffix: noetic
