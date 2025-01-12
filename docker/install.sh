@@ -45,7 +45,7 @@ while [[ $# -gt 0 ]]; do
       esac
 done
 
-if [ $build_ros1_pkgs -eq 1 ]; then
+if [[ $build_ros1_pkgs -eq 1 ]]; then
     # ROS1 build and install
     cd ~/workspace_ros1
     echo "ROS1 build"
@@ -70,7 +70,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
     exit #Success building ros1 pkgs
 
-elif [ $build_ros2_pkgs -eq 1 ]; then
+elif [[ $build_ros2_pkgs -eq 1 ]]; then
 
     if [ -z $token ];
         then
