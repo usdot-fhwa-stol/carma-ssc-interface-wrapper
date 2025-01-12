@@ -16,7 +16,7 @@ ARG DOCKER_TAG=develop-humble
 FROM ${DOCKER_ORG}/carma-base:${DOCKER_TAG} as base_image
 
 FROM base_image as source-code
-ARG GIT_BRANCH=develop-humble
+ARG GIT_BRANCH=develop
 
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG TOKEN="NULL"
