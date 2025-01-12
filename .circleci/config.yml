@@ -55,7 +55,7 @@ jobs:
           name: Install Deps
           command: |
             sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
-            sudo apt-add-repository ppa:astuff/kvaser-linux
+            sudo apt-add-repository -y ppa:astuff/kvaser-linux
             sudo apt update
 
             sudo apt install -y kvaser-canlib-dev kvaser-drivers-dkms

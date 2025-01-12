@@ -82,11 +82,11 @@ elif [[ $build_ros2_pkgs -eq 1 ]]; then
     git clone https://$token@github.com/usdot-fhwa-stol/CARMASensitive.git --branch arc-199-humble-lexus-ssc-deb-files
 
     sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
-    sudo apt-add-repository ppa:astuff/kvaser-linux
+    sudo apt-add-repository -y ppa:astuff/kvaser-linux
     sudo apt-get update
 
     # Prerequisite for kvaser-interface
-    sudo apt install kvaser-canlib-dev kvaser-drivers-dkms
+    sudo apt install -y kvaser-canlib-dev kvaser-drivers-dkms
 
     # Install necessary dependencies for ssc-pm-lexus
     sudo apt-get install -y libas-common \
