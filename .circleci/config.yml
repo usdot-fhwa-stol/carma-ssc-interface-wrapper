@@ -50,7 +50,25 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -ros2 -r ${PWD} 
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -ros2 -r ${PWD}
+      - run:
+          name: Install Deps
+          command: |
+            sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+            apt-add-repository ppa:astuff/kvaser-linux
+            apt-get update
+
+            apt install kvaser-canlib-dev kvaser-drivers-dkms
+
+            apt-get install -y libas-common \
+                ros-humble-automotive-autonomy-msgs \
+                ros-humble-automotive-navigation-msgs \
+                ros-humble-automotive-platform-msgs \
+                ros-humble-pacmod3-msgs \
+                ros-humble-pacmod3 \
+                ros-humble-kvaser-interface \
+                ros-humble-message-filters \
+                apt-utils
       - run:
           name: Build Driver
           command: |
