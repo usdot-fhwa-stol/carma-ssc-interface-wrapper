@@ -14,7 +14,6 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-set -e
 declare -i false=0 true=1
 
 # This script installs the ssc_pm_lexus package using the access id and secret key as arguments
@@ -59,11 +58,10 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
     sudo apt-get install python3-catkin-pkg
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
-    chmod -R ugo+x /opt/carma/install
-    unset ROS_LANG_DISABLE
-
     # Get the exit code from the ROS1 build so we can skip the ROS2 build if the ROS1 build failed
     status=$?
+    chmod -R ugo+x /opt/carma/install
+    unset ROS_LANG_DISABLE
 
     if [[ $status -ne 0 ]]; then
         echo "ssc interface wrapper ros1 build failed."
