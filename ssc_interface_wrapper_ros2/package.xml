@@ -33,7 +33,6 @@
   <depend>std_srvs</depend>
   <depend>pacmod3_msgs</depend>
   <depend>j2735_v2x_msgs</depend>
-  <depend>cav_srvs</depend>
   <depend>carma_driver_msgs</depend>
   <depend>automotive_navigation_msgs</depend>
   <depend>lifecycle_msgs</depend>
