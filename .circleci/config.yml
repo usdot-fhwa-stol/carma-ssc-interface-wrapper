@@ -56,11 +56,11 @@ jobs:
           command: |
             sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
             sudo apt-add-repository ppa:astuff/kvaser-linux
-            sudo apt-get update
+            sudo apt update
 
             sudo apt install kvaser-canlib-dev kvaser-drivers-dkms
 
-            sudo apt-get install -y libas-common \
+            sudo apt install -y libas-common \
                 ros-humble-automotive-autonomy-msgs \
                 ros-humble-automotive-navigation-msgs \
                 ros-humble-automotive-platform-msgs \
