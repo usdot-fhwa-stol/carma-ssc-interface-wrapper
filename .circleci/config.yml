@@ -54,13 +54,13 @@ jobs:
       - run:
           name: Install Deps
           command: |
-            sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
-            apt-add-repository ppa:astuff/kvaser-linux
-            apt-get update
+            sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+            sudo apt-add-repository ppa:astuff/kvaser-linux
+            sudo apt-get update
 
-            apt install kvaser-canlib-dev kvaser-drivers-dkms
+            sudo apt install kvaser-canlib-dev kvaser-drivers-dkms
 
-            apt-get install -y libas-common \
+            sudo apt-get install -y libas-common \
                 ros-humble-automotive-autonomy-msgs \
                 ros-humble-automotive-navigation-msgs \
                 ros-humble-automotive-platform-msgs \
