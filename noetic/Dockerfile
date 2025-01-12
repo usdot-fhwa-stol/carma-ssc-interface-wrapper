@@ -22,9 +22,8 @@ ARG GIT_BRANCH=develop
 RUN mkdir -p ~/workspace_ros1/src
 
 COPY --chown=carma . /home/carma/workspace_ros1/src/
-RUN ls -la
 RUN chmod -R u+x ~/workspace_ros1/src/docker/
-RUN ~/workspace_ros1/src/docker/checkout.bash -ros1
+RUN ~/workspace_ros1/src/docker/checkout.bash -ros1 -b ${GIT_BRANCH}
 
 # Build ros1 pkgs
 RUN ~/workspace_ros1/src/docker/install.sh -ros1

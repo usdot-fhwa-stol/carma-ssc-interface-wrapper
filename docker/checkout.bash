@@ -61,9 +61,18 @@ else
       sudo git clone --depth 1 --filter=blob:none --sparse https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch "$BRANCH"
 fi
 
+ls -ld ${dir}
+
+ls -ld ${dir}/src
+ls -ld ${dir}/src/CARMAMsgs
+ls -ld ${dir}/src/CARMAUtils
+
+ls -ld ${dir}/src/autoware.ai
+
 cd ${dir}/src/autoware.ai
-git sparse-checkout init --cone
-git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs common/autoware_build_flags common/ros_observer
+
+sudo git sparse-checkout init --cone
+sudo git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs common/autoware_build_flags common/ros_observer
 cd ${dir}
 
 if [ $build_ros1_pkgs -eq 1 ]; then

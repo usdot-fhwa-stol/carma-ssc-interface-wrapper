@@ -23,7 +23,6 @@ ARG TOKEN="NULL"
 
 # ROS2 checkout deps
 COPY --chown=carma . /home/carma/workspace_ros2/src/
-COPY --chown=carma . /home/carma/workspace_ros2/src/
 RUN chmod -R u+x ~/workspace_ros2/src/docker/
 RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 
