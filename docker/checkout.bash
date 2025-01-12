@@ -63,7 +63,7 @@ fi
 
 cd ${dir}/src/autoware.ai
 git sparse-checkout init --cone
-git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs
+git sparse-checkout set messages/autoware_msgs jsk_recognition/jsk_recognition_msgs common/autoware_build_flags
 cd ${dir}
 
 if [ $build_ros1_pkgs -eq 1 ]; then
