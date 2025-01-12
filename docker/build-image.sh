@@ -95,13 +95,13 @@ fi
 
 if [[ $COMPONENT_VERSION_STRING = "develop" ]]; then
     sed "s|usdotfhwastoldev/|$USERNAME/|g; s|usdotfhwastolcandidate/|$USERNAME/|g; s|usdotfhwastol/|$USERNAME/|g; s|:[0-9]*\.[0-9]*\.[0-9]*|:$COMPONENT_VERSION_STRING|g; s|checkout.bash|checkout.bash -d|g" \
-        Dockerfile | docker build --progress=plain --network=host -f - --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
+        Dockerfile | docker build --progress=plain --network=host -f - -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
         --build-arg TOKEN=$token ../
 else
-    docker build --network=host --progress=plain --no-cache -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
+    docker build --network=host --progress=plain -f Dockerfile -t $USERNAME/$IMAGE:$COMPONENT_VERSION_STRING \
         --build-arg VERSION="$COMPONENT_VERSION_STRING" \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \

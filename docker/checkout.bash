@@ -56,9 +56,9 @@ git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/sr
 
 # Sparse checkout to only get the messages we need
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
-      git clone --depth 1 --filter=blob:none --sparse https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch carma-"$BRANCH"
+      sudo git clone --depth 1 --filter=blob:none --sparse https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch carma-"$BRANCH"
 else
-      git clone --depth 1 --filter=blob:none --sparse https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch "$BRANCH"
+      sudo git clone --depth 1 --filter=blob:none --sparse https://github.com/usdot-fhwa-stol/autoware.ai.git ${dir}/src/autoware.ai --branch "$BRANCH"
 fi
 
 cd ${dir}/src/autoware.ai
