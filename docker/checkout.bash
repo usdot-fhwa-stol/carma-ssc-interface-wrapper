@@ -87,6 +87,6 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     sudo git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
     cd ${dir}
     
-elif [ $build_ros1_pkgs -eq 1 ]; then
+elif [ $build_ros2_pkgs -eq 1 ]; then
     git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch "$BRANCH"
 fi
