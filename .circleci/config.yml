@@ -58,7 +58,7 @@ jobs:
             sudo apt-add-repository ppa:astuff/kvaser-linux
             sudo apt update
 
-            sudo apt install kvaser-canlib-dev kvaser-drivers-dkms
+            sudo apt install -y kvaser-canlib-dev kvaser-drivers-dkms
 
             sudo apt install -y libas-common \
                 ros-humble-automotive-autonomy-msgs \
