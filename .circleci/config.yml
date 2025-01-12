@@ -50,7 +50,7 @@ jobs:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD} -ros2
       - run:
           name: Build Driver
           command: |
