@@ -14,7 +14,7 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 
-set -eo pipefail
+set -e
 declare -i false=0 true=1
 
 # This script installs the ssc_pm_lexus package using the access id and secret key as arguments
