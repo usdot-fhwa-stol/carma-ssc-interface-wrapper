@@ -1,4 +1,4 @@
-#  Copyright (C) 2018-2022 LEIDOS.
+#  Copyright (C) 2025 LEIDOS.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
@@ -44,7 +44,9 @@ LABEL org.label-schema.vcs-url="https://github.com/usdot-fhwa-stol/carma-ssc-int
 LABEL org.label-schema.vcs-ref=${VCS_REF}
 LABEL org.label-schema.build-date=${BUILD_DATE}
 
+# Copy over the carma packages' installations
 COPY --from=source-code --chown=carma /opt/carma /opt/carma
+# Copy over the noetic packages' installations
 COPY --from=source-code --chown=carma /opt/ros/noetic /opt/ros/noetic
 
 # Default launch ros1 verion

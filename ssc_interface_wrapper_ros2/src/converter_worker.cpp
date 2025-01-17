@@ -79,9 +79,6 @@ namespace ssc_interface_wrapper{
         // ssc topic subscribers
         module_states_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState> ("as/module_states", 1,
                                                                     std::bind(&Converter::callback_from_ssc_module_states, this, std_ph::_1));
-        // TO DO: The output from callback_from_ssc_feedbacks and callback_for_twist_update needs to be kept synchronized
-        // This was being done in autoware using message_filters https://github.com/usdot-fhwa-stol/autoware.ai/blob/1cb4e74b810111369a6bbe49b0e64e07767454c0/drivers/as/nodes/ssc_interface/ssc_interface.h#L58
-        // The implementation here should be updated to keep the output relatively synchronized
         velocity_accel_sub_ = create_subscription<automotive_platform_msgs::msg::VelocityAccelCov>("as/velocity_accel_cov",10,
                                                                     std::bind(&Converter::velocity_accel_cb, this, std_ph::_1));
         curvature_feedback_sub_ = create_subscription<automotive_platform_msgs::msg::CurvatureFeedback>("as/curvature_feedback", 10,

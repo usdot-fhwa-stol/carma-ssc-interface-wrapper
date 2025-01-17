@@ -146,7 +146,7 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     bool twist_curvature_msg_ = false;
     bool twist_steering_msg_ = false;
 
-    //autoware subscriptions from autoware
+    // Subscriptions from autoware
     carma_ros2_utils::SubPtr<carma_planning_msgs::msg::GuidanceState> guidance_state_sub_;
     carma_ros2_utils::SubPtr<autoware_msgs::msg::VehicleCmd> vehicle_cmd_sub_;
     carma_ros2_utils::SubPtr<std_msgs::msg::Bool> engage_sub_;

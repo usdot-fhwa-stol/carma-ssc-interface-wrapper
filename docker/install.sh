@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2022 LEIDOS.
+#  Copyright (C) 2025 LEIDOS.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
@@ -79,7 +79,7 @@ elif [[ $build_ros2_pkgs -eq 1 ]]; then
     fi
     cd ~
     source /opt/ros/humble/install/setup.bash
-    git clone https://$token@github.com/usdot-fhwa-stol/CARMASensitive.git --branch arc-199-humble-lexus-ssc-deb-files
+    git clone https://$token@github.com/usdot-fhwa-stol/CARMASensitive.git --branch develop
 
     sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
     sudo apt-add-repository -y ppa:astuff/kvaser-linux

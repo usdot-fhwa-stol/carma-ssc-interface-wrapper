@@ -10,6 +10,6 @@ jobs:
     with:
       file: ./humble/Dockerfile
       tag_name_suffix: humble
-      replace_suffix: true # remove after develop-humble branch is merged to develop
+      replace_suffix: true # TODO: remove after develop-humble branch is merged to develop
     secrets:
       GH_PAT: ${{ secrets.GH_PAT }}
