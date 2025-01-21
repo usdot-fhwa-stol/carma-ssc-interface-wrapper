@@ -120,13 +120,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>> brake_feedback_sub_;
     std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>> gear_feedback_sub_;
     std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>> steering_wheel_sub_;
-    //Callbacks for vehicle_status
-    void velocity_accel_cb(const automotive_platform_msgs::msg::VelocityAccelCov::UniquePtr msg_velocity);
-    void curvature_feedback_cb(const automotive_platform_msgs::msg::CurvatureFeedback::UniquePtr msg_curvature);
-    void throttle_feedback_cb(const automotive_platform_msgs::msg::ThrottleFeedback::UniquePtr msg_throttle);
-    void brake_feedback_cb(const automotive_platform_msgs::msg::BrakeFeedback::UniquePtr msg_brake);
-    void gear_feedback_cb(const automotive_platform_msgs::msg::GearFeedback::UniquePtr msg_gear);
-    void steering_feedback_cb(const automotive_platform_msgs::msg::SteeringFeedback::UniquePtr msg_steering_wheel);
     // Global variables to store ssc feedback msgs
     automotive_platform_msgs::msg::VelocityAccelCov velocity_feedback_;
     automotive_platform_msgs::msg::CurvatureFeedback curvature_feedback_;
@@ -148,19 +141,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     bool callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
-
-    //Flags to achieve approximate synchronization
-    bool velocity_msg_exists_ = false;
-    bool curvature_msg_exists_ = false;
-    bool throttle_msg_exists_ = false;
-    bool brake_msg_exists_ = false;
-    bool gear_msg_exists_ = false;
-    bool steering_msg_exists_ = false;
-
-    // Flags for twist update
-    bool twist_vel_msg_ = false;
-    bool twist_curvature_msg_ = false;
-    bool twist_steering_msg_ = false;
 
     // Subscriptions from autoware
     carma_ros2_utils::SubPtr<carma_planning_msgs::msg::GuidanceState> guidance_state_sub_;
