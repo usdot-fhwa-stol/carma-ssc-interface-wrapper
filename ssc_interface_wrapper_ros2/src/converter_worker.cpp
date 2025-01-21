@@ -77,7 +77,8 @@ namespace ssc_interface_wrapper{
                                                         std::bind(&Converter::callback_from_engage, this, std_ph::_1));
 
         // ssc topic subscribers
-        module_states_sub_ = std::make_unique<message_filters::Subscriber<automotive_navigation_msgs::msg::ModuleState>> (this, "as/module_states");
+        module_states_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState> ("as/module_states", 1, 
+                                                                    std::bind(&Converter::callback_from_ssc_module_states, this, std_ph::_1));
         velocity_accel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>>(this, "as/velocity_accel_cov");
         curvature_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>>(this, "as/curvature_feedback");
         throttle_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>>(this, "as/throttle_feedback");
