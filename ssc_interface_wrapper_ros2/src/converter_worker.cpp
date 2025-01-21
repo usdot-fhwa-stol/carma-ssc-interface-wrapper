@@ -96,7 +96,7 @@ namespace ssc_interface_wrapper{
             *brake_feedback_sub_, *gear_feedback_sub_, *steering_wheel_sub_);
         ssc_feedbacks_sync_->registerCallback(
             std::bind(&Converter::callback_from_ssc_feedbacks, this, 
-            std_ph::1, std_ph::2, std_ph::3, std_ph::4, std_ph::5, std_ph::6));
+            std_ph::_1, std_ph::_2, std_ph::_3, std_ph::_4, std_ph::_5, std_ph::_6));
 
         ssc_twist_sync_ = new message_filters::Synchronizer<SSCTwistSyncPolicy>(
             SSCTwistSyncPolicy(10), *velocity_accel_sub_, *curvature_feedback_sub_, *steering_wheel_sub_);
