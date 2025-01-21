@@ -77,20 +77,13 @@ namespace ssc_interface_wrapper{
                                                         std::bind(&Converter::callback_from_engage, this, std_ph::_1));
 
         // ssc topic subscribers
-        module_states_sub_ = std::make_unique<message_filters::Subscriber<automotive_navigation_msgs::msg::ModuleState>> ("as/module_states", 1,
-                                                                    std::bind(&Converter::callback_from_ssc_module_states, this, std_ph::_1));
-        velocity_accel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>>("as/velocity_accel_cov",10,
-                                                                    std::bind(&Converter::velocity_accel_cb, this, std_ph::_1));
-        curvature_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>>("as/curvature_feedback", 10,
-                                                                    std::bind(&Converter::curvature_feedback_cb, this, std_ph::_1));
-        throttle_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>>("as/throttle_feedback", 10,
-                                                                    std::bind(&Converter::throttle_feedback_cb, this, std_ph::_1));
-        brake_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>>("as/brake_feedback", 10,
-                                                                    std::bind(&Converter::brake_feedback_cb, this, std_ph::_1));
-        gear_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>>("as/gear_feedback", 10,
-                                                                    std::bind(&Converter::gear_feedback_cb, this, std_ph::_1));
-        steering_wheel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>>("as/steering_feedback", 10,
-                                                                    std::bind(&Converter::steering_feedback_cb, this, std_ph::_1));
+        module_states_sub_ = std::make_unique<message_filters::Subscriber<automotive_navigation_msgs::msg::ModuleState>> (this, "as/module_states");
+        velocity_accel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>>(this, "as/velocity_accel_cov");
+        curvature_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>>(this, "as/curvature_feedback");
+        throttle_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>>(this, "as/throttle_feedback");
+        brake_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>>(this, "as/brake_feedback");
+        gear_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>>(this, "as/gear_feedback");
+        steering_wheel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>>(this, "as/steering_feedback");
         ssc_feedbacks_sync_ = new message_filters::Synchronizer<SSCFeedbacksSyncPolicy>(
             SSCFeedbacksSyncPolicy(10), *velocity_accel_sub_, *curvature_feedback_sub_, *throttle_feedback_sub_,
             *brake_feedback_sub_, *gear_feedback_sub_, *steering_wheel_sub_);
@@ -270,7 +263,10 @@ namespace ssc_interface_wrapper{
                                                 const automotive_platform_msgs::msg::GearFeedback& msg_gear,
                                                 const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
-        if(velocity_msg_exists_ && curvature_msg_exists_  && throttle_msg_exists_ && brake_msg_exists_ && gear_msg_exists_ && steering_msg_exists_){
+        
+
+
+         if(true){ #todo
             builtin_interfaces::msg::Time stamp = msg_velocity.header.stamp;
             // update adaptive gear ratio (avoiding zero division)
             adaptive_gear_ratio_ =
@@ -345,7 +341,7 @@ namespace ssc_interface_wrapper{
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
-        if(twist_vel_msg_ && twist_curvature_msg_ && twist_steering_msg_)
+        if(true) #todo
         {
             // current steering curvature
             double curvature = !config_.use_adaptive_gear_ratio_ ?
