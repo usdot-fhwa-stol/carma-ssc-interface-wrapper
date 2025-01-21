@@ -120,13 +120,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>> brake_feedback_sub_;
     std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>> gear_feedback_sub_;
     std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>> steering_wheel_sub_;
-    // Global variables to store ssc feedback msgs
-    automotive_platform_msgs::msg::VelocityAccelCov velocity_feedback_;
-    automotive_platform_msgs::msg::CurvatureFeedback curvature_feedback_;
-    automotive_platform_msgs::msg::ThrottleFeedback throttle_feedback_;
-    automotive_platform_msgs::msg::BrakeFeedback brake_feedback_;
-    automotive_platform_msgs::msg::GearFeedback gear_feedback_;
-    automotive_platform_msgs::msg::SteeringFeedback steering_feedback_;
     std::unique_ptr<message_filters::Synchronizer<SSCFeedbacksSyncPolicy>> ssc_feedbacks_sync_;
     std::unique_ptr<message_filters::Synchronizer<SSCTwistSyncPolicy>> ssc_twist_sync_;
 

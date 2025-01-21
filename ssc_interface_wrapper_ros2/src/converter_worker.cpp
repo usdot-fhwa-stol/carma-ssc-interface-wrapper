@@ -133,14 +133,14 @@ namespace ssc_interface_wrapper{
     }
 
     void Converter::callback_from_guidance_state(const carma_planning_msgs::msg::GuidanceState::UniquePtr msg){
-            if (msg->state == carma_planning_msgs::msg::GuidanceState::ENGAGED)
-            {
-                shift_to_park_ = false;
-            }
-            else if (msg->state == carma_planning_msgs::msg::GuidanceState::ENTER_PARK)
-            {
-                shift_to_park_ = true;
-            }
+        if (msg->state == carma_planning_msgs::msg::GuidanceState::ENGAGED)
+        {
+            shift_to_park_ = false;
+        }
+        else if (msg->state == carma_planning_msgs::msg::GuidanceState::ENTER_PARK)
+        {
+            shift_to_park_ = true;
+        }
     }
 
     void Converter::callback_from_vehicle_cmd(const autoware_msgs::msg::VehicleCmd::UniquePtr msg){
@@ -173,68 +173,68 @@ namespace ssc_interface_wrapper{
                                                 const automotive_platform_msgs::msg::GearFeedback& msg_gear,
                                                 const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
-            builtin_interfaces::msg::Time stamp = msg_velocity.header.stamp;
-            // update adaptive gear ratio (avoiding zero division)
-            adaptive_gear_ratio_ =
-                std::max(1e-5, config_.agr_coef_a_ + config_.agr_coef_b_ * msg_velocity.velocity * msg_velocity.velocity - config_.agr_coef_c_ * msg_steering_wheel.steering_wheel_angle);
+        builtin_interfaces::msg::Time stamp = msg_velocity.header.stamp;
+        // update adaptive gear ratio (avoiding zero division)
+        adaptive_gear_ratio_ =
+            std::max(1e-5, config_.agr_coef_a_ + config_.agr_coef_b_ * msg_velocity.velocity * msg_velocity.velocity - config_.agr_coef_c_ * msg_steering_wheel.steering_wheel_angle);
 
-            // current steering curvature
-            double curvature = !config_.use_adaptive_gear_ratio_ ?
-                            (msg_curvature.curvature) :
-                            std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
+        // current steering curvature
+        double curvature = !config_.use_adaptive_gear_ratio_ ?
+                        (msg_curvature.curvature) :
+                        std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
 
-            // Set current_velocity_ variable [m/s]
-            current_velocity_ = msg_velocity.velocity;
+        // Set current_velocity_ variable [m/s]
+        current_velocity_ = msg_velocity.velocity;
 
-            // vehicle_status (autoware_msgs::msg::VehicleStatus)
-            autoware_msgs::msg::VehicleStatus vehicle_status;
-            vehicle_status.header.frame_id = BASE_FRAME_ID;
-            vehicle_status.header.stamp = stamp;
+        // vehicle_status (autoware_msgs::msg::VehicleStatus)
+        autoware_msgs::msg::VehicleStatus vehicle_status;
+        vehicle_status.header.frame_id = BASE_FRAME_ID;
+        vehicle_status.header.stamp = stamp;
 
-            // drive/steeringmode
-            vehicle_status.drivemode = (module_states_.state == "active") ? autoware_msgs::msg::VehicleStatus::MODE_AUTO :
-                                                                    autoware_msgs::msg::VehicleStatus::MODE_MANUAL;
+        // drive/steeringmode
+        vehicle_status.drivemode = (module_states_.state == "active") ? autoware_msgs::msg::VehicleStatus::MODE_AUTO :
+                                                                autoware_msgs::msg::VehicleStatus::MODE_MANUAL;
 
-            vehicle_status.steeringmode = vehicle_status.drivemode;
+        vehicle_status.steeringmode = vehicle_status.drivemode;
 
-            // speed [km/h]
-            vehicle_status.speed = msg_velocity.velocity * 3.6;
+        // speed [km/h]
+        vehicle_status.speed = msg_velocity.velocity * 3.6;
 
-            // drive/brake pedal [0,1000] (TODO: Scaling)
-            vehicle_status.drivepedal = (int)(1000 * msg_throttle.throttle_pedal);
-            vehicle_status.brakepedal = (int)(1000 * msg_brake.brake_pedal);
+        // drive/brake pedal [0,1000] (TODO: Scaling)
+        vehicle_status.drivepedal = (int)(1000 * msg_throttle.throttle_pedal);
+        vehicle_status.brakepedal = (int)(1000 * msg_brake.brake_pedal);
 
-            // steering angle [rad]
-            vehicle_status.angle = std::atan(curvature * config_.wheel_base_);
+        // steering angle [rad]
+        vehicle_status.angle = std::atan(curvature * config_.wheel_base_);
 
-            // gearshift
-            if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NONE)
-            {
-                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NONE;
-            }
-            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::PARK)
-            {
-                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::PARK;
-            }
-            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::REVERSE)
-            {
-                vehicle_status.current_gear.gear= automotive_platform_msgs::msg::Gear::REVERSE;
-            }
-            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NEUTRAL)
-            {
-                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NEUTRAL;
-            }
-            else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::DRIVE)
-            {
-                vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::DRIVE;
-            }
+        // gearshift
+        if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NONE)
+        {
+            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NONE;
+        }
+        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::PARK)
+        {
+            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::PARK;
+        }
+        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::REVERSE)
+        {
+            vehicle_status.current_gear.gear= automotive_platform_msgs::msg::Gear::REVERSE;
+        }
+        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::NEUTRAL)
+        {
+            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::NEUTRAL;
+        }
+        else if (msg_gear.current_gear.gear == automotive_platform_msgs::msg::Gear::DRIVE)
+        {
+            vehicle_status.current_gear.gear = automotive_platform_msgs::msg::Gear::DRIVE;
+        }
 
-            // lamp/light cannot be obtain from SSC
-            // vehicle_status.lamp
-            // vehicle_status.light
+        // lamp/light cannot be obtain from SSC
+        // vehicle_status.lamp
+        // vehicle_status.light
 
-            current_status_msg_ = vehicle_status;
-            have_vehicle_status_ = true;
+        current_status_msg_ = vehicle_status;
+        have_vehicle_status_ = true;
 
     }
 
@@ -243,19 +243,19 @@ namespace ssc_interface_wrapper{
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel)
     {
         
-            // current steering curvature
-            double curvature = !config_.use_adaptive_gear_ratio_ ?
-                            (msg_curvature.curvature) :
-                            std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
+        // current steering curvature
+        double curvature = !config_.use_adaptive_gear_ratio_ ?
+                        (msg_curvature.curvature) :
+                        std::tan(msg_steering_wheel.steering_wheel_angle/ adaptive_gear_ratio_) / config_.wheel_base_;
 
-            geometry_msgs::msg::TwistStamped twist;
-            twist.header.frame_id = BASE_FRAME_ID;
-            twist.header.stamp = msg_velocity.header.stamp;
-            twist.twist.linear.x = msg_velocity.velocity;               // [m/s]
-            twist.twist.angular.z = curvature * msg_velocity.velocity;  // [rad/s]
-            current_twist_msg_ = twist;
+        geometry_msgs::msg::TwistStamped twist;
+        twist.header.frame_id = BASE_FRAME_ID;
+        twist.header.stamp = msg_velocity.header.stamp;
+        twist.twist.linear.x = msg_velocity.velocity;               // [m/s]
+        twist.twist.angular.z = curvature * msg_velocity.velocity;  // [rad/s]
+        current_twist_msg_ = twist;
 
-            have_twist_ = true;
+        have_twist_ = true;
     }
 
     void Converter::publish_command()
