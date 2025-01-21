@@ -79,20 +79,26 @@ namespace ssc_interface_wrapper{
         // ssc topic subscribers
         module_states_sub_ = create_subscription<automotive_navigation_msgs::msg::ModuleState> ("as/module_states", 1, 
                                                                     std::bind(&Converter::callback_from_ssc_module_states, this, std_ph::_1));
-        velocity_accel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>>(this, "as/velocity_accel_cov");
-        curvature_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>>(this, "as/curvature_feedback");
-        throttle_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>>(this, "as/throttle_feedback");
-        brake_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>>(this, "as/brake_feedback");
-        gear_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>>(this, "as/gear_feedback");
-        steering_wheel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>>(this, "as/steering_feedback");
-        ssc_feedbacks_sync_ = new message_filters::Synchronizer<SSCFeedbacksSyncPolicy>(
+        velocity_accel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>>
+            (this->get_node_base_interface(), "as/velocity_accel_cov", rmw_qos_profile_default);
+        curvature_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>>
+            (this->get_node_base_interface(), "as/curvature_feedback", rmw_qos_profile_default);
+        throttle_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>>
+            (this->get_node_base_interface(), "as/throttle_feedback", rmw_qos_profile_default);
+        brake_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>>
+            (this->get_node_base_interface(), "as/brake_feedback", rmw_qos_profile_default);
+        gear_feedback_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>>
+            (this->get_node_base_interface(), "as/gear_feedback", rmw_qos_profile_default);
+        steering_wheel_sub_ = std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>>
+            (this->get_node_base_interface(), "as/steering_feedback", rmw_qos_profile_default);
+        ssc_feedbacks_sync_ = std::make_unique<message_filters::Synchronizer<SSCFeedbacksSyncPolicy>>(
             SSCFeedbacksSyncPolicy(10), *velocity_accel_sub_, *curvature_feedback_sub_, *throttle_feedback_sub_,
             *brake_feedback_sub_, *gear_feedback_sub_, *steering_wheel_sub_);
         ssc_feedbacks_sync_->registerCallback(
             std::bind(&Converter::callback_from_ssc_feedbacks, this, 
             std_ph::_1, std_ph::_2, std_ph::_3, std_ph::_4, std_ph::_5, std_ph::_6));
 
-        ssc_twist_sync_ = new message_filters::Synchronizer<SSCTwistSyncPolicy>(
+        ssc_twist_sync_ = std::make_unique<message_filters::Synchronizer<SSCTwistSyncPolicy>>(
             SSCTwistSyncPolicy(10), *velocity_accel_sub_, *curvature_feedback_sub_, *steering_wheel_sub_);
 
         ssc_twist_sync_->registerCallback(
