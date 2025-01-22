@@ -98,15 +98,13 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
 {
     private:
     typedef message_filters::sync_policies::ApproximateTime<
-      automotive_platform_msgs::msg::VelocityAccelCov, automotive_platform_msgs::msg::CurvatureFeedback,
-      automotive_platform_msgs::msg::ThrottleFeedback, automotive_platform_msgs::msg::BrakeFeedback,
-      automotive_platform_msgs::msg::GearFeedback, automotive_platform_msgs::msg::SteeringFeedback>
+      automotive_platform_msgs::VelocityAccelCov, automotive_platform_msgs::CurvatureFeedback,
+      automotive_platform_msgs::ThrottleFeedback, automotive_platform_msgs::BrakeFeedback,
+      automotive_platform_msgs::GearFeedback, automotive_platform_msgs::SteeringFeedback>
       SSCFeedbacksSyncPolicy;
   
     typedef message_filters::sync_policies::ApproximateTime<
-      automotive_platform_msgs::msg::VelocityAccelCov, 
-      automotive_platform_msgs::msg::CurvatureFeedback,
-      automotive_platform_msgs::msg::SteeringFeedback>
+      automotive_platform_msgs::VelocityAccelCov, automotive_platform_msgs::CurvatureFeedback,automotive_platform_msgs::SteeringFeedback>
       SSCTwistSyncPolicy;
 
     carma_ros2_utils::PubPtr<autoware_msgs::msg::VehicleStatus> vehicle_status_pub_;
