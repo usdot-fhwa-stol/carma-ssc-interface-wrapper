@@ -131,14 +131,14 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     std::unique_ptr<message_filters::Synchronizer<SSCTwistSyncPolicy>> ssc_twist_sync_;
 
     // Consolidated Feedback for vehicle status
-    void callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
+    bool callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                     const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                     const automotive_platform_msgs::msg::ThrottleFeedback& msg_throttle,
                                     const automotive_platform_msgs::msg::BrakeFeedback& msg_brake,
                                     const automotive_platform_msgs::msg::GearFeedback& msg_gear,
                                     const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
     // Consolidated Feedback for twist
-    void callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
+    bool callback_for_twist_update(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                   const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
                                   const automotive_platform_msgs::msg::SteeringFeedback& msg_steering_wheel);
 
