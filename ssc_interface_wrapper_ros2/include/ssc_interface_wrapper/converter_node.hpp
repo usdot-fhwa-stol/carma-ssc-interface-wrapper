@@ -114,12 +114,12 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
 
     //autoware publishes a vehicle status topic after subscribing to ssc topics, that needs to be created here
     //Create vehicle status message after subscribing to ssc topics
-    std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>> velocity_accel_sub_;
-    std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>> curvature_feedback_sub_;
-    std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>> throttle_feedback_sub_;
-    std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>> brake_feedback_sub_;
-    std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>> gear_feedback_sub_;
-    std::unique_ptr<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>> steering_wheel_sub_;
+    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>> velocity_accel_sub_;
+    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>> curvature_feedback_sub_;
+    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>> throttle_feedback_sub_;
+    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>> brake_feedback_sub_;
+    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>> gear_feedback_sub_;
+    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>> steering_wheel_sub_;
     //Callbacks for vehicle_status
     void velocity_accel_cb(const automotive_platform_msgs::msg::VelocityAccelCov::UniquePtr msg_velocity);
     void curvature_feedback_cb(const automotive_platform_msgs::msg::CurvatureFeedback::UniquePtr msg_curvature);
@@ -134,8 +134,8 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     automotive_platform_msgs::msg::BrakeFeedback brake_feedback_;
     automotive_platform_msgs::msg::GearFeedback gear_feedback_;
     automotive_platform_msgs::msg::SteeringFeedback steering_feedback_;
-    std::unique_ptr<message_filters::Synchronizer<SSCFeedbacksSyncPolicy>> ssc_feedbacks_sync_;
-    std::unique_ptr<message_filters::Synchronizer<SSCTwistSyncPolicy>> ssc_twist_sync_;
+    message_filters::Synchronizer<SSCFeedbacksSyncPolicy>* ssc_feedbacks_sync_;
+    message_filters::Synchronizer<SSCTwistSyncPolicy>* ssc_twist_sync_;
 
     // Consolidated Feedback for vehicle status
     bool callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
