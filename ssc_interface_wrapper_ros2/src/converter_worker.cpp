@@ -49,7 +49,7 @@ namespace ssc_interface_wrapper{
     }
 
     carma_ros2_utils::CallbackReturn Converter::handle_on_configure(const rclcpp_lifecycle::State &)
-    {
+   {
        // Load parameters
         get_parameter<bool>("use_adaptive_gear_ratio", config_.use_adaptive_gear_ratio_);
         get_parameter<double>("loop_rate", config_.loop_rate_);
@@ -91,17 +91,6 @@ namespace ssc_interface_wrapper{
                                                                     std::bind(&Converter::gear_feedback_cb, this, std_ph::_1));
         steering_wheel_sub_ = create_subscription<automotive_platform_msgs::msg::SteeringFeedback>("as/steering_feedback", 10,
                                                                     std::bind(&Converter::steering_feedback_cb, this, std_ph::_1));
-        ssc_feedbacks_sync_ = new message_filters::Synchronizer<SSCFeedbacksSyncPolicy>(
-            SSCFeedbacksSyncPolicy(10), *velocity_accel_sub_, *curvature_feedback_sub_, *throttle_feedback_sub_,
-            *brake_feedback_sub_, *gear_feedback_sub_, *steering_wheel_sub_);
-        ssc_feedbacks_sync_->registerCallback(
-            std::bind(&Converter::callback_from_ssc_feedbacks, this, _1, _2, _3, _4, _5, _6));
-
-        ssc_twist_sync_ = new message_filters::Synchronizer<SSCTwistSyncPolicy>(
-            SSCTwistSyncPolicy(10), *velocity_accel_sub_, *curvature_feedback_sub_, *steering_wheel_sub_);
-
-        ssc_twist_sync_->registerCallback(
-            std::bind(&Converter::callback_for_twist_update, this, _1, _2, _3));
 
         // Setup publishers
         // To autoware
@@ -125,7 +114,7 @@ namespace ssc_interface_wrapper{
 
         // Return success if everthing initialized successfully
         return CallbackReturn::SUCCESS;
-    }
+   }
 
     void Converter::publish_vehicle_status(){
           if (have_vehicle_status_) {

@@ -38,9 +38,6 @@
 #include <automotive_navigation_msgs/msg/module_state.hpp>
 #include <carma_planning_msgs/msg/guidance_state.hpp>
 #include <autoware_msgs/msg/vehicle_cmd.hpp>
-#include <message_filters/subscriber.h>
-#include <message_filters/synchronizer.h>
-#include <message_filters/sync_policies/approximate_time.h>
 
 #include <automotive_platform_msgs/msg/steer_mode.hpp>
 #include <automotive_platform_msgs/msg/speed_mode.hpp>
@@ -97,15 +94,6 @@ static const std::string BASE_FRAME_ID = "base_link";
 class Converter : public carma_ros2_utils::CarmaLifecycleNode
 {
     private:
-    typedef message_filters::sync_policies::ApproximateTime<
-      automotive_platform_msgs::VelocityAccelCov, automotive_platform_msgs::CurvatureFeedback,
-      automotive_platform_msgs::ThrottleFeedback, automotive_platform_msgs::BrakeFeedback,
-      automotive_platform_msgs::GearFeedback, automotive_platform_msgs::SteeringFeedback>
-      SSCFeedbacksSyncPolicy;
-  
-    typedef message_filters::sync_policies::ApproximateTime<
-      automotive_platform_msgs::VelocityAccelCov, automotive_platform_msgs::CurvatureFeedback,automotive_platform_msgs::SteeringFeedback>
-      SSCTwistSyncPolicy;
 
     carma_ros2_utils::PubPtr<autoware_msgs::msg::VehicleStatus> vehicle_status_pub_;
     carma_ros2_utils::PubPtr<geometry_msgs::msg::TwistStamped> current_twist_pub_;
@@ -132,9 +120,6 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     automotive_platform_msgs::msg::BrakeFeedback brake_feedback_;
     automotive_platform_msgs::msg::GearFeedback gear_feedback_;
     automotive_platform_msgs::msg::SteeringFeedback steering_feedback_;
-    message_filters::Synchronizer<SSCFeedbacksSyncPolicy>* ssc_feedbacks_sync_;
-    message_filters::Synchronizer<SSCTwistSyncPolicy>* ssc_twist_sync_;
-
     // Consolidated Feedback for vehicle status
     bool callback_from_ssc_feedbacks(const automotive_platform_msgs::msg::VelocityAccelCov& msg_velocity,
                                     const automotive_platform_msgs::msg::CurvatureFeedback& msg_curvature,
