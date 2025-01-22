@@ -114,12 +114,12 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
 
     //autoware publishes a vehicle status topic after subscribing to ssc topics, that needs to be created here
     //Create vehicle status message after subscribing to ssc topics
-    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::VelocityAccelCov>> velocity_accel_sub_;
-    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::CurvatureFeedback>> curvature_feedback_sub_;
-    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::ThrottleFeedback>> throttle_feedback_sub_;
-    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::BrakeFeedback>> brake_feedback_sub_;
-    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::GearFeedback>> gear_feedback_sub_;
-    std::make_unique<message_filters::Subscriber<automotive_platform_msgs::msg::SteeringFeedback>> steering_wheel_sub_;
+    carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::VelocityAccelCov> velocity_accel_sub_;
+    carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::CurvatureFeedback> curvature_feedback_sub_;
+    carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::ThrottleFeedback> throttle_feedback_sub_;
+    carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::BrakeFeedback> brake_feedback_sub_;
+    carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::GearFeedback> gear_feedback_sub_;
+    carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::SteeringFeedback> steering_wheel_sub_;
     //Callbacks for vehicle_status
     void velocity_accel_cb(const automotive_platform_msgs::msg::VelocityAccelCov::UniquePtr msg_velocity);
     void curvature_feedback_cb(const automotive_platform_msgs::msg::CurvatureFeedback::UniquePtr msg_curvature);
