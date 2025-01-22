@@ -1,4 +1,4 @@
-name: Docker Hub build
+name: Docker Hub Noetic build
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - develop
       - master
       - "release/*"
+      - develop-humble
     tags:
       - "carma-system-*"
 jobs:
@@ -14,5 +15,8 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      ACCESS_ID: ${{ secrets.ACCESS_ID }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      TOKEN: ${{ secrets.GH_PAT }}
+    with:
+      file: ./noetic/Dockerfile
+      tag_name_suffix: noetic
+      replace_suffix: true # TODO: remove after develop-humble branch is merged to develop

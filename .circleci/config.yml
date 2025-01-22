@@ -1,20 +1,20 @@
 version: 2
-#  Copyright (C) 2018-2022 LEIDOS.
-# 
+#  Copyright (C) 2018-2025 LEIDOS.
+#
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
-# 
+#
 #  http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #  License for the specific language governing permissions and limitations under
 #  the License.
-# 
+#
 
-# Configuration file for Circle CI 
+# Configuration file for Circle CI
 # CI will report failure if any executed command returns and error status
 # Operations performed are as follows
 # Build source code
@@ -29,7 +29,7 @@ jobs:
     # XTERM used for better catkin_make output
     # TODO (CAR-6024) move this worflow to github action to allow dynamic container selection
     docker:
-      - image: usdotfhwastoldev/autoware.ai:develop
+      - image: usdotfhwastoldev/carma-base:develop-humble
         user: carma
         environment:
           TERM: xterm # use xterm to get full display output from build
@@ -46,27 +46,45 @@ jobs:
             mkdir CARMASscInterfaceWrapper
       - checkout:
           path: src/CARMASscInterfaceWrapper
-      - run: 
+      - run:
           name: Pull Deps
           command: |
             source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -ros2 -r ${PWD}
+      - run:
+          name: Install Deps
+          command: |
+            sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+            sudo apt-add-repository -y ppa:astuff/kvaser-linux
+            sudo apt update
+
+            sudo apt install -y kvaser-canlib-dev kvaser-drivers-dkms
+
+            sudo apt install -y libas-common \
+                ros-humble-automotive-autonomy-msgs \
+                ros-humble-automotive-navigation-msgs \
+                ros-humble-automotive-platform-msgs \
+                ros-humble-pacmod3-msgs \
+                ros-humble-pacmod3 \
+                ros-humble-kvaser-interface \
+                ros-humble-message-filters \
+                apt-utils
       - run:
           name: Build Driver
           command: |
             source ${INIT_ENV}
-            export ROS_PARALLEL_JOBS='-j1 -l1'
+            export ROS_PARALLEL_JOBS='-j4 -l4'
             build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
-            export ROS_PARALLEL_JOBS='-j1 -l1'
+            export ROS_PARALLEL_JOBS='-j4 -l4'
             bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
       # Run SonarCloud analysis
       # PR Branchs and number extracted from Circle variables and github api
       # Circle CI seems to make a change to the base branch, so we must fetch --force to ensure correct git file change stats
-      # SONAR_SCANNER_TOKEN MUST be secured as an environment variable in Circle CI NOT in this file. 
+      # SONAR_SCANNER_TOKEN MUST be secured as an environment variable in Circle CI NOT in this file.
       # The following sonar settings MUST be set in SonarCloud UI NOT in this file
       # sonar.pullrequest.provider
       # sonar.pullrequest.github.endpoint
@@ -80,7 +98,7 @@ jobs:
             if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
               echo "Non-PR Build Detected. Running analysis on ${CIRCLE_BRANCH}"
               cd src/CARMASscInterfaceWrapper
-              sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${SONAR_SCANNER_TOKEN} 
+              sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${SONAR_TOKEN}
               exit 0;
             fi
             echo "PR branch ${CIRCLE_BRANCH}"
@@ -89,8 +107,8 @@ jobs:
             export PR_NUM=`echo ${CIRCLE_PULL_REQUEST} | cut -d'/' -f7`
             echo "PR number ${PR_NUM}"
             export BASE_BRANCH_URL="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${PR_NUM}"
-            export TARGET_BRANCH=$(curl "$BASE_BRANCH_URL" | jq '.base.ref' | tr -d '"') 
+            export TARGET_BRANCH=$(curl "$BASE_BRANCH_URL" | jq '.base.ref' | tr -d '"')
             echo "Target Branch = ${TARGET_BRANCH}"
             cd src/CARMASscInterfaceWrapper
             git fetch --force origin ${TARGET_BRANCH}:${TARGET_BRANCH}
-            sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${SONAR_SCANNER_TOKEN} -Dsonar.pullrequest.base=${TARGET_BRANCH} -Dsonar.pullrequest.branch=${CIRCLE_BRANCH} -Dsonar.pullrequest.key=${PR_NUM}
+            sonar-scanner -X -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${SONAR_TOKEN} -Dsonar.pullrequest.base=${TARGET_BRANCH} -Dsonar.pullrequest.branch=${CIRCLE_BRANCH} -Dsonar.pullrequest.key=${PR_NUM}

@@ -1,0 +1,22 @@
+name: Docker Hub Humble build
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - "release/*"
+      - develop-humble
+    tags:
+      - "carma-system-*"
+jobs:
+  dockerhub:
+    uses: usdot-fhwa-stol/actions/.github/workflows/dockerhub.yml@main
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      TOKEN: ${{ secrets.GH_PAT }}
+    with:
+      file: ./humble/Dockerfile
+      tag_name_suffix: humble
+      replace_suffix: true # TODO: remove after develop-humble branch is merged to develop
