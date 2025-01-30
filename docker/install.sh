@@ -57,7 +57,7 @@ if [[ $build_ros1_pkgs -eq 1 ]]; then
     sudo apt-get install ros-noetic-pacmod-msgs
 
     sudo apt-get install python3-catkin-pkg
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
+    colcon build --packages-up-to driver_shutdown ssc_interface_wrapper --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
     # Get the exit code from the ROS1 build so we can skip the ROS2 build if the ROS1 build failed
     status=$?
     chmod -R ugo+x /opt/carma/install
@@ -107,7 +107,7 @@ elif [[ $build_ros2_pkgs -eq 1 ]]; then
     cd ~/workspace_ros2
     source /opt/ros/humble/setup.bash
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 driver_shutdown_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
     # Get the exit code from the ROS2 build
     status=$?
