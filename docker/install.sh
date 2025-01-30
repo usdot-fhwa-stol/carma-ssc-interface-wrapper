@@ -107,7 +107,7 @@ elif [[ $build_ros2_pkgs -eq 1 ]]; then
     cd ~/workspace_ros2
     source /opt/ros/humble/setup.bash
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 driver_shutdown_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
     # Get the exit code from the ROS2 build
     status=$?

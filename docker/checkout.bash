@@ -52,6 +52,7 @@ done
 
 cd ${dir}
 git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-msgs.git ${dir}/src/CARMAMsgs --branch "$BRANCH"
+git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch "$BRANCH"
 
 # Sparse checkout to only get the messages we need
 if [[ "$BRANCH" == "develop" ]] || [[ "$BRANCH" == "master" ]]; then
@@ -86,7 +87,4 @@ if [[ $build_ros1_pkgs -eq 1 ]]; then
     cd ${dir}/src/kvaser_interface
     sudo git reset --hard e2aa169e32577f2468993b89edf7a0f67d1e7f0e
     cd ${dir}
-
-elif [[ $build_ros2_pkgs -eq 1 ]]; then
-    git clone --depth 1 https://github.com/usdot-fhwa-stol/carma-utils.git ${dir}/src/CARMAUtils --branch "$BRANCH"
 fi
