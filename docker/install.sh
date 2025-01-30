@@ -57,7 +57,7 @@ if [[ $build_ros1_pkgs -eq 1 ]]; then
     sudo apt-get install ros-noetic-pacmod-msgs
 
     sudo apt-get install python3-catkin-pkg
-    colcon build --packages-up-to driver_shutdown ssc_interface_wrapper --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
     # Get the exit code from the ROS1 build so we can skip the ROS2 build if the ROS1 build failed
     status=$?
     chmod -R ugo+x /opt/carma/install
