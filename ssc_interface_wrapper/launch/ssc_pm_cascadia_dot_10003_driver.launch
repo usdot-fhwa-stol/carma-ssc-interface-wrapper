@@ -15,12 +15,13 @@
   the License.
 -->
 <!--
-	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface. 
-  This launch file is for systems which require the additional gear_change node to operate such as the frieghtliner cascadia operated at STOL. 
+	This file is used to launch a CARMA compatible controller driver for the pacmod using the ssc interface.
+  This launch file is for systems which require the additional gear_change node to operate such as the frieghtliner cascadia operated at STOL.
 -->
 <launch>
 
   <arg name="ssc_param_dir" default="$(find ssc_pm_cascadia_dot_10003)"/>
+  <arg name="enable_ros1_record" default="false"/>
 
   <!-- Launch Wrapper -->
   <group> <!-- Group to scope remappings -->
@@ -29,7 +30,9 @@
     <remap from="parsed_tx/brake_rpt" to="pacmod/parsed_tx/brake_rpt"/>
     <remap from="parsed_tx/shift_rpt" to="pacmod/parsed_tx/shift_rpt"/>
     <remap from="as_rx/hazard_lights" to="pacmod/as_rx/hazard_lights_cmd"/>
-    <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+    <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch">
+      <arg name="enable_ros1_record" value="$(arg enable_ros1_record)"/>
+    </include>
   </group>
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
