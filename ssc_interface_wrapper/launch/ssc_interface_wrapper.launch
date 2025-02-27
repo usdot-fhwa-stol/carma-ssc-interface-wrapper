@@ -21,8 +21,12 @@
   <arg name="enable_ros1_record" default="false" doc="Flag to toggle carma_record"/>
 
   <!-- Directory of vehicle config parameters -->
-  <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory containing vehicle config type parameters"/>
+  <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory continaing vehicle config type parameters"/>
   <arg name="vehicle_calibration_dir" default="/opt/carma/vehicle/calibration" doc="The directory continuing vehicle calibration type parameters"/>
+
+  <!-- Load Vehicle Characteristics -->
+  <rosparam command="load" file="$(arg vehicle_calibration_dir)/identifiers/UniqueVehicleParams.yaml"/>
+  <rosparam command="load" file="$(arg vehicle_config_dir)/VehicleConfigParams.yaml"/>
 
   <!-- Logging -->
   <!-- ROS Bag -->
@@ -31,9 +35,10 @@
   <!-- Run the node only if enable_ros1_record is toggled-->
   <!-- Node exists in carma-utils repository-->
   <group if="$(arg enable_ros1_record)">
-    <node name="carma_record" pkg="carma_record" type="carma_record" output="screen">
-      <param name="rosbag_exclusions" value="$(arg rosbag_exclusions)"/>
-    </node>
+    <!-- Set up the rosbag record node that will exclude sensitive topics -->
+    <group ns="carma_record">
+      <include file="$(find carma_record)/launch/carma_record.launch" />
+    </group>
 
     <!-- Dump all ros parameters to a file -->
     <node name="param_dump" pkg="carma_record" type="param_dump.sh"/>
