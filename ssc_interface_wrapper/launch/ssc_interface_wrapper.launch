@@ -21,7 +21,7 @@
   <arg name="enable_ros1_record" default="false" doc="Flag to toggle carma_record"/>
 
   <!-- Directory of vehicle config parameters -->
-  <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory continaing vehicle config type parameters"/>
+  <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory containing vehicle config type parameters"/>
   <arg name="vehicle_calibration_dir" default="/opt/carma/vehicle/calibration" doc="The directory continuing vehicle calibration type parameters"/>
 
   <!-- Load Vehicle Characteristics -->
