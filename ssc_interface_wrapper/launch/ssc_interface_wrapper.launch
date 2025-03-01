@@ -22,10 +22,8 @@
 
   <!-- Directory of vehicle config parameters -->
   <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory containing vehicle config type parameters"/>
-  <arg name="vehicle_calibration_dir" default="/opt/carma/vehicle/calibration" doc="The directory continuing vehicle calibration type parameters"/>
 
-  <!-- Load Vehicle Characteristics -->
-  <rosparam command="load" file="$(arg vehicle_calibration_dir)/identifiers/UniqueVehicleParams.yaml"/>
+  <!-- Load Vehicle Topic Exclusion Rules -->
   <rosparam command="load" file="$(arg vehicle_config_dir)/VehicleConfigParams.yaml"/>
 
   <!-- Logging -->
