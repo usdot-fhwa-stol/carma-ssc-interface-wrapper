@@ -34,7 +34,7 @@
   <!-- Node exists in carma-utils repository-->
   <group if="$(arg enable_ros1_record)">
     <!-- Set up the rosbag record node that will exclude sensitive topics -->
-    <group ns="carma_record">
+    <group ns="/carma_record">
       <include file="$(find carma_record)/launch/carma_record.launch" />
     </group>
 
