@@ -24,7 +24,7 @@
   <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory containing vehicle config type parameters"/>
 
   <!-- Load Vehicle Topic Exclusion Rules -->
-  <rosparam command="load" file="$(arg vehicle_config_dir)/VehicleConfigParams.yaml"/>
+  <rosparam command="load" file="$(arg vehicle_config_dir)/VehicleConfigParams.yaml" ns="/"/>
 
   <!-- Logging -->
   <!-- ROS Bag -->
