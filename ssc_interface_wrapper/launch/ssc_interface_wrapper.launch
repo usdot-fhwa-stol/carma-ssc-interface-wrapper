@@ -17,6 +17,31 @@
 	This file is used to launch a ros wrapper which can be combined with ssc_interface and pacmod drivers to make them CARMA compatible
 -->
 <launch>
+  <!-- Flag to toggle carma_record-->
+  <arg name="enable_ros1_record" default="false" doc="Flag to toggle carma_record"/>
+
+  <!-- Directory of vehicle config parameters -->
+  <arg name="vehicle_config_dir" default="/opt/carma/vehicle/config" doc="The directory containing vehicle config type parameters"/>
+
+  <!-- Load Vehicle Topic Exclusion Rules -->
+  <rosparam command="load" file="$(arg vehicle_config_dir)/VehicleConfigParams.yaml"/>
+
+  <!-- Logging -->
+  <!-- ROS Bag -->
+  <arg name="rosbag_exclusions" default="/fake_exclusion" doc="Additional regex pattern to match for identifying what topics to exclude from rosbag recordings"/>
+
+  <!-- Run the node only if enable_ros1_record is toggled-->
+  <!-- Node exists in carma-utils repository-->
+  <group if="$(arg enable_ros1_record)">
+    <!-- Set up the rosbag record node that will exclude sensitive topics -->
+    <group ns="carma_record">
+      <include file="$(find carma_record)/launch/carma_record.launch" />
+    </group>
+
+    <!-- Dump all ros parameters to a file -->
+    <node name="param_dump" pkg="carma_record" type="param_dump.sh"/>
+  </group>
+
     <node name="ssc_interface_wrapper" pkg="ssc_interface_wrapper" type="ssc_interface_wrapper_node"/>
     <rosparam command="load" file="$(find ssc_interface_wrapper)/config/parameters.yaml"/>
     <node pkg="topic_tools" type="relay" name="relay_vehicle_command" args="/controller/vehicle_commands /vehicle_cmd"/>

@@ -23,11 +23,13 @@
   <arg name="can_circuit_id" default="0" />
   <arg name="can_bit_rate" default="500000" />
   <arg name="ssc_param_dir" default="$(find ssc_ds_fusion)"/>
-
+  <arg name="enable_ros1_record" default="false"/>
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
-  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
-  
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch">
+    <arg name="enable_ros1_record" value="$(arg enable_ros1_record)"/>
+  </include>
+
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
   <arg name="live" default="true" />
