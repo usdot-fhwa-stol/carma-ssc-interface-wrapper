@@ -6,7 +6,6 @@ on:
       - develop
       - master
       - "release/*"
-      - develop-humble
     tags:
       - "carma-system-*"
   workflow_dispatch:
@@ -21,4 +20,3 @@ jobs:
     with:
       file: ./noetic/Dockerfile
       tag_name_suffix: noetic
-      replace_suffix: true # TODO: remove after develop-humble branch is merged to develop
