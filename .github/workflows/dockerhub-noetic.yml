@@ -1,4 +1,4 @@
-name: Docker Hub build
+name: Docker Hub Noetic build
 
 on:
   push:
@@ -8,11 +8,15 @@ on:
       - "release/*"
     tags:
       - "carma-system-*"
+  workflow_dispatch:
+
 jobs:
   dockerhub:
     uses: usdot-fhwa-stol/actions/.github/workflows/dockerhub.yml@main
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      ACCESS_ID: ${{ secrets.ACCESS_ID }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      GH_PAT: ${{ secrets.GH_PAT }}
+    with:
+      file: ./noetic/Dockerfile
+      tag_name_suffix: noetic
