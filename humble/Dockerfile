@@ -12,11 +12,11 @@
 #  License for the specific language governing permissions and limitations under
 #  the License.
 ARG DOCKER_ORG=usdotfhwastoldev
-ARG DOCKER_TAG=develop-humble
+ARG DOCKER_TAG=sync_test_run-humble
 FROM ${DOCKER_ORG}/carma-base:${DOCKER_TAG} as base_image
 
 FROM base_image as source-code
-ARG GIT_BRANCH=develop
+ARG GIT_BRANCH=sync_test_run
 
 # Install astuff ros2 ssc_pm using tokens as arguments
 ARG TOKEN="NULL"
