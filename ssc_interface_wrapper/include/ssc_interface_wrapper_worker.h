@@ -21,7 +21,7 @@
 #include <cav_srvs/SetEnableRobotic.h>
 #include <pacmod_msgs/SystemRptInt.h>
 #include <automotive_navigation_msgs/ModuleState.h>
-#include <j2735_msgs/TransmissionState.h>
+#include <j2735_v2x_msgs/TransmissionState.h>
 
 class SSCInterfaceWrapperWorker
 {

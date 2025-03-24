@@ -20,6 +20,7 @@
 <launch>
 
   <arg name="ssc_param_dir" default="$(find ssc_pm_lexus)"/>
+  <arg name="enable_ros1_record" default="false"/>
 
   <!-- Launch Wrapper -->
   <group> <!-- Group to scope remappings -->
@@ -27,7 +28,9 @@
     <remap from="parsed_tx/steer_rpt" to="pacmod/parsed_tx/steer_rpt"/>
     <remap from="parsed_tx/brake_rpt" to="pacmod/parsed_tx/brake_rpt"/>
     <remap from="parsed_tx/shift_rpt" to="pacmod/parsed_tx/shift_rpt"/>
-    <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
+    <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch">
+      <arg name="enable_ros1_record" value="$(arg enable_ros1_record)"/>
+    </include>
   </group>
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
