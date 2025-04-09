@@ -32,7 +32,6 @@ RUN ~/workspace_ros2/src/docker/checkout.bash -ros2 -b ${GIT_BRANCH}
 #Build ros2 pkgs
 RUN ~/workspace_ros2/src/docker/install.sh -ros2 ${TOKEN}
 
-FROM base_image
 
 ARG BUILD_DATE="NULL"
 ARG VERSION="NULL"
@@ -48,10 +47,8 @@ LABEL org.label-schema.vcs-url="https://github.com/usdot-fhwa-stol/carma-ssc-int
 LABEL org.label-schema.vcs-ref=${VCS_REF}
 LABEL org.label-schema.build-date=${BUILD_DATE}
 
-# Copy over the carma packages' installations
-COPY --from=source-code --chown=carma /opt/carma /opt/carma
-# Copy over the humble packages' installations
-COPY --from=source-code --chown=carma /opt/ros/humble /opt/ros/humble
+# Remove source code from image
+RUN rm -rf ~/workspace_ros2
 
 # Default launch ros2 verion
 CMD [ "ros2", "launch", "ssc_interface_wrapper", "ssc_interface_wrapper.launch.py"]
