@@ -4,7 +4,6 @@
 
 # CARMASscInterfaceWrapper
 CARMASscInterfaceWrapper contains a driver wrapper for usage with the Autoware speed and steering control interface in combination with the AutonomouStuff controller and driver
-
 To add this package to your CARMAPlatform project simply clone this repository into your Catkin workspace
 
 # CARMAPlatform
