@@ -16,12 +16,14 @@
 -->
 <launch>
   <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
-
+  <arg name="enable_ros1_record" default="false"/>
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
-  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
-  
-  <!-- Launch Wrapped Nodes -->	
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch">
+    <arg name="enable_ros1_record" value="$(arg enable_ros1_record)"/>
+  </include>
+
+  <!-- Launch Wrapped Nodes -->
 
   <!-- Drive By Wire -->
   <include file="$(arg ssc_param_dir)/ne_dbw_connection.launch"/>
@@ -29,7 +31,7 @@
   <!-- SSC -->
   <group>
 
-  
+
   <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
     <arg name="param_dir" value="$(arg ssc_param_dir)"/>
     <arg name="ssc_package_name" value="ssc_ne_pacifica"/>

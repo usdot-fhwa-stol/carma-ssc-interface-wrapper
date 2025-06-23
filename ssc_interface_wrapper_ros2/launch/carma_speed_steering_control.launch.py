@@ -59,7 +59,11 @@ def generate_launch_description():
 
                 set_remap.SetRemap('/hardware_interface/as/veh_interface/get_state', '/hardware_interface/as/veh_interface/false_get_state'),
                 set_remap.SetRemap('/hardware_interface/as/veh_interface/change_state', '/hardware_interface/as/veh_interface/false_change_state'),
-
+                
+                # Remap topics used in CARMA Web UI to match other vehicles
+                set_remap.SetRemap('/hardware_interface/as/brake_feedback', '/hardware_interface/brake_feedback'),
+                set_remap.SetRemap('/hardware_interface/as/throttle_feedback', '/hardware_interface/throttle_feedback'),
+                set_remap.SetRemap('/hardware_interface/as/steering_feedback', '/hardware_interface/steering_feedback'),
             
                 IncludeLaunchDescription(
                     AnyLaunchDescriptionSource([

@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
  /**
   * Modification (C) Leidos 2022
   * Updated ssc_interface to ROS2 as new converter_node
   */
- 
+
 #pragma once
 
 #include <rclcpp/rclcpp.hpp>
 #include <functional>
 #include <std_msgs/msg/string.hpp>
-#include <std_srvs/srv/empty.hpp>
 
 #include <carma_ros2_utils/carma_lifecycle_node.hpp>
 #include <automotive_platform_msgs/msg/velocity_accel_cov.hpp>
@@ -54,7 +53,7 @@ static const std::string BASE_FRAME_ID = "base_link";
 
   struct ConverterConfig
   {
-   
+
     bool use_adaptive_gear_ratio_ = true;
     double loop_rate_ = 30.0;
     int command_timeout_ = 1000;
@@ -70,7 +69,7 @@ static const std::string BASE_FRAME_ID = "base_link";
     double agr_coef_c_ = 0.042;
 
     // Stream operator for this config
-    
+
     friend std::ostream &operator<<(std::ostream &output, const ConverterConfig &c)
     {
       output << "ssc_interface_wrapper::ConverterConfig { " << std::endl
@@ -95,11 +94,11 @@ static const std::string BASE_FRAME_ID = "base_link";
 class Converter : public carma_ros2_utils::CarmaLifecycleNode
 {
     private:
-    
-    carma_ros2_utils::PubPtr<autoware_msgs::msg::VehicleStatus> vehicle_status_pub_; 
+
+    carma_ros2_utils::PubPtr<autoware_msgs::msg::VehicleStatus> vehicle_status_pub_;
     carma_ros2_utils::PubPtr<geometry_msgs::msg::TwistStamped> current_twist_pub_;
 
-    //autoware.ai publishes a vehicle status topic after subscribing to ssc topics, that needs to be created here
+    //autoware publishes a vehicle status topic after subscribing to ssc topics, that needs to be created here
     //Create vehicle status message after subscribing to ssc topics
     carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::VelocityAccelCov> velocity_accel_sub_;
     carma_ros2_utils::SubPtr<automotive_platform_msgs::msg::CurvatureFeedback> curvature_feedback_sub_;
@@ -135,7 +134,7 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
 
     //Flags to achieve approximate synchronization
     bool velocity_msg_exists_ = false;
-    bool curvature_msg_exists_ = false;                                  
+    bool curvature_msg_exists_ = false;
     bool throttle_msg_exists_ = false;
     bool brake_msg_exists_ = false;
     bool gear_msg_exists_ = false;
@@ -146,7 +145,7 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     bool twist_curvature_msg_ = false;
     bool twist_steering_msg_ = false;
 
-    //autoware.ai subscriptions from autoware
+    // Subscriptions from autoware
     carma_ros2_utils::SubPtr<carma_planning_msgs::msg::GuidanceState> guidance_state_sub_;
     carma_ros2_utils::SubPtr<autoware_msgs::msg::VehicleCmd> vehicle_cmd_sub_;
     carma_ros2_utils::SubPtr<std_msgs::msg::Bool> engage_sub_;
@@ -174,11 +173,11 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     rclcpp::TimerBase::SharedPtr status_pub_timer_;
     rclcpp::TimerBase::SharedPtr command_pub_timer_;
 
-    
+
     ConverterConfig config_;
 
     bool engage_ = false;
-    bool command_initialized_ = false; 
+    bool command_initialized_ = false;
     double current_velocity_;
     double adaptive_gear_ratio_;
     rclcpp::Time command_time_;
@@ -199,7 +198,7 @@ class Converter : public carma_ros2_utils::CarmaLifecycleNode
     public:
 
     /**
-     * \brief constructor 
+     * \brief constructor
      */
     explicit Converter(const rclcpp::NodeOptions &);
 

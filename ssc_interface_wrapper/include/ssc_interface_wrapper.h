@@ -20,7 +20,7 @@
 #include <cav_srvs/SetEnableRobotic.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float64.h>
-#include <j2735_msgs/TransmissionState.h>
+#include <j2735_v2x_msgs/TransmissionState.h>
 #include <pacmod_msgs/SystemRptFloat.h>
 #include <pacmod_msgs/SystemRptInt.h>
 #include <pacmod_msgs/SystemCmdBool.h>
