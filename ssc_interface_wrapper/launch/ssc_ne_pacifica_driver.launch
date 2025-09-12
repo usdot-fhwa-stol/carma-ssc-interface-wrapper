@@ -16,12 +16,20 @@
 -->
 <launch>
   <arg name="ssc_param_dir" default="$(find ssc_ne_pacifica)"/>
+  <!-- Global parameters file path -->
+  <!-- Parameters in this file will override any parameters loaded in their respective packages -->
+  <arg name="global_params_file"
+    default="/opt/carma/vehicle/config/GlobalParamsOverride.yaml"
+    doc="Path to global vehicle configuration parameters file"
+  />
 
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
-  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
-  
-  <!-- Launch Wrapped Nodes -->	
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch">
+    <arg name="global_params_file" value="$(arg global_params_file)"/>
+  </include>
+
+  <!-- Launch Wrapped Nodes -->
 
   <!-- Drive By Wire -->
   <include file="$(arg ssc_param_dir)/ne_dbw_connection.launch"/>
@@ -29,7 +37,7 @@
   <!-- SSC -->
   <group>
 
-  
+
   <include file="$(find ssc_interface_wrapper)/launch/carma_speed_steering_control.launch">
     <arg name="param_dir" value="$(arg ssc_param_dir)"/>
     <arg name="ssc_package_name" value="ssc_ne_pacifica"/>
