@@ -23,11 +23,19 @@
   <arg name="can_circuit_id" default="0" />
   <arg name="can_bit_rate" default="500000" />
   <arg name="ssc_param_dir" default="$(find ssc_ds_fusion)"/>
+  <!-- Global parameters file path -->
+  <!-- Parameters in this file will override any parameters loaded in their respective packages -->
+  <arg name="global_params_file"
+    default="/opt/carma/vehicle/config/GlobalParamsOverride.yaml"
+    doc="Path to global vehicle configuration parameters file"
+  />
 
   <!-- Launch Wrapper -->
   <!-- Group to scope remappings -->
-  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch"/>
-  
+  <include file="$(find ssc_interface_wrapper)/launch/ssc_interface_wrapper.launch">
+    <arg name="global_params_file" value="$(arg global_params_file)"/>
+  </include>
+
   <!-- Launch Wrapped Nodes -->
   <!-- Drive By Wire -->
   <arg name="live" default="true" />
