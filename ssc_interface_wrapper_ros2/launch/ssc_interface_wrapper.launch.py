@@ -32,10 +32,19 @@ def generate_launch_description():
     log_level = LaunchConfiguration('log_level')
     declare_log_level_arg = DeclareLaunchArgument(
         name ='log_level', default_value='WARN')
-    
+
     # Get parameter file path
     param_file_path = os.path.join(
         get_package_share_directory('ssc_interface_wrapper_ros2'), 'config/parameters.yaml')
+
+    # Declare the global_params_override_file launch argument
+    # Parameters in this file will override any parameters loaded in their respective packages
+    global_params_override_file = LaunchConfiguration('global_params_override_file')
+    declare_global_params_override_file_arg = DeclareLaunchArgument(
+        name = 'global_params_override_file',
+        default_value = "/opt/carma/vehicle/config/GlobalParamsOverride.yaml",
+        description = "Path to global file containing the parameters overwrite"
+    )
 
     # Launch node(s) in a carma container to allow logging to be configured
     container = ComposableNodeContainer(
@@ -44,7 +53,7 @@ def generate_launch_description():
         namespace= GetCurrentNamespace(),
         executable='carma_component_container_mt',
         composable_node_descriptions=[
-            
+
             # Launch the core node(s)
             ComposableNode(
                     package='ssc_interface_wrapper_ros2',
@@ -54,10 +63,10 @@ def generate_launch_description():
                         {'use_intra_process_comms': True},
                         {'--log-level' : log_level }
                     ],
-                    parameters=[ param_file_path ],
+                    parameters=[ param_file_path, global_params_override_file ],
                     remappings= [
                         ("/controller/vehicle_commands", "/vehicle_cmd"),
-                        ("/can/wheel_speed", "/parsed_tx/wheel_speed_rpt"), 
+                        ("/can/wheel_speed", "/parsed_tx/wheel_speed_rpt"),
                         ("module_states","as/module_states")
                     ]
             ),
@@ -66,8 +75,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_log_level_arg,
+        declare_global_params_override_file_arg,
         container
     ])
-
-
-    
